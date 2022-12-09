@@ -40,37 +40,106 @@
 \end{figure}
 
 
-\subsection{小节标题}
+% \subsection{小节标题}
 
 
-\par 如\autoref{tab:sample}所示，这是一张自动调节列宽的表格。
+% \par 如\autoref{tab:sample}所示，这是一张自动调节列宽的表格。
 
-\begin{table}[htbp]
-    \caption{\label{tab:sample}自动调节列宽的表格}
-    \begin{tabularx}{\linewidth}{c|X<{\centering}}
-        \hline
-        第一列 & 第二列 \\ \hline
-        xxx & xxx \\ \hline
-        xxx & xxx \\ \hline
-        xxx & xxx \\ \hline
-    \end{tabularx}
-\end{table}
+% \begin{table}[htbp]
+%     \caption{\label{tab:sample}自动调节列宽的表格}
+%     \begin{tabularx}{\linewidth}{c|X<{\centering}}
+%         \hline
+%         第一列 & 第二列 \\ \hline
+%         xxx & xxx \\ \hline
+%         xxx & xxx \\ \hline
+%         xxx & xxx \\ \hline
+%     \end{tabularx}
+% \end{table}
 
 
-\par 如\autoref{equ:sample}，这是一个公式
+% \par 如\autoref{equ:sample}，这是一个公式
 
+% \begin{equation}
+%     \label{equ:sample}
+%     A=\overbrace{(a+b+c)+\underbrace{i(d+e+f)}_{\text{虚数}}}^{\text{复数}}
+% \end{equation}
+
+\section{腿足运动控制最新进展}
+腿的作用在于，机器人能用腿上的末端执行器来推“地”从而为身体提供主动避震[1]，
+使得机器人身体的运动要比地表的轮廓更平滑。我们把所有用来推“地”的末端执行器统一叫做“足”，
+不管它们的形式和功能具体是什么。腿可以暂时离开地面来迈步，因此可以通过不连续的地形，
+在轮子无法到达的地方运动。无论腿的数量、运动学构型和自由度数，
+足的类型(平面足，可变形足，点足，轮足)如何变化，根本的原理是一样的。
+因此，最近几年原本在平面足人形机器人上发展的方法也快速适配了四足机器人以及其他形式足的腿足机器人。
+
+控制的目标是找到足够多的可以在足和环境之间建立接触的位置，并且执行对应的动力学可行的轨迹。
+为了处理腿足运动控制的关键难题——交替的触地和对应的接触力约束，
+目前几乎推广到所有形式的腿足机器人的通用方法大量使用了数值轨迹优化及其在线实现——MPC。
+
+除了将这种通用的方法适配到不同数量的腿和不同类型的足，
+近几年在腿足运动控制领域的主要进展是如何用“提纯”的模型和“提纯”的数值模型来处理轨迹优化问题。
+这使得从在多为平地的双足行走到更多样的机器人形态
+，更通用的不平整地形的多接触运动的转换成为可能。
+除了将这种通用的方法适配到不同数量的腿和不同类型的足，
+近几年在腿足运动控制领域的主要进展是如何用“提纯”的模型和“提纯”的数值模型来处理
+轨迹优化问题。这使得从在多为平地的双足行走到更多样的机器人形态
+，更通用的不平整地形的多接触运动的转换成为可能。
+
+\subsection{腿足运动控制的典型方法}
+
+The dynamics of legged locomotion: 牛顿方程说明和环境接触产生的外力$f_i$减去重力$mg$决定了机器人质心$c$变化的方向：
 \begin{equation}
-    \label{equ:sample}
-    A=\overbrace{(a+b+c)+\underbrace{i(d+e+f)}_{\text{虚数}}}^{\text{复数}}
+    \label{equ:1.1}
+    m(\ddot{c}-g)=\sum_i f_i
 \end{equation}
+其中$m$是机器人的总质量。同时对应的欧拉方程表明接触点$s_i$相对质心$c$的位置是控制机器人身体相对质心的角动量$L$的关键：
+\begin{equation}
+    \label{equ:1.2}
+    \dot{L}=\sum_i\left(s_i-c\right) \times f_i
+\end{equation}
+
+Artificial synergy synthesis 方法认为，应该更加关注和地面接触力直接绑定的质心动力学\autoref{equ:1.1}和\autoref{equ:1.2}，
+而不是和关节力矩更直接绑定的机器人的精准关节姿态\cite{vukobratovic1972contribution}，如\autoref{fig:1.1}所示。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.3\linewidth]{图1.png}
+    \caption{\label{fig:1.1}质心动力学及其与全身动力学的联系释图(图源~\cite{carpentier2016center})}
+\end{figure}
+这种方法在现在是机器人运动控制的核心，但在需要紧密协调机器人平衡和姿态的情况下，基于完整多刚体拉格朗日动力学的方法才是首选，
+因为它天然包含了质心动力学\cite{orin2013centroidal}。
+
+腿足运控的难题之一是接触力通常是单边的：机器人只能推接触表面，而不能拉。因此接触力$f_i$只能朝向特定的方向，由摩擦锥来约束。
+另外，每个接触都是二元的：要么有接触和接触力，要么没有接触也没有接触力。当腿和某个面碰撞，也会产生冲击力。
+触地转换和冲击是影响连续动力学\autoref{equ:1.1}和\autoref{equ:1.2}的离散事件，从这个角度讲腿足机器人的动力学是混合的，
+这是难题之二。
+
+理论上，从机器人可以执行合适的接触力来避免摔倒的状态中，我们可以定义可行状态（viable states）。周期运动（周期踏步？）和平衡点
+显然是可行的，并且如果机器人能从给定状态在几步内达到这样一个循环或者是平衡点，那这样的状态也是可行的\cite{wieber2002stability}。
+这就是目前许多现有腿足运控方法的关键\cite{wieber2016modeling}——可捕获性分析\cite{pratt2006velocity}的要义。
+
+Control architecture: 接触点$s_i$的序列通常要考虑机器人所在环境及其目标点、运动学和静平衡约束\cite{escande2013planning}，
+用随机采样点的方法在时空域上预先规划好，这个过程称作落脚点规划。预规划好的落脚点在后续执行的过程中可以根据实际的地形
+和外界扰动来调整cite{feng2016robust}。对应的质心运动和角动量可以通过在线MPC的框架来得到\cite{wieber2006trajectory}，
+该框架在考虑质心动力学\autoref{equ:1.1}和\autoref{equ:1.2}的同时需要保证机器人的状态始终是可捕获的\cite{wieber2016modeling}。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \chapter{另一章}
 
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=.3\linewidth]{example-image-a}
-    \caption{\label{fig:fig-placeholder}图片占位符}
-\end{figure}
 
 \chapter{再一章}
