@@ -270,7 +270,50 @@ Reinforcement learning:强化学习技术的成熟使得离线用机器人的完
 有了这个结论之后，浮动基的位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
 
 A 过程模型
-和[3]中一样，机器人的位置和速度估计的状态量$x$将机器人足的位置也包括了进去：
+
+和[3]中一样，机器人的位置和速度估计的状态量$\boldsymbol{x}$将机器人足的位置也包括了进去：
+\begin{equation}
+    \label{equ:est_posvel}
+    \boldsymbol{x}=\left[{ }^\mathcal{I} \boldsymbol{p}_b^{\top},{ }^\mathcal{I} \boldsymbol{v}_b^{\top},{ }^\mathcal{I} \boldsymbol{p}_L^{\top},{ }^\mathcal{I} \boldsymbol{p}_R^{\top}\right]^{\top}
+\end{equation}
+对于$n$时刻的加速度测量$\boldsymbol{a}_n$，浮动基的位置和速度的演化可以表示为：
+\begin{equation}
+    \label{equ:est_posvel}
+    \boldsymbol{x}_{n+1}=\left[\begin{array}{c}
+        { }^{\top} \boldsymbol{p}_{b, n}+{ }^{\top} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\top} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right](\Delta t)^2 \\
+        { }^{\top} \boldsymbol{v}_{b, n}+\left[{ }^{\top} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right] \Delta t \\
+        { }^{\top} \boldsymbol{p}_{L, n} \\
+        { }^{\top} \boldsymbol{p}_{R, n}
+        \end{array}\right]
+\end{equation}
+我们假设足是保持静止的。
+
+通常，如果 的估计是和 同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的。
+然而如果近似将 的估计与 的估计解耦，那么将 看成是时变的控制输入 ，则过程模型(6)就变成了线性时不变的模型。
+
+我们用了基于IMU的姿态估计器来估计 (和第二部分B中描述的类似)。我们使用了[14]中提出估计的第二种版本。
+原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
+
+B 测量模型
+
+为了估计 ，需要用运动学测量得到IMU相对脚的位置。除此之外，脚的高度( 和 这里假设为0)也被用作伪测量：
+
+通过解耦状态 的估计，它的估计值可以代入 。这种方法可以在测量 和状态值 中建立起线性的关系：
+
+C 加权噪声模型
+基于上文的解耦假设， 的估计可以写成随机过程下的标准线性卡尔曼滤波：
+$A$和$B$满足(6)式， 和 分别是过程噪声和测量噪声的协方差矩阵。为了和WA滤波器的操作大致符合，测量噪声被设计成：
+
+和 被设计成：
+
+和 是固定的名义标准差。 的值向下会饱和到一个较小的正值 来避免除0。右腿的测量噪声模型也采用了类似的放缩。
+
+过程噪声被建模成：
+
+其中 是加速度计的固定均方根误差， 也是自适应放缩的足端位置的标准差，这样的噪声模型使得估计器可以在走路的过程中自动捕捉摆动腿的位置变化。
+为了给这个过程提供更多的灵活性，噪声模型通过一个inverse logistic sigmoid做了放大：
+
+其中 是足端速度变化的名义方差。随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计。
 
 \section{触地状态估计}
 \subsection{概率触地模型融合}
@@ -292,7 +335,7 @@ A 过程模型
 我们就能用一个简单的线性卡尔曼滤波来实现。在估计时使用概率而不是离散的二进制接触状态的好处之一是，在概率增大或者减小时
 我们可以预测会发生接触状态的变化。
 
-A 预测模型
+A 预测：过程模型
 
 对于给定的步态规划和当前某条腿的相位$\phi$，步态规划器会给出每条腿期望的接触状态$s_{\phi}$。在理想情况下，$s = s_{\phi}$，
 并且状态切换是同时发生的。然而机器人的控制系统很容易有延时，这可能导致腿抬得晚了，或者由于摆动腿轨迹跟随的误差以及未知的地面高度变化
@@ -307,8 +350,121 @@ A 预测模型
         & \left.\bar{s}_\phi\left[2+\operatorname{erf}\left(\frac{\mu_{\bar{c}_0}-\phi}{\sigma_{\bar{c}_0} \sqrt{2}}\right)+\operatorname{erf}\left(\frac{\phi-\mu_{\bar{c}_1}}{\sigma_{\bar{c}_1} \sqrt{2}}\right)\right]\right)
         \end{aligned}
 \end{equation}
+其中$s_{\phi}$表示支撑相或者摆动相之间的切换，均值$\mu$表示接触状态切换的期望子相值，方差$\sigma^2$由触地相的子相值的可变性(variability)决定。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.75\linewidth]{图3.png}
+    \caption{\label{fig:gauss_phase}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
+\end{figure}
+\autoref{fig:gauss_phase}展示了基于相位和规划状态的不同方差的接触概率的两条曲线。
+在触地相即将要开始和结束的阶段，腿出于触地状态的可能性是更小的，
+而在摆动相的开始和结束阶段腿处于触底状态的可能性是更大的。因此这种模型可以被用作系统的瞬时输入，将各条腿叠在一起，
+用每条腿的规划状态和相位，将其写成：
+\begin{equation}
+    \label{equ:est_input}
+    \boldsymbol{u}_k=\left\{\begin{array}{c}
+        P_1\left(c \mid s_\phi, \phi\right) \\
+        \vdots \\
+        P_N\left(c \mid s_\phi, \phi\right)
+        \end{array}\right\}_k
+\end{equation}
+下面的协方差矩阵 大致表示了我们对基于相位的状态切换模型的置信度：
+\begin{equation}
+    \label{equ:est_process_noise}
+    \boldsymbol{\Sigma}_{w_k}=\left[\begin{array}{ccc}
+        \sigma_{\phi, 1}^2 & \cdots & 0 \\
+        \vdots & \ddots & \vdots \\
+        0 & \cdots & \sigma_{\phi, N}^2
+        \end{array}\right]_k
+\end{equation}
+由于我们只是通过融合当前可用的测量来看瞬时的接触检测，所以状态和输入矩阵可以定义为：
+\begin{equation}
+    \label{equ:est_process_matrix}
+    \boldsymbol{A}_k=\mathbf{0}_N \quad \text { and } \quad \boldsymbol{B}_k=\mathbf{I}_N
+\end{equation}
 
+B 校正：测量模型
 
+1）地面高度测量模型：在缺少环境感知系统的情况下，地面高度$z_g$可以概率地被建模出来。
+表示地面高度的随机变量$z_g$符合高斯分布，即$Z_g \sim \mathcal{N}\left(\mu_{z_g}, \sigma_{z_g}^2\right)$。$\mu_{z_g}$表示地面高度的均值，
+在没有外部信息时被设为0，因为我们无法对地形做出任何假设。类似地，方差大致和地形的“粗糙”程度对应。这样我们就能用地面高度的模型来根据当前机器人
+足端在竖直方向的位置$p_z$得到触地的概率：
+\begin{equation}
+    \label{equ:est_height_prob}
+    P\left(c \mid p_z\right)=\frac{1}{2}\left[1+\operatorname{erf}\left(\frac{\mu_{z_g}-p_z}{\sigma_{z_g} \sqrt{2}}\right)\right]
+\end{equation}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.75\linewidth]{图4.png}
+    \caption{\label{fig:gauss_height}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
+\end{figure}
+\autoref{fig:gauss_height}展示了地面的高斯模型，以及给定足端高度对应推理出的触地概率。每个图都有不同的参数对应不同地面粗糙度的估计。
+最终$\mu_{z_g}$和$\sigma_{z_g}^2$的值可以从其他传感器信息或者之前的行走数据中获得。这个模型提供了第一次测量校正，
+并且对应的协方差矩阵可以写为：
+\begin{equation}
+    \label{equ:est_height_noise}
+    \tilde{\boldsymbol{z}}_{1, k}=\left\{\begin{array}{c}
+        P_1\left(c \mid p_z\right) \\
+        \vdots \\
+        P_N\left(c \mid p_z\right)
+        \end{array}\right\}_k \boldsymbol{\Sigma}_{v_{1, k}}=\left[\begin{array}{ccc}
+        \sigma_{p_{z, 1}}^2 & \cdots & 0 \\
+        \vdots & \ddots & \vdots \\
+        0 & \cdots & \sigma_{p_{z, N}}^2
+        \end{array}\right]_k
+\end{equation}
+该协方差矩阵表示我们对接触高度模型信任度的度量。
+
+1）接触力测量模型：足底的外力是唯一真实能表明发生了触地的信息。然而机器人当前并没有安装直接力传感器。通过第三部分中估计出的外力，
+我们可以建立另一个力接触的简单概率模型，用随机变量$f_c$表示，$f_c$满足高斯分布：$F_c \sim \mathcal{N}\left(\mu_{f_c}, \sigma_{f_c}^2\right)$。
+这里$\mu_{f_c}$是在接触处感知到的外力的均值，$\sigma_{f_c}^2$度量估计出的外力的噪声大小。对于给定估计接触力，触地概率可以写成：
+\begin{equation}
+    \label{equ:est_force_prob}
+    P\left(c \mid f_z\right)=\frac{1}{2}\left[1+\operatorname{erf}\left(\frac{f_z-\mu_{f_c}}{\sigma_{f_c} \sqrt{2}}\right)\right]
+\end{equation}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.75\linewidth]{图5.png}
+    \caption{\label{fig:gauss_force}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
+\end{figure}
+\autoref{fig:gauss_force}展示了法向接触力和对应触地概率的关系，这个基于外力的概率是我们的第二个测量:
+\begin{equation}
+    \label{equ:est_force_noise}
+    \tilde{\boldsymbol{z}}_{2, k}=\left\{\begin{array}{c}
+        P_1\left(c \mid f_z\right) \\
+        \vdots \\
+        P_N\left(c \mid f_z\right)
+        \end{array}\right\}_k \boldsymbol{\Sigma}_{v_{2, k}}=\left[\begin{array}{ccc}
+        \sigma_{f_{z, 1}}^2 & \cdots & 0 \\
+        \vdots & \ddots & \vdots \\
+        0 & \ldots & \sigma_{f_{z, N}}^2
+        \end{array}\right]_k
+\end{equation}
+
+这两组单独的测量叠在一起组成了卡尔曼滤膜中的测量向量。类似地，每个测量的协方差矩阵组成了如下的块对角协方差矩阵：
+\begin{equation}
+    \label{equ:est_h_and_f}
+    \tilde{\boldsymbol{z}}_k=\left[\begin{array}{c}
+        \tilde{\boldsymbol{z}}_{1, k} \\
+        \tilde{\boldsymbol{z}}_{2, k}
+        \end{array}\right] \quad \boldsymbol{\Sigma}_{v_k}=\left[\begin{array}{cc}
+        \boldsymbol{\Sigma}_{v_{1, k}} & \mathbf{0}_N \\
+        \mathbf{0}_N & \boldsymbol{\Sigma}_{v_{2, k}}
+        \end{array}\right]
+\end{equation}
+输出矩阵$\boldsymbol{H}_k$由两个$N\times N$的单位矩阵叠在一起组成：
+\begin{equation}
+    \label{equ:output_matrix}
+    \boldsymbol{H}_k=\left[\begin{array}{l}
+        \mathbf{I}_N \\
+        \mathbf{I}_N
+        \end{array}\right]
+\end{equation}
+其中$N$是足的个数。通过将步态规划器的期望接触状态和测量概率模型的结果融合，我们可以得到每条腿的实际接触状态的一个更好的估计。
+由于我们把卡尔曼滤波器的$\boldsymbol{A}_k$设为$\mathbf{0}_N$，融合的过程也能通过贝叶斯定理下的静态最大似然方法来得到。
+但我们还是用了标准的卡尔曼滤波来迭代更新（但这个过程是预先嵌入在标准卡尔曼滤波更新中的），这在机器人学中是更容易获得的。
+
+\subsection{触地估计实验验证}
 
 
 \chapter{双足机器人质心轨迹优化}
@@ -517,7 +673,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
     \label{equ:kine_constraint}
     -l^{\min } \leq\left\|\boldsymbol{x}-\boldsymbol{x}_*\right\| \leq l^{\max }
 \end{equation}
-其中$l^{min}, l^{max} \in \mathbb{R}$分别是上下限，这些约束可以分别施加到每条腿上。
+其中$l^{\min}, l^{\max} \in \mathbb{R}$分别是上下限，这些约束可以分别施加到每条腿上。
 
 \subsection{任务（目标函数设计）}
 \label{cost_function}
@@ -585,3 +741,8 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 % \boldsymbol{\rho}
 % \in \mathbb{R}^{3}
 % { }^* \boldsymbol{f}_*
+
+\chapter{步态优化}
+
+
+\chapter{总结与展望}
