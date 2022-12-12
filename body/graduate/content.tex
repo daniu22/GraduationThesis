@@ -213,6 +213,29 @@ Reinforcement learning:强化学习技术的成熟使得离线用机器人的完
 
 
 \chapter{双足机器人状态估计}
+标准卡尔曼滤波的预测模型可以写成：
+\begin{equation}
+    \label{equ:kf_process}
+    \begin{gathered}
+        \hat{\boldsymbol{x}}_{k \mid k-1}=\boldsymbol{A}_k \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{B}_k \boldsymbol{u}_k \\
+        \boldsymbol{\Sigma}_{k \mid k-1}=\boldsymbol{A}_k \boldsymbol{\Sigma}_{k-1} \boldsymbol{A}_k^T+\boldsymbol{\Sigma}_{w_k}
+        \end{gathered}
+\end{equation}
+
+标准卡尔曼滤波器的校正方程可以写为：
+\begin{equation}
+    \label{equ:kf_measurement}
+    \begin{gathered}
+        \boldsymbol{K}_k=\boldsymbol{\Sigma}_{k \mid k-1} \boldsymbol{H}_k^T\left(\boldsymbol{H}_k \boldsymbol{\Sigma}_{k \mid k-1} \boldsymbol{H}_k^T+\boldsymbol{\Sigma}_{v_k}\right) \\
+        \hat{\boldsymbol{x}}_{k \mid k}=\hat{\boldsymbol{x}}_{k \mid k-1}+\boldsymbol{K}_k\left(\tilde{\boldsymbol{z}}_k-\boldsymbol{H}_k \hat{\boldsymbol{x}}_{k \mid k-1}\right) \\
+        \boldsymbol{\Sigma}_{k \mid k}=\left(\mathbf{I}-\boldsymbol{K}_k \boldsymbol{H}_k\right) \boldsymbol{\Sigma}_{k \mid k-1}
+        \end{gathered}
+\end{equation}
+
+
+
+
+
 \section{质心状态估计}
 包括人形机器人在内的腿足机器人有驱动关节，但并没有和环境刚性固定。因此驱动关节的角度并不能决定机器人相对环境的位姿。
 腿足机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态。这个连杆就是所谓的浮动基。
@@ -250,14 +273,315 @@ A 过程模型
 和[3]中一样，机器人的位置和速度估计的状态量$x$将机器人足的位置也包括了进去：
 
 \section{触地状态估计}
+\subsection{概率触地模型融合}
+实际上，我们不能完全信任控制器会按时将脚抬离或者放回地面，完美地按照规划出的相位执行。同样地，我们也不能假设地面是完全平整的，
+由于复杂的地形或者是未知的物体，地面的高度可能是未知的。在没有外部力传感器的情况下，我们必须从关节编码器的数据，本体力感知，
+以及腿的动力学模型来估计外部作用力。编码器有离散误差，同时模型误差会导致在没有外力的时候也会计算出非0的外力。
+这些单一的测量没有一个能告诉我们腿的真实状态，但我们能从每个测量中获取信息，并且用这些信息来得到某条腿是否有可能和地面接触的一个
+更好的估计$\hat s$，$\hat s \in \left\{0=swing, 1=contact\right\}$。完美的触地检测算法满足$\hat s = s$，$s$表示触地状态的真值。
+由于要使用多种测量，使用卡尔曼滤波器来实现数据融合是很自然的。将脚和地面接触的整体估计概率作为卡尔曼滤波器的状态，即：
+\begin{equation}
+    \label{equ:est_state}
+    \hat{\boldsymbol{x}}_k=\left\{\begin{array}{c}
+        P_1(c) \\
+        \vdots \\
+        P_N(c)
+        \end{array}\right\}_k
+\end{equation}
+自然而然地，我们可以用概率接触模型作为先验来融合所有可用的数据。虽然测量中涉及到的动力学很复杂，但把接触的概率作为状态，
+我们就能用一个简单的线性卡尔曼滤波来实现。在估计时使用概率而不是离散的二进制接触状态的好处之一是，在概率增大或者减小时
+我们可以预测会发生接触状态的变化。
 
+A 预测模型
 
+对于给定的步态规划和当前某条腿的相位$\phi$，步态规划器会给出每条腿期望的接触状态$s_{\phi}$。在理想情况下，$s = s_{\phi}$，
+并且状态切换是同时发生的。然而机器人的控制系统很容易有延时，这可能导致腿抬得晚了，或者由于摆动腿轨迹跟随的误差以及未知的地面高度变化
+导致触地触地提前或者晚了。
 
-
-
-
+为了解决这些问题，我们可以建立一个概率模型，来在给定腿的规划接触状态和在支撑相 或者摆动相 的子相的情况下得到触地的期望值。
+对于给定接触状态和子相百分比，触地概率有如下形式：
+\begin{equation}
+    \label{equ:est_contact_prob}
+    \begin{aligned}
+        P\left(c \mid s_\phi, \phi\right)= & \frac{1}{2}\left(s_\phi\left[\operatorname{erf}\left(\frac{\phi-\mu_{c_0}}{\sigma_{c_0} \sqrt{2}}\right)+\operatorname{erf}\left(\frac{\mu_{c_1}-\phi}{\sigma_{c_1} \sqrt{2}}\right)\right]+\right. \\
+        & \left.\bar{s}_\phi\left[2+\operatorname{erf}\left(\frac{\mu_{\bar{c}_0}-\phi}{\sigma_{\bar{c}_0} \sqrt{2}}\right)+\operatorname{erf}\left(\frac{\phi-\mu_{\bar{c}_1}}{\sigma_{\bar{c}_1} \sqrt{2}}\right)\right]\right)
+        \end{aligned}
+\end{equation}
 
 
 
 
 \chapter{双足机器人质心轨迹优化}
+\section{基于QP的全身控制器}
+机器人运动由基于QP的全身控制器控制[22]，该控制器输出一组期望关节加速度，包括浮动基关节在惯性系$\mathcal{I}$下的空间加速度，
+这里我们用$\dot{\boldsymbol{\nu}}_d \in \mathbb{R}^{n+6}$表示，$n$是驱动关节的数量。另外，该全身控制器也会生成
+期望的接触力和力矩(wrenches)。
+
+该全身控制器处理包括笛卡尔空间和质心任务的不同运动控制任务。前者的实现是通过最小化下面的目标函数：
+\begin{equation}
+    \label{equ:qp_objective}
+    \left\|\boldsymbol{J}_t \dot{\boldsymbol{\nu}}_d-\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)\right\|^2
+\end{equation}
+其中$\boldsymbol{J}_t \in \mathbb{R}^{n_j \times (n+6)}$是任务雅可比，$n_j$是任务$j$的自由度数量，
+$\boldsymbol{\alpha}_d \in \mathbb{R}^{n_j}$是任务的期望加速度，$\boldsymbol{\nu}$是由状态估计得到的浮动基和关节速度向量。
+$\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)$是不依赖决策变量的向量，用符号$\boldsymbol{\alpha}_i$代替。
+
+质心任务由控制机器人的动量$\boldsymbol{h}$实现，$\boldsymbol{h} \in \mathbb{R}^{6}$。我们特意利用了下面的关系：
+\begin{equation}
+    \label{equ:qp_momentum}
+    \dot{\boldsymbol{h}}=\boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\sum_i \boldsymbol{W}_{\mathrm{gr}, i}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i}
+\end{equation}
+其中$\boldsymbol{J}_{CMM} \in \mathbb{R}^{6 \times (n+6)}$是质心动量矩阵[23]，
+$\boldsymbol{W}_g=\left[\begin{array}{ll}0_{3 \times 1}^{\top} & m \boldsymbol{g}^{\top}\end{array}\right]^{\top}$是由于重力产生的力和力矩(wrench)，
+$\sum_i {\boldsymbol{W}_{gr,i}}$表示作用在机器人身体上的接触力，$\sum_i {\boldsymbol{W}_{ext,i}}$表示除上述两种力外作用在机器人上的力和力矩的总和。
+
+不同的接触力作用在接触面(contact patch)的每个顶点上，这些力被特意用一个坐标向量$\boldsymbol{\rho}_i$定义，$\boldsymbol{\rho}_i \in \mathbb{R}^{m}$，
+它的基是摩擦锥表面上的$m$个向量(extreme rays)。通过限制$\boldsymbol{\rho}_i$的每一个元素都在$\left[\rho_{min}, \rho_{max}\right]$内，我们避免过分大的力和力矩。
+另外更重要的一点是，这样做隐式地满足了摩擦约束和CoP约束。一般来说由接触产生的法向力也一定是正的。
+我们可以把接触相关的力和力矩$\sum_i {\boldsymbol{W}_{gr,i}}$在惯性系$\mathcal{I}$中表示为$\boldsymbol{\rho}_i$的函数：
+\begin{equation}
+    \label{equ:qp_grf_coord}
+    \boldsymbol{W}_{\mathrm{gr}, i}=\boldsymbol{Q}_i \boldsymbol{\rho}_i
+\end{equation}
+其中$\boldsymbol{Q}_i \in \mathbb{R}^{6 \times m}$取决于接触顶点$i$的位置和基向量的选择，通过把所有的$\boldsymbol{Q}_i$和$\boldsymbol{\rho}_i$接到一起，
+我们可以得到$\sum_i {\boldsymbol{W}_{\mathrm{gr}, i}}=\boldsymbol{Q}_i \boldsymbol{\rho}_i$。
+
+最终笛卡尔和质心任务被组合成如下形式：
+\begin{equation}
+    \label{equ:qp_cartesian_com_task}
+    \hat{\boldsymbol{J}}=\left[\begin{array}{c}
+        \boldsymbol{J} \\
+        \boldsymbol{J}_{\mathrm{CMM}}
+        \end{array}\right], \quad \hat{\boldsymbol{\beta}}=\left[\begin{array}{c}
+        \boldsymbol{\beta} \\
+        \dot{\boldsymbol{h}}_d-\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}
+        \end{array}\right]
+\end{equation}
+其中$\boldsymbol{J}$和$\boldsymbol{\beta}$分别是所有的任务雅可比$\boldsymbol{J}_i$和$\boldsymbol{\beta}_i$的接合，
+$\dot{\boldsymbol{h}}_d$是期望的动量变化率。
+在每个控制周期，要解的QP问题可以写成：
+\begin{equation}
+    \label{equ:qp_final}
+    \begin{aligned}
+        \underset{\dot{\nu}_d, \boldsymbol{\rho}}{\operatorname{minimize}} & \left\|\hat{\boldsymbol{J}} \dot{\boldsymbol{\nu}}_d-\hat{\boldsymbol{\beta}}\right\|_{C_t}^2+\|\boldsymbol{\rho}\|_{C_\rho}^2+\left\|\dot{\boldsymbol{\nu}}_d\right\|_{C_{\dot{\boldsymbol{\nu}}}}^2 \\
+        \text { subject to: } & \boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}_d+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\boldsymbol{Q} \boldsymbol{\rho}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i} \\
+        & \boldsymbol{\rho}^{\min } \leq \boldsymbol{\rho} \leq \boldsymbol{\rho}^{\max }
+        \end{aligned}
+\end{equation}
+期望的广义关节加速度和接触力被用于计算机器人期望的关节力矩输入。
+
+\section{变高度双摆模型}
+由牛顿第二定律可以得到线动量的变化率：
+\begin{equation}
+    \label{equ:newton_2}
+    m \ddot{\boldsymbol{x}}=-m \boldsymbol{g}+\sum_i{ }^{\mathcal{I}} \boldsymbol{f}_i
+\end{equation}
+其中$\boldsymbol{x} \in \mathbb{R}^{3}$是惯性系$\mathcal{I}$下的质心位置，$m$是机器人的总质量，$\boldsymbol{g}$是重力加速度， 
+是惯性系$\mathcal{I}$下的一个外力。我们可以把机器人足底所受的力和力矩定义在和$\mathcal{I}$平行的一个坐标系下，这个坐标系的原点和CoP点重合；
+同时假设在通过CoP点，和足底垂直的轴上没有力矩作用在机器人上。这样机器人足底所受的力矩为0，可以通过限制所有的力都在通过质心的一条
+直线上来保证角动量守恒，即：
+\begin{equation}
+    \label{equ:linear_f}
+    { }^{\mathcal{I}} \boldsymbol{f}_*=m \lambda_*\left(\boldsymbol{x}-{ }^{\mathcal{I}} \boldsymbol{p}_*\right)
+\end{equation}
+其中*是占位符表示左脚$l$或者右脚$r$。${ }^{\mathcal{I}} \boldsymbol{f}_* \in \mathbb{R}^{3}$是惯性系$\mathcal{I}$下脚上的外力，
+$\lambda_* \in \mathbb{R}^{3}$是系数，可以理解成弹簧的刚度。\autoref{equ:linear_f}表示让质心角动量守恒，是一种偏保守的限制。
+然而，在双足机器人用这样的模型可以在某种程度上确保鲁棒性。
+
+由于我们把所有的接触都考虑成单边接触，$\lambda_*$被约束为正来保证法向力为正，${ }^{\mathcal{I}} \boldsymbol{p}_* \in \mathbb{R}^{3}$
+是足底CoP在$\mathcal{I}$下的位置，
+\begin{equation}
+    \label{equ:cop}
+    { }^{\mathcal{I}} \boldsymbol{p}_*=\boldsymbol{x}_*+{ }^{\mathcal{I}} \boldsymbol{R}_* \boldsymbol{p}_*
+\end{equation}
+其中$\boldsymbol{x}_* \in \mathbb{R}^{3}$是足底位置，$\boldsymbol{p}_equ:acceleration*$是足坐标系下的CoP，因此$z$坐标为0。
+${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$间的相对旋转，为了简化表达，下文我们省略掉上标，
+将${ }^{\mathcal{I}} \boldsymbol{R}_*$表示为$\boldsymbol{R}_*$。
+
+假设机器人所受外力仅由足底力组成，\autoref{equ:newton_2}可以改写为：
+\begin{equation}
+    \label{equ:newton_linear_1}
+    m \ddot{\boldsymbol{x}}= -m \boldsymbol{g}+m \lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right)
+    +m \lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)
+\end{equation}
+同除以机器人的总质量，最终得到：
+\begin{equation}
+    \label{equ:newton_linear_2}
+    \ddot{\boldsymbol{x}}= -\boldsymbol{g}+\lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right) 
+        +\lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)
+\end{equation}
+\autoref{equ:newton_linear_2}表示双摆的模型，在包含双腿的同时也保持了较低的维度。
+
+\section{上台阶动力学规划}
+本文中表述的跨台阶规划器利用了[16][26][27]中阐述的基于阶段的轨迹优化。我们假设预先知道接触的序列，
+这样简化了对接触的激活和失活的处理。本节提出了解决相关的非线性轨迹优化问题的约束，任务和方法论。
+首先我们将\autoref{equ:newton_linear_2}简化为：
+\begin{equation}
+    \label{equ:acceleration}
+    \ddot{\boldsymbol{x}} = \boldsymbol{a}_i
+\end{equation}
+根据对应相位$i$的接触状态，$\boldsymbol{a} \in \mathbb{R}^{3}$表示不同的值:
+\begin{itemize}
+    \item 没有脚触地，$\boldsymbol{a}_i = -\boldsymbol{g}$；
+    \item 一只脚触地(*表示$l$或者$r$)，$\boldsymbol{a}_i=-\boldsymbol{g}+\lambda_*\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right)$
+    \item 两只脚触地，$\boldsymbol{a}_i=-\boldsymbol{g}+\lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right)
+                    +\lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)$
+\end{itemize}
+通过二阶泰勒展开，我们可以得到\autoref{equ:acceleration}的近似离散形式：
+\begin{equation}
+    \label{equ:approx_acc}
+    \begin{aligned}
+        & \boldsymbol{x}(k+1)=\boldsymbol{x}(k)+\boldsymbol{v}(k) \mathrm{dt}_i+\frac{1}{2} \boldsymbol{a}_i(k) \mathrm{dt}_i^2 \\
+        & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\boldsymbol{a}_i(k) \mathrm{dt}_i
+        \end{aligned}
+\end{equation}
+其中$k \in \mathbb{R}$表示任一离散时刻，$\boldsymbol{v}(k) \in \mathbb{R}^{3}$表示时刻$k$的质心速度。每个阶段$i$的时长为$T_i \in \mathbb{R}$，
+$T_i$并非预先设定好的，而是作为待优化变量。但每个阶段的离散区间数是固定的，因此$dt_i=T_i/N$，$N\in \mathbb{N}^+$表示每个阶段的离散区间数量。
+另外$T_i$被限制在$[T_i^{min}, T_i^{max}]$范围内。
+
+\subsection{力和腿长约束}
+\label{constraints}
+为了保证机器人能够执行，施加在足底的力必须满足某些条件。这些条件被嵌入到了优化问题的约束中。
+
+首先，CoP必须处于足底多边形内，通过添加一组不等式约束可以满足这个条件：
+\begin{equation}
+    \label{equ:inequ_constraint}
+    \boldsymbol{A}_* \boldsymbol{p}_* \leq \boldsymbol{b}_*
+\end{equation}
+其中$\boldsymbol{A}_* \in \mathbb{R}^{v \times 3}, b \in \mathbb{R}^{v}$可以根据足底多边形顶点的位置计算，顶点的数量是$v$。
+由于$\boldsymbol{p}_*$被定义在足坐标系下，因此这些量不依赖于足的位姿。
+
+为了避免足底打滑，足底力向量应该位于摩擦锥中，写成不等式约束：
+\begin{equation}
+    \label{equ:friction}
+    \sqrt{{ }^* f_{*, x}^2+{ }^* f_{*, y}^2} \leq \mu_s{ }^* f_{*, z}
+\end{equation}
+其中$\mu_s \in \mathbb{R}$是静摩擦系数，${ }^* \boldsymbol{f}_* \in \mathbb{R}^{3}$是足坐标系下的足底力，
+即$\boldsymbol{f}_*=\boldsymbol{R}_*^{\top \mathcal{I}} \boldsymbol{f}_*$。
+假设足坐标系平行于$z$轴和行走平面垂直并和地面固定的坐标系，代入\autoref{equ:linear_f}和\autoref{equ:cop}，
+\autoref{equ:friction}可以重写为：
+\begin{equation}
+    \label{equ:friction_2}
+    \left[\begin{array}{lll}
+        1 & 1 & -\mu_s^2
+        \end{array}\right]\left(\boldsymbol{R}_*^{\top} m \lambda_*\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right)\right)^2 \leq 0
+\end{equation}
+注意当$\lambda_*=0$，不等式左边为0，摩擦约束自动满足，因此\autoref{equ:friction_2}可以简化为：
+\begin{equation}
+    \label{equ:friction_simplify}
+    \left[\begin{array}{lll}
+        1 & 1 & -\mu_s^2
+        \end{array}\right]\left(\boldsymbol{R}_*^{\top} m \left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right)\right)^2 \leq 0
+\end{equation}
+
+对于扭转摩擦约束，我们在足坐标系的原点施加相同的法向力矩$\tau_{*, z}$，并对其施加边界约束，即$-\mu_t{ }^* f_{*, z} \leq \tau_{*, z} \leq \mu_t{ }^* f_{*, z}$，
+$\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{f}_* \in \mathbb{R}^{3}$的作用点在$\boldsymbol{p}_*$处，我们可以把约束重写为：
+\begin{equation}
+    \label{equ:friction_final}
+    -\left[\begin{array}{c}
+        0 \\
+        0 \\
+        \mu_t
+        \end{array}\right]^{\top} * \boldsymbol{f}_* \leq\left[\begin{array}{c}
+        -p_{*, y} \\
+        p_{*, x} \\
+        0
+        \end{array}\right]^{\top} * \boldsymbol{f}_* \leq\left[\begin{array}{c}
+        0 \\
+        0 \\
+        \mu_t
+        \end{array}\right]^{\top} * \boldsymbol{f}_*
+\end{equation}
+或者等价地写成：
+\begin{equation}
+    \label{equ:friction_vector}
+    -\boldsymbol{d}_*^{\top *} \boldsymbol{f}_* \leq \boldsymbol{c}_*^{\top *} \boldsymbol{f}_* \leq \boldsymbol{d}_*^{\top *} \boldsymbol{f}_*
+\end{equation}
+注意$\boldsymbol{c}_*^{\top *} \boldsymbol{f}_*$表示$\boldsymbol{p}_* \times { }^* \boldsymbol{f}_*$的$z$向分量。
+和上文对静摩擦力约束的处理一样，我们替换掉${ }^* \boldsymbol{f}_*$得到下面的不等式约束：
+\begin{equation}
+    \label{equ:friction_stack}
+    \boldsymbol{F}_* \boldsymbol{R}_*^{\top}\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* p_*\right) \leq 0
+\end{equation}
+其中，
+\begin{equation}
+    \label{equ:friction_F}
+    \boldsymbol{F}_*=\left[\begin{array}{c}
+        \left(\boldsymbol{c}_*-\boldsymbol{d}_*\right)^{\top} \\
+        \left(-\boldsymbol{c}_*-\boldsymbol{d}_*\right)^{\top}
+        \end{array}\right]
+\end{equation}
+
+在规划机器人运动时，我们必须考虑它的运动学限制，可以用质心到足的距离近似腿长，来限制超出运动学范围的运动，这个约束可以写成：
+\begin{equation}
+    \label{equ:kine_constraint}
+    -l^{\min } \leq\left\|\boldsymbol{x}-\boldsymbol{x}_*\right\| \leq l^{\max }
+\end{equation}
+其中$l^{min}, l^{max} \in \mathbb{R}$分别是上下限，这些约束可以分别施加到每条腿上。
+
+\subsection{任务（目标函数设计）}
+\label{cost_function}
+目标函数的设计是为了生成机器人利用自身动量跨越高台阶的质心轨迹，由几个任务组成，完整的目标函数在优化问题1的顶部。
+
+第一个任务是在衡量末状态和期望位置${x}_d$，期望速度${v}_d$之间的距离：
+\begin{equation}
+    \label{equ:cost_1}
+    \Gamma_{x_d}=\sum_{k=\mathbb{K}_f}\left(w_{x_d}\left\|\boldsymbol{x}(k)-\boldsymbol{x}_{\boldsymbol{d}}\right\|^2+w_{\dot{x}_d}\left\|\boldsymbol{v}(k)-\boldsymbol{v}_d\right\|^2\right)
+\end{equation}
+其中$w_{x_d}, w_{\dot{x}_d} \in \mathbb{R}^{+}$是可以调整的权重。$\mathbb{K}_f$包括了最后一个阶段的一部分，末状态在这部分里面。
+所以可以生成提前到达终点并定义可以维持终点状态的控制输入的轨迹。因此，我们保证了最终可以到达稳定的状态。
+
+由\autoref{equ:newton_linear_2}定义的模型不包含任何执行规划运动的关节力矩信息，为了减小关节所需的力矩，我们加上了下面的任务：
+\begin{equation}
+    \label{equ:cost_2}
+    \Gamma_\tau=w_\tau \sum_{k, *} \tau_*(k)^2+w_{\tau_{\max }} \sum_*\left(\max _k \tau_*(k)^2\right)
+\end{equation}
+其中，
+\begin{equation}
+    \label{equ:tau}
+    \tau_*(k)= \begin{cases}\left(x_z(k)-x_{*, z}-\delta_*\right) \lambda_*(k) & \text { if } * \text { in contact } \\ 0 & \text { otherwise }\end{cases}
+\end{equation}
+\autoref{equ:tau}是用来减少关节力矩的启发式函数。*是表示$l$或者$r$的占位符，$\delta_*$是参考高度差。
+直观上看，当机器人膝关节弯的很多的时候，承受的压力是更大的。在这种构型下，质心和足之间的高度差是相对小的，
+这个启发式函数可以防止求解出要求处于运动学极限附近的腿施加很大力的解。
+所以$\Gamma_\tau$衡量了在所有离散时间区间上的的平方和的大小。$\Gamma_\tau$的第二项是为了防止$\tau_*(k)$出现剧烈变化。
+$w_{\tau}, w_{\tau_{max}} \in \mathbb{R}^+$是确定两项的相对优先级的权重。
+
+对于控制输入$\lambda_*(k)$和$\boldsymbol{p}_*(k)$ ，执行规划器生成的轨迹的输入的变化最好是相对小的，
+这样可以减少实物机器人跟踪轨迹时的关节力矩的变化。所以我们考虑下面的任务：
+\begin{equation}
+    \label{equ:cost_3}
+    \Gamma_{\Delta_u}=w_{\Delta_u} \sum_{k=2 \ldots N \cdot P}\left\|\boldsymbol{u}_*(k)-\boldsymbol{u}_*(k-1)\right\|^2
+\end{equation}
+其中$w_{\Delta u} \in \mathbb{R}^+$是任务权重，$\boldsymbol{u}_*=\left[\lambda_*^{\top} \boldsymbol{p}_*^{\top}\right]^{\top}$。
+
+最后，我们加上一系列的正则项：
+\begin{equation}
+    \label{equ:cost_4}
+    \Gamma_{\text {reg }}=  w_t \sum_i\left\|T_i-T_{i, d}\right\|^2+w_\lambda \sum_k\left\|\lambda_*(k)\right\|^2+ 
+        +w_p \sum_k\left\|\boldsymbol{p}_*(k)\right\|^2
+\end{equation}
+正则项使得优化问腿的求解向最小化控制输入和最小化每个阶段的的时长与预设的期望时长$T_{i, d}$的差值的方向进行，$w_t, w_\lambda, w_p$是对应正则项的权重。
+
+\subsection{优化问题}
+最终的轨迹优化问题由动力学约束(\autoref{equ:approx_acc})，\autoref{constraints}中列举的约束，\autoref{cost_function}中的目标函数。由于约束中既有等式约束又有不等式约束，
+我们用Direct Multiple Shooting将轨迹优化问题转化为非线性规划问题(NLP)。NLP问题的决策变量$\boldsymbol{\chi}$可以写成：
+\begin{equation}
+    \label{equ:decision_variable}
+    \boldsymbol{\chi} = \begin{cases}\boldsymbol{x}(k) & k=0 \ldots N \cdot P \\ \boldsymbol{v}(k) & k=0 \ldots N \cdot P \\ \boldsymbol{a}(k) & k=1 \ldots N \cdot P \\ \lambda_*(k) & k=1 \ldots N \cdot P, *=l, r \\ \boldsymbol{p}_*(k) & k=1 \ldots N \cdot P, *=l, r \\ T_i & i=1 \ldots P,\end{cases}
+\end{equation}
+其中$P \in \mathbb{N}^+$是不同阶段的数量。$\boldsymbol{x}(k)$和$\boldsymbol{v}(k)$是状态变量，需要用测量得到的机器人
+初始状态$\boldsymbol{x}_0$，$\boldsymbol{v}_0$初始化，即$\boldsymbol{x}(0)=\boldsymbol{x}_0$，$\boldsymbol{v}(0)=\boldsymbol{v}_0$。
+$\boldsymbol{\chi}$也包含每个阶段的时长。
+
+问题求解的完整过程在优化问题1中，其中含有下标$i$的量取决于某个特定的阶段，并且在该阶段的时长内是固定的。算法的实现基于CasADi[29]，求解器使用了Ipopt。
+
+由于系统模型、摩擦约束、以及相关目标函数的非线性，我们构建的优化问题是非凸的。为了加速求解，我们用每个阶段期望的时长来初始化$T_i$，
+质心轨迹用从$\boldsymbol{x}_0$到$\boldsymbol{x}_d$的线性插值来初始化，其他变量均被初始化为0。
+
+\section{上台阶实验验证}
+\label{stair_experiment}
+% $\mathcal{I}$
+% \boldsymbol{\rho}
+% \in \mathbb{R}^{3}
+% { }^* \boldsymbol{f}_*
