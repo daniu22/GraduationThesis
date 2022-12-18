@@ -432,7 +432,137 @@ B 校正：测量模型
     \includegraphics[width=.5\linewidth]{图6.jpg}
     \caption{\label{fig:centroid}触地状态机(图源~\cite{carpentier2016center})}
 \end{figure}
+本文提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人Atlas上进行了实现。该控制架构的核心是一个二次规划问题，
+该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
+我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
+以及在斜面上的多接触点平衡(后者仅在仿真中实现)。
 
+\section{质心动力学}
+这部分简要地回顾了机器人的质心动力学的一些关键性质。对于更深层次的讨论，见[25]。
+在本文中，我们把机器人看作刚体，其有广义关节力矩向量$\tau \in {{\mathbb{R}}^{n}}$，关节构型向量$q\in {{\mathbb{R}}^{m}}$，
+关节速度向量$v\in {{\mathbb{R}}^{n+6}}$（区分$v$和$\dot q$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是rpy来表示浮动基姿态)，
+同时使用最少的参数来表示速度向量(比如使用角速度而不是四元数的导数)）。我们假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
+\begin{equation}
+    \label{equ:momentum}
+    \boldsymbol{h}=\left(\begin{aligned}
+        & \boldsymbol{k} \\ 
+       & \boldsymbol{l} \\ 
+      \end{aligned} \right)\in \mathbb{R}^{6}
+\end{equation}
+表示机器人的质心动量，$\boldsymbol{k}\in {{\mathbb{R}}^{3}}$表示质心角动量，$\boldsymbol{l}\in {{\mathbb{R}}^{3}}$
+表示质心线动量(符号表示采用[25])。“质心”表示所有的量都在质心系下表示，质心系和世界系有同样方向的坐标轴，但其原点在机器人的瞬时质心处。
+机器人的质心动量就等于所有连杆在质心系下的动量之和。众所周知，无论机器人有多复杂，其质心动力学都是简单的。
+欧拉定律表明机器人的质心动量的变化率就等于施加在机器人上的所有外部力旋量之和。可以写成：
+\begin{equation}
+    \label{equ:euler's_law}
+    \dot{\boldsymbol{h}}={{\boldsymbol{W}}_{g}}+\sum\limits_{i}{{{\boldsymbol{W}}_{gr,i}}}+\sum\limits_{i}{{{\boldsymbol{W}}_{ext,i}}}
+\end{equation}
+	
+其中${{\boldsymbol{W}}_{g}}={{[\mathbf{0}_{3\times 1}^{\top }\ \ m{{\mathbf{g}}^{\top }}]}^{\top }}$表示重力矩，
+${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环境作用力旋量，${\boldsymbol{W}}_{ext,i}$表示机器人受到的接触力和重力之外的
+其它外部力旋量。注意机器人系统的动量变化率和内部力或者力矩无关。Orin和Goswami指出关节速度向量$v$和机器人的质心动量之间存在着简单的线性关系[2]
+\begin{equation}
+    \label{equ:euler_linear_equ}
+    \boldsymbol{h}=\boldsymbol{A}(q)\boldsymbol{v}
+\end{equation}
+其中$boldsymbol{A}(q)$被称作质心动量矩阵（centroidal momentum matrix,CMM）。将\autoref{equ:euler_linear_equ}代入\autoref{equ:euler's_law}可以得到
+\begin{equation}
+    \label{equ:euler_wrench}
+    \boldsymbol{A}\dot{\boldsymbol{v}}+\dot{A}v={{\boldsymbol{W}}_{g}}+\sum\limits_{i}{{{\boldsymbol{W}}_{gr,i}}}
+    +\sum\limits_{i}{{{\boldsymbol{W}}_{ext,i}}}
+\end{equation}
+\autoref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，我们在后续的控制架构中利用了这一点。
+
+\section{控制架构}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{图7.png}
+    \caption{\label{fig:framework_control_flow}控制架构中上层信息流概览}
+\end{figure}
+\autoref{fig:framework_control_flow}展示了我们的控制架构的上层信息流。一个上层的运动行为，比如行走或者开车行为，
+用下列数据构建了一个二次规划问题：
+1）	运动任务(motion task)形式的期望运动；
+2）	可行接触的信息；
+3）	期望质心动量的变化率。
+QP利用\autoref{equ:euler_wrench}协调运动任务和可行接触。QP求解器输出关节加速度和与环境接触的连杆所受的环境接触力。
+这些信息随后通过一种逆动力学算法来计算期望的关节力矩。计算出的力矩随后用来确定发送给机器人关节电机的力矩指令。
+\subsection{期望运动}
+在我们的架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\autoref{equ:euler_wrench}等式左边的部分。
+我们将运动任务定义为和机器人期望的广义速度向量线性相关的方程，${\dot{\boldsymbol{v}}}_{d}\in {\mathbb{R}}^{(n+6)}$，
+包括了机器人浮动基关节相对于世界系的空间加速度。$n$是驱动关节的数量。第$i$个运动任务可以写成
+\begin{equation}
+    \label{equ:motion_task}
+    \boldsymbol{J}_i \dot {\boldsymbol{v}}_d = \boldsymbol{p}_i
+\end{equation}
+
+
+\subsection{外部力旋量}
+本节是关于动量变化率方程\autoref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
+两种形式的地面接触是可行的：单边地面接触(4.2.1)和有限抓地力接触(4.2.2)。其他的待补偿的外部力旋量 在4.2.3中讨论。
+\subsubsection{单边地面接触}
+单边地面接触被建模成有静摩擦力的点接触。有分布的负载的平的，多边形的接触面可以被等效地建模成顶点处的点接触。
+对于法向量为${{\boldsymbol{n}}_{i}}$的第$i$个点接触，接触力${{\boldsymbol{f}}_{i}}$的摩擦约束可以写成：
+\begin{equation}
+    \label{equ:friction_cone}
+    \left\| {{\boldsymbol{f}}_{i}}-({{\boldsymbol{n}}_{i}}{{\boldsymbol{f}}_{i}}){{\boldsymbol{n}}_{i}} \right\|\le \mu {{\boldsymbol{n}}_{i}}{{\boldsymbol{f}}_{i}}
+\end{equation}
+其中$\mu$是摩擦系数。\autoref{equ:friction_cone}的二阶锥约束不能结合到一个二次规划中，并且二阶锥规划(SOCP)还没有比较快的求解器，
+所以我们用了标准的保守对摩擦锥的多棱锥（polyhedral）近似。近似出的摩擦锥用原本的二阶锥的一组$m$个射线作为基向量来参数化（如\autoref{fig:friction_cone}），
+即我们用下式来替代\ref{equ:friction_cone}：
+\begin{equation}
+    \label{equ:friction_para}
+    \begin{aligned}
+        & {{\boldsymbol{f}}_{i}}=\sum\limits_{j=1}^{m}{{{\rho }_{ij}}{{\boldsymbol{\beta}}_{ij}}} \\ 
+       & {{\rho }_{ij}}\ge 0 \\ 
+      \end{aligned}      
+\end{equation}
+其中$\boldsymbol{\beta}_{ij} \in \mathbb{R}^3$是基向量，$\rho_{ij}$是坐标。在本文提出的结果中我们用了四个基向量，将$\mu$设为0.8。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{图8.jpg}
+    \caption{\label{fig:friction_cone}质心系下$\boldsymbol{r}_{i}$处法向量为${{\boldsymbol{n}}_{i}}$的单边接触，摩擦锥由基向量$\boldsymbol{\beta}_{ij}$近似}
+\end{figure}
+质心系下的地面接触力旋量${{\boldsymbol{W}}_{gr,i}}$和接触力${{\boldsymbol{f}}_{i}}$的关系可以表示成：
+\begin{equation}
+    \label{equ:contact_wrench}
+    {\boldsymbol{W}_{gr,i}}=\left( \begin{aligned}
+        & {{{\hat{\boldsymbol{r}}}}_{i}} \\ 
+       & I \\ 
+      \end{aligned} \right){\boldsymbol{f}_{i}}      
+\end{equation}
+其中${\boldsymbol{r}_{i}}$表示质心系下接触点$i$的位置，${{\hat{\boldsymbol{r}}}_{i}}\in {{\mathbb{R}}^{3}}$是满足
+${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\times {\boldsymbol{f}_{i}}$的反对称矩阵。
+将\autoref{equ:friction_para}与\autoref{equ:contact_wrench}结合，可以得到
+\begin{equation}
+    \label{equ:wrench_matrix}
+    \begin{aligned}
+        & {{\boldsymbol{W}}_{gr,i}}={{\boldsymbol{Q}}_{i}}{{\boldsymbol{\rho}}_{i}} \\ 
+       & {{\boldsymbol{\rho}}_{i}}\ge 0 \\ 
+      \end{aligned}        
+\end{equation}
+其中，${{\boldsymbol{Q}}_{i}}=\left[ \begin{aligned}
+    & {{{\hat{\boldsymbol{r}}}}_{i}}{{\boldsymbol{\beta}}_{i1}} \\ 
+   & {{\boldsymbol{\beta}}_{i1}}\ \ \ \  \\ 
+  \end{aligned} \right.\ \ \ \ \cdots \ \ \ \ \left. \begin{aligned}
+    & {{{\hat{\boldsymbol{r}}}}_{i}}{{\boldsymbol{\beta}}_{im}} \\ 
+   & {{\boldsymbol{\beta}}_{im}} \\ 
+  \end{aligned} \right]
+  $。
+  实际我们用了和接触的刚体表面固定的坐标系的面法向量${{\boldsymbol{n}}_{j}}$。我们更愿意使用Pollard和Reitsma的射线参数化，
+  而不是Stewart和Trinkle的另一种参数化，因为射线参数化每个接触点要求的决策变量都会少一个。
+\subsection{QP构建过程}
+\begin{equation}
+    \label{equ:qp_control}
+    \begin{aligned}
+       \underset{{{{\dot{v}}}_{\text{d}}},\rho }{\mathop{\operatorname{minimize}}}\,\quad {{\left( A{{{\dot{v}}}_{\text{d}}}-b \right)}^{\top }}&{{C}_{{\dot{h}}}}\left( A{{{\dot{v}}}_{\text{d}}}-b \right)+{{\rho }^{\top }}{{C}_{\rho }}\rho +\dot{v}_{\text{d}}^{\top }{{C}_{{\dot{v}}}}{{{\dot{v}}}_{\text{d}}} \\ 
+        \text{subject to}\quad A{{{\dot{v}}}_{\text{d}}}+\dot{A}v&={{W}_{g}}+Q\rho +\sum\limits_{i}{{{W}_{\text{ext },i}}} \\ 
+        J{{{\dot{v}}}_{\text{d}}}&=p \\ 
+        {{\rho }_{\min }}&\le \rho \le {{\rho }_{\max }} 
+      \end{aligned}
+\end{equation}
+其中，$b={{\dot{h}}_{d}}-\dot{A}v$，${{\dot{h}}_{d}}\in {{\mathbb{R}}^{6}}$表示期望的质心动量变化率。
+${{C}_{{\dot{h}}}},\ {{C}_{\rho }},\ {{C}_{{\dot{v}}}}$是由更上层的控制器决定的目标函数权重矩阵。5.4给出了行走行为下的权重矩阵示例。
+\section{行走实验}
 
 \chapter{双足机器人质心轨迹优化}
 \section{基于QP的全身控制器}
