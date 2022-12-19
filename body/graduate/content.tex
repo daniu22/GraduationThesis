@@ -103,7 +103,7 @@ Artificial synergy synthesis 方法认为，应该更加关注和地面接触力
 而不是和关节力矩更直接绑定的机器人的精准关节姿态\cite{vukobratovic1972contribution}，如\autoref{fig:centroid}所示。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.5\linewidth]{图1.png}
+    \includegraphics[width=.5\linewidth]{质心动力学.eps}
     \caption{\label{fig:centroid}质心动力学及其与全身动力学的联系释图(图源~\cite{carpentier2016center})}
 \end{figure}
 这种方法在现在是机器人运动控制的核心，但在需要紧密协调机器人平衡和姿态的情况下，基于完整多刚体拉格朗日动力学的方法才是首选，
@@ -135,7 +135,7 @@ Control architecture: 接触点$s_i$的序列通常要考虑机器人所在环�
 是上述方法很有前景的一种替代。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.0\linewidth]{图2.png}
+    \includegraphics[width=1.0\linewidth]{仿人经典控制框架.eps}
     \caption{\label{fig:typical_control}典型的控制框架由主要由三阶段组成：接触规划，质心动力学级规划和全身控制
                 (图源~\cite{carpentier2016center})}
 \end{figure}
@@ -429,7 +429,7 @@ B 校正：测量模型
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.5\linewidth]{图6.jpg}
+    \includegraphics[width=.5\linewidth]{相位转换.pdf}
     \caption{\label{fig:centroid}触地状态机(图源~\cite{carpentier2016center})}
 \end{figure}
 本文提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人Atlas上进行了实现。该控制架构的核心是一个二次规划问题，
@@ -519,7 +519,7 @@ QP利用\autoref{equ:euler_wrench}协调运动任务和可行接触。QP求解�
 其中$\boldsymbol{\beta}_{ij} \in \mathbb{R}^3$是基向量，$\rho_{ij}$是坐标。在本文提出的结果中我们用了四个基向量，将$\mu$设为0.8。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{图8.jpg}
+    \includegraphics[width=1.\linewidth]{摩擦锥.eps}
     \caption{\label{fig:friction_cone}质心系下$\boldsymbol{r}_{i}$处法向量为${{\boldsymbol{n}}_{i}}$的单边接触，摩擦锥由基向量$\boldsymbol{\beta}_{ij}$近似}
 \end{figure}
 质心系下的地面接触力旋量${{\boldsymbol{W}}_{gr,i}}$和接触力${{\boldsymbol{f}}_{i}}$的关系可以表示成：
