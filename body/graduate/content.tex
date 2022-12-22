@@ -1,3 +1,4 @@
+\newcommand{\aref}[1]{\autoref{#1}\space}
 \chapter{绪论}
 
 % 本模板根据浙江大学研究生院编写的《浙江大学研究生学位论文编写规则》~\cite{zjugradthesisrules}，
@@ -31,7 +32,7 @@
 % \section{节标题}
 
 % 我们可以用includegraphics来插入现有的jpg等格式的图片，
-% 如\autoref{fig:zju-logo}所示。
+% 如\aref{fig:zju-logo}所示。
 
 % \begin{figure}[htbp]
 %     \centering
@@ -43,7 +44,7 @@
 % \subsection{小节标题}
 
 
-% \par 如\autoref{tab:sample}所示，这是一张自动调节列宽的表格。
+% \par 如\aref{tab:sample}所示，这是一张自动调节列宽的表格。
 
 % \begin{table}[htbp]
 %     \caption{\label{tab:sample}自动调节列宽的表格}
@@ -57,7 +58,7 @@
 % \end{table}
 
 
-% \par 如\autoref{equ:sample}，这是一个公式
+% \par 如\aref{equ:sample}，这是一个公式
 
 % \begin{equation}
 %     \label{equ:sample}
@@ -99,8 +100,8 @@ The dynamics of legged locomotion: 牛顿方程说明和环境接触产生的外
 \end{equation}
 
 Artificial synergy synthesis 方法认为，应该更加关注和地面接触力直接绑定的质心动力学
-\autoref{equ:newton}和\autoref{equ:euler}，
-而不是和关节力矩更直接绑定的机器人的精准关节姿态\cite{vukobratovic1972contribution}，如\autoref{fig:centroid}所示。
+\aref{equ:newton}和\aref{equ:euler}，
+而不是和关节力矩更直接绑定的机器人的精准关节姿态\cite{vukobratovic1972contribution}，如\aref{fig:centroid}所示。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.5\linewidth]{质心动力学.eps}
@@ -111,7 +112,7 @@ Artificial synergy synthesis 方法认为，应该更加关注和地面接触力
 
 腿足运控的难题之一是接触力通常是单边的：机器人只能推接触表面，而不能拉。因此接触力$f_i$只能朝向特定的方向，由摩擦锥来约束。
 另外，每个接触都是二元的：要么有接触和接触力，要么没有接触也没有接触力。当腿和某个面碰撞，也会产生冲击力。
-触地转换和冲击是影响连续动力学\autoref{equ:newton}和\autoref{equ:euler}的离散事件，从这个角度讲腿足机器人的动力学是混合的，
+触地转换和冲击是影响连续动力学\aref{equ:newton}和\aref{equ:euler}的离散事件，从这个角度讲腿足机器人的动力学是混合的，
 这是难题之二。
 
 理论上，从机器人可以执行合适的接触力来避免摔倒的状态中，我们可以定义可行状态（viable states）。周期运动（周期踏步？）和平衡点
@@ -121,7 +122,7 @@ Artificial synergy synthesis 方法认为，应该更加关注和地面接触力
 Control architecture: 接触点$s_i$的序列通常要考虑机器人所在环境及其目标点、运动学和静平衡约束\cite{escande2013planning}，
 用随机采样点的方法在时空域上预先规划好，这个过程称作落脚点规划。预规划好的落脚点在后续执行的过程中可以根据实际的地形
 和外界扰动来调整cite{feng2016robust}。对应的质心运动和角动量可以通过在线MPC的框架来得到\cite{wieber2006trajectory}，
-该框架在考虑质心动力学\autoref{equ:newton}和\autoref{equ:euler}的同时需要保证机器人的状态始终是可捕获的\cite{wieber2016modeling}。
+该框架在考虑质心动力学\aref{equ:newton}和\aref{equ:euler}的同时需要保证机器人的状态始终是可捕获的\cite{wieber2016modeling}。
 
 当机器人在平地上运动，所有接触点$s_i$都是共面的，接触力$f_i$通常会退化到他们的零力矩点(ZMP)，而ZMP在接触点组成的凸包内\cite{wieber2002stability}
 (通过单边接触约束的多面体投影，非平面的接触点也有类似的性质\cite{caron2016zmp})。在这种情况下，预先定义好质心在竖直方向上的运动可以得到高效的线性模型。
@@ -139,7 +140,7 @@ Control architecture: 接触点$s_i$的序列通常要考虑机器人所在环�
     \caption{\label{fig:typical_control}典型的控制框架由主要由三阶段组成：接触规划，质心动力学级规划和全身控制
                 (图源~\cite{carpentier2016center})}
 \end{figure}
-\autoref{fig:typical_control}所示腿足运控的通用方法，原本是为双足行走开发的，并且在Kawada的HRP-2\cite{takenaka2009real}，
+\aref{fig:typical_control}所示腿足运控的通用方法，原本是为双足行走开发的，并且在Kawada的HRP-2\cite{takenaka2009real}，
 本田的Asimo\cite{takenaka2009real}，Aldebaran的Nao\cite{gouaillier2010omni}，波士顿动力的Atlas[32]等等一系列的机器人上得到了成功的验证。
 最近这种方法也被适配到了诸如ANYbotics的ANYmal\cite{bellicoso2018dynamic}，IIT的HyQ\cite{mastalli2017trajectory}，
 MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite{lafaye2014linear}，ETHZ的ANYmal\cite{bjelonic2020rolling}
@@ -224,7 +225,7 @@ A 过程模型
 
 通常，如果${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计是和$\boldsymbol{x}$同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的。
 然而如果近似将${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计与$\boldsymbol{x}$的估计解耦，
-那么将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\autoref{equ:est_posvel}就变成了线性时不变的模型。
+那么将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\aref{equ:est_posvel}就变成了线性时不变的模型。
 
 我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$(和第二部分B中描述的类似)。我们使用了[14]中提出估计的第二种版本。
 原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
@@ -261,7 +262,7 @@ C 加权噪声模型
         \boldsymbol{y}_{n+1} & =C \boldsymbol{x}_{n+1}+\mathcal{N}\left(0, \boldsymbol{R}_{n+1}\right)
         \end{aligned}
 \end{equation}
-$A$和$B$满足\autoref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了和WA滤波器的操作大致符合，测量噪声被设计成：
+$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了和WA滤波器的操作大致符合，测量噪声被设计成：
 
 和 被设计成：
 
@@ -315,7 +316,7 @@ A 预测：过程模型
     \includegraphics[width=.75\linewidth]{图3.png}
     \caption{\label{fig:gauss_phase}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
 \end{figure}
-\autoref{fig:gauss_phase}展示了基于相位和规划状态的不同方差的接触概率的两条曲线。
+\aref{fig:gauss_phase}展示了基于相位和规划状态的不同方差的接触概率的两条曲线。
 在触地相即将要开始和结束的阶段，腿出于触地状态的可能性是更小的，
 而在摆动相的开始和结束阶段腿处于触底状态的可能性是更大的。因此这种模型可以被用作系统的瞬时输入，将各条腿叠在一起，
 用每条腿的规划状态和相位，将其写成：
@@ -357,7 +358,7 @@ B 校正：测量模型
     \includegraphics[width=.75\linewidth]{图4.png}
     \caption{\label{fig:gauss_height}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
 \end{figure}
-\autoref{fig:gauss_height}展示了地面的高斯模型，以及给定足端高度对应推理出的触地概率。每个图都有不同的参数对应不同地面粗糙度的估计。
+\aref{fig:gauss_height}展示了地面的高斯模型，以及给定足端高度对应推理出的触地概率。每个图都有不同的参数对应不同地面粗糙度的估计。
 最终$\mu_{z_g}$和$\sigma_{z_g}^2$的值可以从其他传感器信息或者之前的行走数据中获得。这个模型提供了第一次测量校正，
 并且对应的协方差矩阵可以写为：
 \begin{equation}
@@ -386,7 +387,7 @@ B 校正：测量模型
     \includegraphics[width=.75\linewidth]{图5.png}
     \caption{\label{fig:gauss_force}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
 \end{figure}
-\autoref{fig:gauss_force}展示了法向接触力和对应触地概率的关系，这个基于外力的概率是我们的第二个测量:
+\aref{fig:gauss_force}展示了法向接触力和对应触地概率的关系，这个基于外力的概率是我们的第二个测量:
 \begin{equation}
     \label{equ:est_force_noise}
     \tilde{\boldsymbol{z}}_{2, k}=\left\{\begin{array}{c}
@@ -465,29 +466,29 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
     \label{equ:euler_linear_equ}
     \boldsymbol{h}=\boldsymbol{A}(q)\boldsymbol{v}
 \end{equation}
-其中$boldsymbol{A}(q)$被称作质心动量矩阵（centroidal momentum matrix,CMM）。将\autoref{equ:euler_linear_equ}代入\autoref{equ:euler's_law}可以得到
+其中$boldsymbol{A}(q)$被称作质心动量矩阵（centroidal momentum matrix,CMM）。将\aref{equ:euler_linear_equ}代入\aref{equ:euler's_law}可以得到
 \begin{equation}
     \label{equ:euler_wrench}
     \boldsymbol{A}\dot{\boldsymbol{v}}+\dot{A}v={{\boldsymbol{W}}_{g}}+\sum\limits_{i}{{{\boldsymbol{W}}_{gr,i}}}
     +\sum\limits_{i}{{{\boldsymbol{W}}_{ext,i}}}
 \end{equation}
-\autoref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，我们在后续的控制架构中利用了这一点。
+\aref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，我们在后续的控制架构中利用了这一点。
 
 \section{控制架构}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{图7.png}
+    \includegraphics[width=1.\linewidth]{qp控制框架.eps}
     \caption{\label{fig:framework_control_flow}控制架构中上层信息流概览}
 \end{figure}
-\autoref{fig:framework_control_flow}展示了我们的控制架构的上层信息流。一个上层的运动行为，比如行走或者开车行为，
+\aref{fig:framework_control_flow}展示了我们的控制架构的上层信息流。一个上层的运动行为，比如行走或者开车行为，
 用下列数据构建了一个二次规划问题：
 1）	运动任务(motion task)形式的期望运动；
 2）	可行接触的信息；
 3）	期望质心动量的变化率。
-QP利用\autoref{equ:euler_wrench}协调运动任务和可行接触。QP求解器输出关节加速度和与环境接触的连杆所受的环境接触力。
+QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器输出关节加速度和与环境接触的连杆所受的环境接触力。
 这些信息随后通过一种逆动力学算法来计算期望的关节力矩。计算出的力矩随后用来确定发送给机器人关节电机的力矩指令。
 \subsection{期望运动}
-在我们的架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\autoref{equ:euler_wrench}等式左边的部分。
+在我们的架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\aref{equ:euler_wrench}等式左边的部分。
 我们将运动任务定义为和机器人期望的广义速度向量线性相关的方程，${\dot{\boldsymbol{v}}}_{d}\in {\mathbb{R}}^{(n+6)}$，
 包括了机器人浮动基关节相对于世界系的空间加速度。$n$是驱动关节的数量。第$i$个运动任务可以写成
 \begin{equation}
@@ -497,7 +498,7 @@ QP利用\autoref{equ:euler_wrench}协调运动任务和可行接触。QP求解�
 
 
 \subsection{外部力旋量}
-本节是关于动量变化率方程\autoref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
+本节是关于动量变化率方程\aref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
 两种形式的地面接触是可行的：单边地面接触(4.2.1)和有限抓地力接触(4.2.2)。其他的待补偿的外部力旋量 在4.2.3中讨论。
 \subsubsection{单边地面接触}
 单边地面接触被建模成有静摩擦力的点接触。有分布的负载的平的，多边形的接触面可以被等效地建模成顶点处的点接触。
@@ -506,9 +507,9 @@ QP利用\autoref{equ:euler_wrench}协调运动任务和可行接触。QP求解�
     \label{equ:friction_cone}
     \left\| {{\boldsymbol{f}}_{i}}-({{\boldsymbol{n}}_{i}}{{\boldsymbol{f}}_{i}}){{\boldsymbol{n}}_{i}} \right\|\le \mu {{\boldsymbol{n}}_{i}}{{\boldsymbol{f}}_{i}}
 \end{equation}
-其中$\mu$是摩擦系数。\autoref{equ:friction_cone}的二阶锥约束不能结合到一个二次规划中，并且二阶锥规划(SOCP)还没有比较快的求解器，
-所以我们用了标准的保守对摩擦锥的多棱锥（polyhedral）近似。近似出的摩擦锥用原本的二阶锥的一组$m$个射线作为基向量来参数化（如\autoref{fig:friction_cone}），
-即我们用下式来替代\ref{equ:friction_cone}：
+其中$\mu$是摩擦系数。\aref{equ:friction_cone}的二阶锥约束不能结合到一个二次规划中，并且二阶锥规划(SOCP)还没有比较快的求解器，
+所以我们用了标准的保守对摩擦锥的多棱锥（polyhedral）近似。近似出的摩擦锥用原本的二阶锥的一组$m$个射线作为基向量来参数化（如\aref{fig:friction_cone}），
+即我们用下式来替代\aref{equ:friction_cone}：
 \begin{equation}
     \label{equ:friction_para}
     \begin{aligned}
@@ -532,7 +533,7 @@ QP利用\autoref{equ:euler_wrench}协调运动任务和可行接触。QP求解�
 \end{equation}
 其中${\boldsymbol{r}_{i}}$表示质心系下接触点$i$的位置，${{\hat{\boldsymbol{r}}}_{i}}\in {{\mathbb{R}}^{3}}$是满足
 ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\times {\boldsymbol{f}_{i}}$的反对称矩阵。
-将\autoref{equ:friction_para}与\autoref{equ:contact_wrench}结合，可以得到
+将\aref{equ:friction_para}与\aref{equ:contact_wrench}结合，可以得到
 \begin{equation}
     \label{equ:wrench_matrix}
     \begin{aligned}
@@ -638,7 +639,7 @@ $\dot{\boldsymbol{h}}_d$是期望的动量变化率。
     { }^{\mathcal{I}} \boldsymbol{f}_*=m \lambda_*\left(\boldsymbol{x}-{ }^{\mathcal{I}} \boldsymbol{p}_*\right)
 \end{equation}
 其中*是占位符表示左脚$l$或者右脚$r$。${ }^{\mathcal{I}} \boldsymbol{f}_* \in \mathbb{R}^{3}$是惯性系$\mathcal{I}$下脚上的外力，
-$\lambda_* \in \mathbb{R}^{3}$是系数，可以理解成弹簧的刚度。\autoref{equ:linear_f}表示让质心角动量守恒，是一种偏保守的限制。
+$\lambda_* \in \mathbb{R}^{3}$是系数，可以理解成弹簧的刚度。\aref{equ:linear_f}表示让质心角动量守恒，是一种偏保守的限制。
 然而，在双足机器人用这样的模型可以在某种程度上确保鲁棒性。
 
 由于我们把所有的接触都考虑成单边接触，$\lambda_*$被约束为正来保证法向力为正，${ }^{\mathcal{I}} \boldsymbol{p}_* \in \mathbb{R}^{3}$
@@ -651,7 +652,7 @@ $\lambda_* \in \mathbb{R}^{3}$是系数，可以理解成弹簧的刚度。\auto
 ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$间的相对旋转，为了简化表达，下文我们省略掉上标，
 将${ }^{\mathcal{I}} \boldsymbol{R}_*$表示为$\boldsymbol{R}_*$。
 
-假设机器人所受外力仅由足底力组成，\autoref{equ:newton_2}可以改写为：
+假设机器人所受外力仅由足底力组成，\aref{equ:newton_2}可以改写为：
 \begin{equation}
     \label{equ:newton_linear_1}
     m \ddot{\boldsymbol{x}}= -m \boldsymbol{g}+m \lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right)
@@ -663,12 +664,12 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
     \ddot{\boldsymbol{x}}= -\boldsymbol{g}+\lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right) 
         +\lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)
 \end{equation}
-\autoref{equ:newton_linear_2}表示双摆的模型，在包含双腿的同时也保持了较低的维度。
+\aref{equ:newton_linear_2}表示双摆的模型，在包含双腿的同时也保持了较低的维度。
 
 \section{上台阶动力学规划}
 本文中表述的跨台阶规划器利用了[16][26][27]中阐述的基于阶段的轨迹优化。我们假设预先知道接触的序列，
 这样简化了对接触的激活和失活的处理。本节提出了解决相关的非线性轨迹优化问题的约束，任务和方法论。
-首先我们将\autoref{equ:newton_linear_2}简化为：
+首先我们将\aref{equ:newton_linear_2}简化为：
 \begin{equation}
     \label{equ:acceleration}
     \ddot{\boldsymbol{x}} = \boldsymbol{a}_i
@@ -680,7 +681,7 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
     \item 两只脚触地，$\boldsymbol{a}_i=-\boldsymbol{g}+\lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right)
                     +\lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)$
 \end{itemize}
-通过二阶泰勒展开，我们可以得到\autoref{equ:acceleration}的近似离散形式：
+通过二阶泰勒展开，我们可以得到\aref{equ:acceleration}的近似离散形式：
 \begin{equation}
     \label{equ:approx_acc}
     \begin{aligned}
@@ -711,15 +712,15 @@ $T_i$并非预先设定好的，而是作为待优化变量。但每个阶段的
 \end{equation}
 其中$\mu_s \in \mathbb{R}$是静摩擦系数，${ }^* \boldsymbol{f}_* \in \mathbb{R}^{3}$是足坐标系下的足底力，
 即$\boldsymbol{f}_*=\boldsymbol{R}_*^{\top \mathcal{I}} \boldsymbol{f}_*$。
-假设足坐标系平行于$z$轴和行走平面垂直并和地面固定的坐标系，代入\autoref{equ:linear_f}和\autoref{equ:cop}，
-\autoref{equ:friction}可以重写为：
+假设足坐标系平行于$z$轴和行走平面垂直并和地面固定的坐标系，代入\aref{equ:linear_f}和\aref{equ:cop}，
+\aref{equ:friction}可以重写为：
 \begin{equation}
     \label{equ:friction_2}
     \left[\begin{array}{lll}
         1 & 1 & -\mu_s^2
         \end{array}\right]\left(\boldsymbol{R}_*^{\top} m \lambda_*\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right)\right)^2 \leq 0
 \end{equation}
-注意当$\lambda_*=0$，不等式左边为0，摩擦约束自动满足，因此\autoref{equ:friction_2}可以简化为：
+注意当$\lambda_*=0$，不等式左边为0，摩擦约束自动满足，因此\aref{equ:friction_2}可以简化为：
 \begin{equation}
     \label{equ:friction_simplify}
     \left[\begin{array}{lll}
@@ -784,7 +785,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
 其中$w_{x_d}, w_{\dot{x}_d} \in \mathbb{R}^{+}$是可以调整的权重。$\mathbb{K}_f$包括了最后一个阶段的一部分，末状态在这部分里面。
 所以可以生成提前到达终点并定义可以维持终点状态的控制输入的轨迹。因此，我们保证了最终可以到达稳定的状态。
 
-由\autoref{equ:newton_linear_2}定义的模型不包含任何执行规划运动的关节力矩信息，为了减小关节所需的力矩，我们加上了下面的任务：
+由\aref{equ:newton_linear_2}定义的模型不包含任何执行规划运动的关节力矩信息，为了减小关节所需的力矩，我们加上了下面的任务：
 \begin{equation}
     \label{equ:cost_2}
     \Gamma_\tau=w_\tau \sum_{k, *} \tau_*(k)^2+w_{\tau_{\max }} \sum_*\left(\max _k \tau_*(k)^2\right)
@@ -794,7 +795,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
     \label{equ:tau}
     \tau_*(k)= \begin{cases}\left(x_z(k)-x_{*, z}-\delta_*\right) \lambda_*(k) & \text { if } * \text { in contact } \\ 0 & \text { otherwise }\end{cases}
 \end{equation}
-\autoref{equ:tau}是用来减少关节力矩的启发式函数。*是表示$l$或者$r$的占位符，$\delta_*$是参考高度差。
+\aref{equ:tau}是用来减少关节力矩的启发式函数。*是表示$l$或者$r$的占位符，$\delta_*$是参考高度差。
 直观上看，当机器人膝关节弯的很多的时候，承受的压力是更大的。在这种构型下，质心和足之间的高度差是相对小的，
 这个启发式函数可以防止求解出要求处于运动学极限附近的腿施加很大力的解。
 所以$\Gamma_\tau$衡量了在所有离散时间区间上的的平方和的大小。$\Gamma_\tau$的第二项是为了防止$\tau_*(k)$出现剧烈变化。
@@ -817,7 +818,7 @@ $w_{\tau}, w_{\tau_{max}} \in \mathbb{R}^+$是确定两项的相对优先级的�
 正则项使得优化问腿的求解向最小化控制输入和最小化每个阶段的的时长与预设的期望时长$T_{i, d}$的差值的方向进行，$w_t, w_\lambda, w_p$是对应正则项的权重。
 
 \subsection{优化问题}
-最终的轨迹优化问题由动力学约束(\autoref{equ:approx_acc})，\autoref{constraints}中列举的约束，\autoref{cost_function}中的目标函数。由于约束中既有等式约束又有不等式约束，
+最终的轨迹优化问题由动力学约束(\aref{equ:approx_acc})，\aref{constraints}中列举的约束，\aref{cost_function}中的目标函数。由于约束中既有等式约束又有不等式约束，
 我们用Direct Multiple Shooting将轨迹优化问题转化为非线性规划问题(NLP)。NLP问题的决策变量$\boldsymbol{\chi}$可以写成：
 \begin{equation}
     \label{equ:decision_variable}
@@ -865,7 +866,7 @@ DCM遵循接触力的一阶动力学，比质心的二阶动力学(1)要简单�
 DCM可以被用作一个可行(viability)条件。
 
 Centroidal dynamics: 在例如不平整地形、狭窄空间等有多点接触的场景中运动时，将接触力等效到ZMP是很局限的。基于完整质心动力学
-\autoref{equ:newton}和\autoref{equ:euler}的方法是在更广泛的接触场景下计算可行的质心轨迹、角动量和对应接触力的一种解决方案。
+\aref{equ:newton}和\aref{equ:euler}的方法是在更广泛的接触场景下计算可行的质心轨迹、角动量和对应接触力的一种解决方案。
 接触序列甚至可以同时优化求解[51]。
 
 利用轨迹优化问题的稀疏性和凸性来求解的方法已经有了一定的发展[41,44,45]。另外，四足机器人的惯量通常用单刚体近似得到[34,35,51]，
@@ -875,7 +876,7 @@ Centroidal dynamics: 在例如不平整地形、狭窄空间等有多点接触�
 质心动力学并不考虑运动学或者关节力矩约束。为了部分弥补这些缺陷，一些方法提出将接触力和力矩(wrench)锥扩展来包含力矩限制[55]，
 还有一些基于学习的方法将更复杂的全身约束表示进质心模型里面[56]。
 
-Mixed models: 另外一个在简化模型跟完整动力学模型之间的折中方案是，将质心动力学\autoref{equ:newton}和\autoref{equ:euler}和
+Mixed models: 另外一个在简化模型跟完整动力学模型之间的折中方案是，将质心动力学\aref{equ:newton}和\aref{equ:euler}和
 全身运动学模型结合，这样可以在保持适度的计算复杂度的同时得到符合动力学的全身运动[57,58]。用这种方法可以在70ms内在线计算和更新
 局部最优的反馈控制[59]。也可以用交替下降的方法(alternating descent method)将质心动力学与全身动力学模型结合，来考虑质心动力学以外的部分[60]。
 一种更早的方法将机器人的瞬间全身动力学与LIP模型在一个滚动时域内结合到一个统一的QP问题中，来获得机器人运动的长时动力学[61]。
