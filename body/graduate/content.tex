@@ -320,7 +320,7 @@ A 预测：过程模型
 其中$s_{\phi}$表示支撑相或者摆动相之间的切换，均值$\mu$表示接触状态切换的期望子相值，方差$\sigma^2$由触地相的子相值的可变性(variability)决定。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.75\linewidth]{图3.png}
+    \includegraphics[width=.75\linewidth]{gauss_phase.pdf}
     \caption{\label{fig:gauss_phase}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
 \end{figure}
 \aref{fig:gauss_phase}展示了基于相位和规划状态的不同方差的接触概率的两条曲线。
@@ -362,8 +362,8 @@ B 校正：测量模型
 \end{equation}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.75\linewidth]{图4.png}
-    \caption{\label{fig:gauss_height}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
+    \includegraphics[width=.75\linewidth]{gauss_height.pdf}
+    \caption{\label{fig:gauss_height}足底高度-触地概率图。高斯分布表示的地面高度${{z}_{g}}$，以及足底高度测量对应的触地概率。}
 \end{figure}
 \aref{fig:gauss_height}展示了地面的高斯模型，以及给定足端高度对应推理出的触地概率。每个图都有不同的参数对应不同地面粗糙度的估计。
 最终$\mu_{z_g}$和$\sigma_{z_g}^2$的值可以从其他传感器信息或者之前的行走数据中获得。这个模型提供了第一次测量校正，
@@ -391,8 +391,8 @@ B 校正：测量模型
 \end{equation}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.75\linewidth]{图5.png}
-    \caption{\label{fig:gauss_force}基于相位的触地概率。对于预定状态和状态子相的完成进度，多个参数会定义触地的概率。}
+    \includegraphics[width=.75\linewidth]{gauss_force.pdf}
+    \caption{\label{fig:gauss_force}足底力-触地概率图。高斯分布表示的接触过程中的外力，以及足底外力测量对应的触地概率。}
 \end{figure}
 \aref{fig:gauss_force}展示了法向接触力和对应触地概率的关系，这个基于外力的概率是我们的第二个测量:
 \begin{equation}
