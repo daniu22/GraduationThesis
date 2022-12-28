@@ -107,7 +107,11 @@
         \phantomsection
         \addcontentsline{toc}{chapter}{#1}
         \markboth{#1}{#1}
-        \chapter*{#1}
+        % \chapter*{#1}
+        \begin{center} 
+            \bfseries \zihao{3} #1	 
+        \end{center}	 
+        \setcounter{section}{0} 
     }
 
     \newcommand{\sectionnonum}[1]
