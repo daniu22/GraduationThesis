@@ -8,14 +8,14 @@
             format=\centering\zihao{-0}\bfseries,
             nameformat=\centering\heiti\fontsize{48}{48}\bfseries,
         },
-        chapter =
-        {
-            format=\centering\zihao{3}\bfseries,
-            name={,、},
-            aftername=,
-            number=\chinese{chapter},
-            beforeskip=12pt,
-            afterskip=6pt
+        chapter = 
+        { 
+            format=\centering\zihao{-2}\bfseries, 
+            name={第, 章}, 
+            number=\chinese{chapter}, 
+            beforeskip=18pt, 
+            afterskip=18pt, 
+            fixskip=true 
         },
         section =
         {
@@ -53,17 +53,18 @@
             format=\centering\zihao{-0}\bfseries,
             nameformat=\centering\heiti\fontsize{48}{48}\bfseries,
         },
-        chapter =
-        {
-            format=\raggedright\zihao{-3}\bfseries,
-            name={},
-            number=\arabic{chapter},
-            beforeskip=12pt,
-            afterskip=6pt
+        chapter = 
+        { 
+            format=\centering\zihao{-2}, 
+            name={第, 章}, 
+            number=\chinese{chapter}, 
+            beforeskip=18pt, 
+            afterskip=18pt, 
+            fixskip=true 
         },
         section =
         {
-            format=\raggedright\zihao{4}\bfseries,
+            format=\raggedright\zihao{4},
             name={},
             number=\arabic{chapter}.\arabic{section},
             beforeskip=13pt,
@@ -71,7 +72,7 @@
         },
         subsection =
         {
-            format=\raggedright\zihao{-4}\bfseries,
+            format=\raggedright\zihao{-4},
             name={},
             number=\arabic{chapter}.\arabic{section}.\arabic{subsection},
             beforeskip=13pt,

@@ -2,7 +2,7 @@
 
 \chapter{绪论}
 \section{研究背景与意义}
-    机器人一直是人类孜孜不倦探索钻研的目标，人类一直致力于实现让机器人覆盖人
+机器人一直是人类孜孜不倦探索钻研的目标，人类一直致力于实现让机器人覆盖人
 类的功能，使人类从繁杂重复的体力劳动中或是危险系数较高的工作中解放出来。将机
 器人按照驱动方式区分可以分为轮履式机器人与腿足式机器人，就当今已存在的机器人
 中，轮式机器人和履带式机器人要占据绝大部分。这种类型机器人有着移动快，控制简
@@ -14,7 +14,7 @@
 以跨过不同的障碍物和适应不同的路面，腿足式机器人可以通过步态规划以及身体平衡
 控制做到不平整路面的前进，但目前仍然存在许多挑战。
 
-    另一方面，腿足式也是自然界大部分生物所采取的前进方式，所以机器人采用腿足
+另一方面，腿足式也是自然界大部分生物所采取的前进方式，所以机器人采用腿足
 式方式能够更好的融入人类生活中。采用和人类相似的外形使得腿足式机器人相对于轮
 式和履带式机器人在亲和力方面有着难以匹敌的优势，完美的适应人类的工作环境[2]。
 在未来利用仿人机器人取代人类在高危险环境下的工作或者重复性较高的体力劳动的
@@ -36,9 +36,10 @@
 \section{国内外研究现状介绍}
 \subsection{日本仿人机器人研究现状}
 
-    早在20世纪60年代末，日本就开始了对仿人双足机器人的研究。日本早稻田大学的Ichiro Kato教授于1969~1971年设计制作了液压驱动的
+早在20世纪60年代末，日本就开始了对仿人双足机器人的研究。日本早稻田大学的Ichiro Kato教授于1969~1971年设计制作了液压驱动的
 双足机器人WL-3[1]以及WL-5[2] （\aref{subfig:wl5}），并以此为基础在1973年研制了仿人机器人WABOT-1[3] （\aref{subfig:wabot1}），这也被认为是最早的现代仿人机器人。
 尽管这些机器人运动能力相当差，只能实现一些静态动作，但也在客观上引发了学术界和产业界对仿人双足机器人研究的兴趣。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{WL-5\label{subfig:wl5}}
@@ -54,10 +55,12 @@
     \includegraphics[width=1.\linewidth]{asimo.jpg}
     \caption{\label{fig:asimo}本田公司研制的ASIMO仿人机器人及其历代原型机}
 \end{figure}
+
 20世纪80年代，日本本田公司（Honda）也开始了仿人机器人的研究，出于控制方便和动力源可携带等方面的考虑，本田选择了电机驱动的技术路线，
 经过E0到E6的七代步行样机研发，以及加入仿人上半身的P1到P2的原型机迭代，以及基于P系列原型机做出的小型化改进，终于在2000年推出了著名的
 仿人机器人ASIMO（\aref{fig:asimo}）。 ASIMO具有良好的外观设计，并且集成了视觉识别、语音交互等技术，是最为人所熟知的仿人机器人之一。
 本田也不断地对ASIMO¬进行改进，到2011年时ASIMO的奔跑速度就达到了9km/h，并能完成上下台阶、倒水等展示任务[4]。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{HRP-1\label{subfig:HRP-1}}
@@ -85,9 +88,11 @@
 
     \caption{HRP系列仿人机器人\label{fig:japan_hrp}}
 \end{figure}
+
 除ASIMO外，日本产业技术综合研究院也在1998年开启了仿人机器人项目（Humanoid Robotics Project, HRP），HRP系列（\aref{fig:japan_hrp}）
 也采取了电机位置伺服驱动的思路，2018年第五代最新的HRP-5P发布（\aref{subfig:HRP-5P}）。HRP-5P高182cm，重101kg，搭载的视觉和激光传感器可以识别工具类别并灵活使用工具，
 并且具备搬运木板等较重负载的能力[5]，体现了HRP系列双足20多年的研究积累。
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[height=.35\textwidth]{s-one1.jpg}
@@ -95,6 +100,7 @@
     \includegraphics[width=.6\textwidth]{s-one3.jpg}
     \caption{\label{fig:s-one}S-One机器人完成DRC的各项任务}
 \end{figure}
+
 在参与HRP计划的研究机构中，东京大学的情报工学研究室（Johou Systems Kougaku Laboratory，简称JSK）取得的成果较为突出，2010年，JSK的Urata和Nakanishi
 创造性地给伺服电机加入液冷系统，大大提高了电机的散热效率，再加上他们设计的大电流驱动器，整套驱动系统的功率密度得到了显著提升。
 他们将改造过的驱动系统安装在了一对源于HRP-3的腿上从而得到了HRP3L-JSK（\aref{subfig:HRP3L-JSK}），HRP3L-JSK强大的驱动性能使其同时具有了快速运动和承受大负载的能力。
@@ -108,6 +114,7 @@ SCHAFT也在2013年被Google收购。SCHAFT之后在2016年发布了其新研发
 Planar One-Leg Hopper（\aref{subfig:one-leg-2d}），该机器人由气缸驱动腿部的摆动和伸缩，可以实现平面约束下连续的稳定跳跃；在1983至1984年这个平面单腿机器人被拓展到了三维空间，
 3D One-Leg Hopper（\aref{subfig:one-leg-3d}）实现了在三维空间的连续稳定跳跃；1985至1990年间，Raibert又将平面单腿机器人拓展成为平面双足机器人Planar Biped（\aref{subfig:biped-2d}），
 实现了平面约束下的奔跑、越障、空翻等动作；后面Planar Biped 又进一步被拓展为3D Biped（\aref{subfig:biped-3d}），该双足机器人能够在三维空间进行跑跳运动并完成空翻动作[7]。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{Planar One-Leg Hopper\label{subfig:one-leg-2d}}
@@ -128,9 +135,11 @@ Planar One-Leg Hopper（\aref{subfig:one-leg-2d}），该机器人由气缸驱�
             \includegraphics[height = .425\linewidth]{leglab4.jpg}}
     \caption{MIT LegLab 早期的双足机器人\label{fig:leglab_biped}}
 \end{figure}
+
 此后Raibert离开MIT，创建了波士顿动力公司（Boston Dynamics）继续进行腿足机器人的相关研究。2009年，波士顿动力发布了新一代的双足机器人PETMAN（\aref{fig:leglab_biped}），
 PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的液压驱动方案，它能模仿人的行走步态，并具有一定抗外界干扰的能力[8]。在PETMAN的基础上，
 波士顿动力公司从2013年开始又进一步研发了Atlas，为其升级了动力系统，并增加了深度相机、激光雷达等传感器。Atlas被IHMC使用参加了DRC2015(\aref{fig:atlas})并取得了第二名。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{PETMAN Prototype\label{subfig:biped-2d}}
@@ -143,24 +152,28 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
 \end{figure}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[height=.45\linewidth]{atlas.jpg}
+    \includegraphics[height=.42\linewidth]{atlas.jpg}
     \caption{\label{fig:atlas}IHMC参加DRC2015使用的Atlas机器人}
 \end{figure}
+
 随后波士顿动力公司将Atlas进一步小型化，为其开发了人机协作搬运货物等功能。小型化的Atlas能够自带电池在野外复杂环境行走，不再依赖于实验室的理想环境。从2018年开始，
 波士顿动力公司每年都会发布Atlas的最新进展，采取液压驱动方案的Atlas也被公认为是世界上最先进的双足仿人机器人。到2021年，Atlas已经能够完成后空翻、高难度跑酷、
 甚至是跳舞等各种复杂高动态动作（\aref{fig:atlas_dance}），目前其他所有公开的仿人双足机器人都无法在运动能力上望其项背。
+
 \begin{figure}[htbp]
     \centering
-    \includegraphics[height=.45\linewidth]{dance1.jpg}
-    \includegraphics[height=.45\linewidth]{dance2.jpg}
+    \includegraphics[height=.43\linewidth]{dance1.jpg}
+    \includegraphics[height=.43\linewidth]{dance2.jpg}
     \includegraphics[height=.4\linewidth]{dance3.jpg}
     \includegraphics[height=.4\linewidth]{dance4.jpg}
     \caption{\label{fig:atlas_dance}Atlas机器人完成各种高难度动作}
 \end{figure}
+
 除Atlas外，美国的其他研究机构也在双足机器人领域取得了瞩目的成就。密歇根大学的Jessy Grizzle教授在1997年开始研究平面双足机器人，先后研发了RABBIT[10]（\aref{subfig:RABBIT}）
 和MABEL[11]（\aref{subfig:MABEL}），MABEL利用弹性机构储能，大大突破了电机功率密度的限制，可在平面约束下以1.95m/s进行奔跑，并且能够跨越障碍。在此基础上，Grizzle又和
 俄勒冈州立大学的Jonathan Hurst教授合作研发了ATRIAS[12]（\aref{subfig:ATRIAS}）以及MARLO[13]（\aref{subfig:MARLO}）两代3D双足机器人，设计有板簧储能元件以及轻量化的腿部连杆，
 几乎所有的质量都集中在身体部位，能以最高9.1km/h的速度奔跑，并能应对台阶、室外斜坡等复杂路况。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{RABBIT\label{subfig:RABBIT}}
@@ -180,9 +193,11 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
             \includegraphics[height = .225\textheight]{michigan4.jpg}}
     \caption{Jessy Grizzle和Jonathan Hurst合作研发的双足机器人\label{fig:michigan_biped}}
 \end{figure}
+
 Jonathan Hurst在此前研究的基础上创办了Agility Robotics，而后者于2017年发布了双足机器人Cassie[14]（\aref{subfig:Cassie}）。Cassie由电机驱动，每条腿具备5个驱动自由度和
 2个欠驱动自由度，能以2.1m/s的速度高速行走，并具备对户外复杂地形的良好适应能力。2019年Agility Robotics又发布了给cassie加入上身和双臂的双足机器人Digit[15]（\aref{subfig:Digit}），
 Digit的设计目标在于和无人驾驶车队配合，解决无人配送最后的送货上门问题。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{Cassie\label{subfig:Cassie}}
@@ -194,19 +209,23 @@ Digit的设计目标在于和无人驾驶车队配合，解决无人配送最后
             \includegraphics[height = .4\linewidth]{digit.jpg}}
     \caption{Agility Robotics研发的两款双足机器人产品\label{fig:michigan_biped}}
 \end{figure}
+
 \subsection{其他国家仿人机器人研究现状}
 
 德国慕尼黑工业大学在2009年发布了双足机器人Lola[16]。Lola多个关节采用了电机+滚珠丝杆的传动方式，尽可能减小腿部的转动惯量，可以以2.4km/h的速度步行。在2021年最新发布的视频中，
 Lola以及可以应对不规则的路面，并可以在走过易打滑路面的时候利用双手支撑侧面墙壁以避免失稳[17] （图1.11）。
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.60\textwidth]{lola.jpg}
     \caption{\label{fig:atlas_dance}慕尼黑工大Lola机器人手臂辅助行走}
 \end{figure}
+
 意大利技术研究院（Italian Institute of Technology，简称IIT）在腿足机器人领域有着许多卓越的成果，2007年IIT推出了儿童尺寸的仿人机器人iCub[18]（\aref{subfig:iCub}），iCub装备了
 具有触觉感知的人造皮肤等一系列传感器，但行走并不是它的主要设计目标，因此iCub的运动能力很差。除了iCub外，IIT在2012年公布了以行走功能为重点的COMAN[19]（\aref{subfig:COMAN}），
 它的关节由SEA驱动，SEA带来的关节力控制效果使得COMAN在站立平衡恢复方面展现出优异的性能，但电机的功率限制决定了COMAN的行走性能非常一般。之后2013年IIT又参与了欧盟的
 Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研发了两款WALK-MAN机器人[20]（\aref{subfig:WALK-MAN}），但运动性能相比COMAN并未有显著的提升。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{iCub\label{subfig:iCub}}
@@ -220,9 +239,11 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
             \includegraphics[height = .4\linewidth]{walkman.jpg}}            
     \caption{Agility Robotics研发的两款双足机器人产品\label{fig:iit_biped}}
 \end{figure}
+
 韩国先进技术研究院（Korea Advanced Institute of Science and Technology，简称KAIST）从2002年开始迭代研发了一系列KHR/HUBO双足机器人，从2002年的KHR-1开始，
 到2013年参加DRC的DRC-HUBO已经是第七代了。DRC-HUBO采用轮腿混合的设计，既能以双足形态行走，也能跪下利用膝盖上的轮子移动[21]（\aref{fig:kaist_hubo}）。
 可以根据不同情境选择移动方式的优势使得DRC-HUBO最终夺得了DRC2015的冠军。
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[height=.4\linewidth]{kaist1.jpg}
@@ -230,12 +251,14 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     \includegraphics[height=.4\linewidth]{kaist3.jpg}
     \caption{\label{fig:kaist_hubo}KAIST-HUBO机器人及其多种运动形态}
 \end{figure}
+
 \subsection{我国仿人机器人研究现状}
 早在1985年哈尔滨工业大学就研制了HIT-III双足机器人，这也被认为是我国最早的双足机器人[22]。该机器人由电机驱动，仅仅能够进行基本的静态步行。
 国防科技大学1995年公布的KDW-III双足机器人也仅能实现0.36km/h的静态步行[23]。随后国防科技大学又在2001年公布了仿人机器人“先行者”（\aref{subfig:poineer}），是国内第一台具有可运动四肢的仿人机器人。
 北京理工大学2000年开始了仿人机器人的研究，之后发布了“汇童”系列仿人机器人（\aref{subfig:sboy}）。2006年发布的第二代汇童机器人已经具备了1km/h的动态行走能力，同时可以实现打太极、舞剑等全身动作。
 第四代和第五代又分别实现了表情控制和打乒乓球的功能。目前最新的第六代汇童机器人可以实现倒地爬起、原地跳跃等功能[24]。浙江大学于2011年公布了仿人机器人KONG-II[25] （\aref{subfig:KONG}）。
 该机器人全身共计32个自由度，高160cm，重65kg，步行速度可达1.07km/h，能够实现和人对打乒乓球的功能。
+
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{先行者\label{subfig:poineer}}
@@ -252,6 +275,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     %         \includegraphics[height = .4\linewidth]{domestic3.jpg}}         
     \caption{国内部分双足机器人\label{fig:domes_biped}}
 \end{figure}
+
 截至2021年，国内公开的仿人机器人中，更多还是借鉴了日本在仿人机器人领域的技术路线，采用高速电机加大速比减速器的关节驱动方案，运动性能基本还都局限在低速静态步行，
 难以实现仿人机器人的动态步行，相较国外还有相当大的差距。
 \section{腿足运动控制最新进展}
@@ -393,11 +417,11 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
     \caption{\label{fig:zju-logo}机器人浮动基运动模型}
 \end{figure}
 
-\begin{algorithm}[htb] 
+\begin{algorithm}[htbp] 
 \setstretch{1.3}
 \caption{线性卡尔曼滤波} 
 \label{alg:KF} 
-\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
 \STATE{\fangsong{\textbf{输入}}：$\hat{\boldsymbol{x}}_{k-1}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k-1}, \boldsymbol{Q}_{w_k}, \boldsymbol{R}_{v_k}$}
 \STATE{\fangsong{\textbf{输出}}：$\hat{\boldsymbol{x}}_{k}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k}$}
 \STATE{\textbf{Step 1}\ \fangsong{初始化}$\boldsymbol{A}_0$，$\boldsymbol{B}_0$，$\boldsymbol{H}_0$}
@@ -417,111 +441,6 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 \end{algorithmic}
 \end{algorithm}
 标准卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。
-
-
-\section{质心状态估计}
-包括人形机器人在内的腿足机器人有驱动关节，但并没有和环境刚性固定。因此驱动关节的角度并不能决定机器人相对环境的位姿。
-腿足机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态。这个连杆就是所谓的浮动基。
-器人每个连杆的位置可以用浮动基的位姿和编码器测量得到的关节角度重建出来。
-
-由于浮动基的状态并不是直接可测的，所以快速可靠的状态估计是在腿足机器人上实现状态反馈控制非常重要的一环。如果能知道触地点的精确位置，
-那么关节的角度就足够重建出浮动基的位姿。但实际上接触很有可能会发生打滑，或者是踩到边缘脚板翻转，而且环境可能是不规则的，
-机器人的几何模型中也可能有不确定性(比如柔性零件引起的变形)。因此关节角度信息是不足以实现可靠的状态估计的。
-
-力/力矩传感器和惯性测量单元(IMU)可以帮忙解决这个问题。力测量可以用来检测触地，打滑，以及脚板翻转。这些测量也可以用来估计柔性零件的形变，
-例如HRP-2中的柔性脚踝。IMU通常会提供安装位置处的角速度和线加速度，其测量仅足以测量偏航角。
-
-最近的方法集中在融合IMU信息，力传感器数据和运动学测量来实现高保真的状态估计。IMU和运动学数据的融合最开始是用来实现里程计[1][2]。
-之后，融合两者的高频率状态估计被用来估计速度并给闭环控制器使用：这可以在运动学层面进行[3][4][5]，也可以扩展到动力学模型[6][7]。
-其他传感器包括激光雷达的数据也可以被融合进来[8]。这些方法的共性是，解一个全耦合的推理问题来从传感器测量中估计位置和姿态。
-然而这种全耦合的推理计算十分耗时，同时很难调参，并且通常代码实现和debug是很复杂的。
-
-也有更简单的状态估计器和平衡控制器一起被提出，并且通常可以实现很震撼的实物效果[9][10][11][12][13]。这些估计器将姿态和位置估计解耦
-来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
-的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
-
-这篇文章的主要贡献在于在WuKong4上进行了原地平衡和行走实验，并且对比(benchmark)了两种简单的状态估计方法。对比试验同样考察了不同传感器
-的贡献度，比如IMU数据的加入，以及用力传感器来检测接触扰动。我们在第二和第三部分提出了两种不同的简化状态估计方法；
-第四部分展示并讨论了实验结果；第五部分给出了实验结论。
-
-\subsection{方法1.两阶段加权平均(WA)}
-
-\subsection{方法2.位置速度线性卡尔曼滤波器}
-本文使用的第二种方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。现在的状态估计方法已经用扩展卡尔曼滤波(EKF)
-在人形和四足机器人的浮动基状态估计上取得了很好的效果[4][5]。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
-并且在实际中可能很难调整参数。第三部分讨论了浮动基状态估计如何能在一个轻微的假设下分解成分级的姿态和位置滤波器，这是一个关键的结论。
-有了这个结论之后，浮动基的位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
-
-A 过程模型
-
-和[3]中一样，机器人的位置和速度估计的状态量$\boldsymbol{x}$将机器人足的位置也包括了进去：
-\begin{equation}
-    \label{equ:est_posvel}
-    \boldsymbol{x}=\left[{ }^\mathcal{I} \boldsymbol{p}_b^{\top},{ }^\mathcal{I} \boldsymbol{v}_b^{\top},{ }^\mathcal{I} \boldsymbol{p}_L^{\top},{ }^\mathcal{I} \boldsymbol{p}_R^{\top}\right]^{\top}
-\end{equation}
-对于$n$时刻的加速度测量$\boldsymbol{a}_n$，浮动基的位置和速度的演化可以表示为：
-\begin{equation}
-    \label{equ:est_posvel}
-    \boldsymbol{x}_{n+1}=\left[\begin{array}{c}
-        { }^{\top} \boldsymbol{p}_{b, n}+{ }^{\top} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right](\Delta t)^2 \\
-        { }^{\top} \boldsymbol{v}_{b, n}+\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right] \Delta t \\
-        { }^{\top} \boldsymbol{p}_{L, n} \\
-        { }^{\top} \boldsymbol{p}_{R, n}
-        \end{array}\right]
-\end{equation}
-我们假设足是保持静止的。
-
-通常，如果${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计是和$\boldsymbol{x}$同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的。
-然而如果近似将${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计与$\boldsymbol{x}$的估计解耦，
-那么将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\aref{equ:est_posvel}就变成了线性时不变的模型。
-
-我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$(和第二部分B中描述的类似)。我们使用了[14]中提出估计的第二种版本。
-原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
-
-B 测量模型
-
-为了估计$\boldsymbol{x}$，需要用运动学测量得到IMU相对脚的位置。除此之外，脚的高度$z_L$和$z_R$(这里假设为0)也被用作伪测量：
-\begin{equation}
-    \label{equ:est_posvel_mea}
-    \boldsymbol{y}=\left[\begin{array}{c}
-        { }^{\mathcal{I}} \boldsymbol{R}_b{ }^b \boldsymbol{p}_L\left(\boldsymbol{q}_L\right) \\
-        { }^{\mathcal{I}} \boldsymbol{R}_b{ }^b \boldsymbol{p}_R\left(\boldsymbol{q}_R\right) \\
-        z_L \\
-        z_R
-        \end{array}\right]
-\end{equation}
-通过解耦状态${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计，它的估计值可以代入$\boldsymbol{y}$。
-这种方法可以在估计测量值$\hat{\boldsymbol{y}}$和估计状态值$\hat{\boldsymbol{x}}$中建立起线性的关系：
-\begin{equation}
-    \label{equ:est_mea_model}
-    \hat{\boldsymbol{y}}=\left[\begin{array}{c}
-        { }^{\mathcal{I}} \hat{\boldsymbol{p}}_b-{ }^{\mathcal{I}} \hat{\boldsymbol{p}}_L \\
-        { }^{\mathcal{I}} \hat{\boldsymbol{p}}_b-{ }^{\mathcal{I}} \hat{\boldsymbol{p}}_R \\
-        \hat{z}_L \\
-        \hat{z}_R
-        \end{array}\right]:=\boldsymbol{C} \hat{\boldsymbol{y}}
-\end{equation}
-C 加权噪声模型
-基于上文的解耦假设，$\boldsymbol{x}$的估计可以写成随机过程下的标准线性卡尔曼滤波：
-\begin{equation}
-    \label{equ:std_kf}
-    \begin{aligned}
-        \boldsymbol{x}_{n+1} & =\boldsymbol{A} \boldsymbol{x}_n+\boldsymbol{B} u_n+\mathcal{N}\left(0, \boldsymbol{Q}_n\right) \\
-        \boldsymbol{y}_{n+1} & =C \boldsymbol{x}_{n+1}+\mathcal{N}\left(0, \boldsymbol{R}_{n+1}\right)
-        \end{aligned}
-\end{equation}
-$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了和WA滤波器的操作大致符合，测量噪声被设计成：
-
-和 被设计成：
-
-和 是固定的名义标准差。 的值向下会饱和到一个较小的正值 来避免除0。右腿的测量噪声模型也采用了类似的放缩。
-
-过程噪声被建模成：
-
-其中 是加速度计的固定均方根误差， 也是自适应放缩的足端位置的标准差，这样的噪声模型使得估计器可以在走路的过程中自动捕捉摆动腿的位置变化。
-为了给这个过程提供更多的灵活性，噪声模型通过一个inverse logistic sigmoid做了放大：
-
-其中 是足端速度变化的名义方差。随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计。
 
 \section{触地状态估计}
 \subsection{概率触地模型融合}
@@ -673,6 +592,112 @@ B 校正：测量模型
 但我们还是用了标准的卡尔曼滤波来迭代更新（但这个过程是预先嵌入在标准卡尔曼滤波更新中的），这在机器人学中是更容易获得的。
 
 \subsection{触地估计实验验证}
+
+\section{质心状态估计}
+包括人形机器人在内的腿足机器人有驱动关节，但并没有和环境刚性固定。因此驱动关节的角度并不能决定机器人相对环境的位姿。
+腿足机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态。这个连杆就是所谓的浮动基。
+器人每个连杆的位置可以用浮动基的位姿和编码器测量得到的关节角度重建出来。
+
+由于浮动基的状态并不是直接可测的，所以快速可靠的状态估计是在腿足机器人上实现状态反馈控制非常重要的一环。如果能知道触地点的精确位置，
+那么关节的角度就足够重建出浮动基的位姿。但实际上接触很有可能会发生打滑，或者是踩到边缘脚板翻转，而且环境可能是不规则的，
+机器人的几何模型中也可能有不确定性(比如柔性零件引起的变形)。因此关节角度信息是不足以实现可靠的状态估计的。
+
+力/力矩传感器和惯性测量单元(IMU)可以帮忙解决这个问题。力测量可以用来检测触地，打滑，以及脚板翻转。这些测量也可以用来估计柔性零件的形变，
+例如HRP-2中的柔性脚踝。IMU通常会提供安装位置处的角速度和线加速度，其测量仅足以测量偏航角。
+
+最近的方法集中在融合IMU信息，力传感器数据和运动学测量来实现高保真的状态估计。IMU和运动学数据的融合最开始是用来实现里程计[1][2]。
+之后，融合两者的高频率状态估计被用来估计速度并给闭环控制器使用：这可以在运动学层面进行[3][4][5]，也可以扩展到动力学模型[6][7]。
+其他传感器包括激光雷达的数据也可以被融合进来[8]。这些方法的共性是，解一个全耦合的推理问题来从传感器测量中估计位置和姿态。
+然而这种全耦合的推理计算十分耗时，同时很难调参，并且通常代码实现和debug是很复杂的。
+
+也有更简单的状态估计器和平衡控制器一起被提出，并且通常可以实现很震撼的实物效果[9][10][11][12][13]。这些估计器将姿态和位置估计解耦
+来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
+的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
+
+这篇文章的主要贡献在于在WuKong4上进行了原地平衡和行走实验，并且对比(benchmark)了两种简单的状态估计方法。对比试验同样考察了不同传感器
+的贡献度，比如IMU数据的加入，以及用力传感器来检测接触扰动。我们在第二和第三部分提出了两种不同的简化状态估计方法；
+第四部分展示并讨论了实验结果；第五部分给出了实验结论。
+
+\subsection{方法1.两阶段加权平均(WA)}
+
+\subsection{方法2.位置速度线性卡尔曼滤波器}
+本文使用的第二种方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。现在的状态估计方法已经用扩展卡尔曼滤波(EKF)
+在人形和四足机器人的浮动基状态估计上取得了很好的效果[4][5]。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
+并且在实际中可能很难调整参数。第三部分讨论了浮动基状态估计如何能在一个轻微的假设下分解成分级的姿态和位置滤波器，这是一个关键的结论。
+有了这个结论之后，浮动基的位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
+
+A 过程模型
+
+和[3]中一样，机器人的位置和速度估计的状态量$\boldsymbol{x}$将机器人足的位置也包括了进去：
+\begin{equation}
+    \label{equ:est_posvel}
+    \boldsymbol{x}=\left[{ }^\mathcal{I} \boldsymbol{p}_b^{\top},{ }^\mathcal{I} \boldsymbol{v}_b^{\top},{ }^\mathcal{I} \boldsymbol{p}_L^{\top},{ }^\mathcal{I} \boldsymbol{p}_R^{\top}\right]^{\top}
+\end{equation}
+对于$n$时刻的加速度测量$\boldsymbol{a}_n$，浮动基的位置和速度的演化可以表示为：
+\begin{equation}
+    \label{equ:est_posvel}
+    \boldsymbol{x}_{n+1}=\left[\begin{array}{c}
+        { }^{\top} \boldsymbol{p}_{b, n}+{ }^{\top} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right](\Delta t)^2 \\
+        { }^{\top} \boldsymbol{v}_{b, n}+\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right] \Delta t \\
+        { }^{\top} \boldsymbol{p}_{L, n} \\
+        { }^{\top} \boldsymbol{p}_{R, n}
+        \end{array}\right]
+\end{equation}
+我们假设足是保持静止的。
+
+通常，如果${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计是和$\boldsymbol{x}$同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的。
+然而如果近似将${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计与$\boldsymbol{x}$的估计解耦，
+那么将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\aref{equ:est_posvel}就变成了线性时不变的模型。
+
+我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$(和第二部分B中描述的类似)。我们使用了[14]中提出估计的第二种版本。
+原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
+
+B 测量模型
+
+为了估计$\boldsymbol{x}$，需要用运动学测量得到IMU相对脚的位置。除此之外，脚的高度$z_L$和$z_R$(这里假设为0)也被用作伪测量：
+\begin{equation}
+    \label{equ:est_posvel_mea}
+    \boldsymbol{y}=\left[\begin{array}{c}
+        { }^{\mathcal{I}} \boldsymbol{R}_b{ }^b \boldsymbol{p}_L\left(\boldsymbol{q}_L\right) \\
+        { }^{\mathcal{I}} \boldsymbol{R}_b{ }^b \boldsymbol{p}_R\left(\boldsymbol{q}_R\right) \\
+        z_L \\
+        z_R
+        \end{array}\right]
+\end{equation}
+通过解耦状态${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计，它的估计值可以代入$\boldsymbol{y}$。
+这种方法可以在估计测量值$\hat{\boldsymbol{y}}$和估计状态值$\hat{\boldsymbol{x}}$中建立起线性的关系：
+\begin{equation}
+    \label{equ:est_mea_model}
+    \hat{\boldsymbol{y}}=\left[\begin{array}{c}
+        { }^{\mathcal{I}} \hat{\boldsymbol{p}}_b-{ }^{\mathcal{I}} \hat{\boldsymbol{p}}_L \\
+        { }^{\mathcal{I}} \hat{\boldsymbol{p}}_b-{ }^{\mathcal{I}} \hat{\boldsymbol{p}}_R \\
+        \hat{z}_L \\
+        \hat{z}_R
+        \end{array}\right]:=\boldsymbol{C} \hat{\boldsymbol{y}}
+\end{equation}
+C 加权噪声模型
+基于上文的解耦假设，$\boldsymbol{x}$的估计可以写成随机过程下的标准线性卡尔曼滤波：
+\begin{equation}
+    \label{equ:std_kf}
+    \begin{aligned}
+        \boldsymbol{x}_{n+1} & =\boldsymbol{A} \boldsymbol{x}_n+\boldsymbol{B} u_n+\mathcal{N}\left(0, \boldsymbol{Q}_n\right) \\
+        \boldsymbol{y}_{n+1} & =C \boldsymbol{x}_{n+1}+\mathcal{N}\left(0, \boldsymbol{R}_{n+1}\right)
+        \end{aligned}
+\end{equation}
+$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了和WA滤波器的操作大致符合，测量噪声被设计成：
+
+和 被设计成：
+
+和 是固定的名义标准差。 的值向下会饱和到一个较小的正值 来避免除0。右腿的测量噪声模型也采用了类似的放缩。
+
+过程噪声被建模成：
+
+其中 是加速度计的固定均方根误差， 也是自适应放缩的足端位置的标准差，这样的噪声模型使得估计器可以在走路的过程中自动捕捉摆动腿的位置变化。
+为了给这个过程提供更多的灵活性，噪声模型通过一个inverse logistic sigmoid做了放大：
+
+其中 是足端速度变化的名义方差。随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计。
+
+
 
 \chapter{基于事件触发的双足机器人运动控制器}
 \section{双足机器人建模与控制器设计}
