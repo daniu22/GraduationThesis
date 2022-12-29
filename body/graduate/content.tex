@@ -1,5 +1,5 @@
 \newcommand{\aref}[1]{\autoref{#1}\space}
-
+\renewcommand{\algorithmcfname}{算法}
 \chapter{绪论}
 \section{研究背景与意义}
 机器人一直是人类孜孜不倦探索钻研的目标，人类一直致力于实现让机器人覆盖人
@@ -10,20 +10,20 @@
 器人无法适应复杂路面，比如轮式机器人无法实现在阶梯或是崎岖路面前进，履带式机
 器人也很难做到上下楼梯。相比较来说，腿足式机器人就能很好适应复杂路面，在崎岖
 路面有着得天独厚的优势，从人类通过双腿可以适应自然界绝大部分的地貌环境就可以
-看出来，足式机器人更适合于复杂的陆地环境[1]。人类通过视觉信息选取离散的落脚点
+看出来，足式机器人更适合于复杂的陆地环境\cite{schraft2000service}。人类通过视觉信息选取离散的落脚点
 以跨过不同的障碍物和适应不同的路面，腿足式机器人可以通过步态规划以及身体平衡
 控制做到不平整路面的前进，但目前仍然存在许多挑战。
 
 另一方面，腿足式也是自然界大部分生物所采取的前进方式，所以机器人采用腿足
 式方式能够更好的融入人类生活中。采用和人类相似的外形使得腿足式机器人相对于轮
-式和履带式机器人在亲和力方面有着难以匹敌的优势，完美的适应人类的工作环境[2]。
+式和履带式机器人在亲和力方面有着难以匹敌的优势，完美的适应人类的工作环境\cite{2010067776.nh}。
 在未来利用仿人机器人取代人类在高危险环境下的工作或者重复性较高的体力劳动的
 是必然趋势。此外对于腿足式机器人的研究还能够通过得到腿部运动的规律设计康复外
 骨骼等助力工具帮助残疾人恢复健康。对于腿足式机器人的研究能够更好的了解人类腿
 部运动机理，利用康复性外骨骼机器人帮助腿部残疾的患者恢复健康也是大势所趋。
 目前国内外关于腿足式尤其是双足机器人的研究也受到越来越多的关注，双足机器
 人是仿生机器人领域的代表之一，它集机械、电气、计算机、传感器等多种学科于一体，
-是直接模仿采用双足前进动物的一类机器人[3]，而双足机器人跑跳步态一直是腿足机器
+是直接模仿采用双足前进动物的一类机器人\cite{梶田秀司2007仿人机器人}，而双足机器人跑跳步态一直是腿足机器
 人领域的重要挑战和研究热点之一。双足机器人采用跑跳步态可以实现更为快速的运动
 速度，由于机器人在空中相持续时间内还会因为惯性具有向前的速度，所以机器人的前
 进速度就不再受到机器人连杆长度的限制，比采用行走的速度有了较大的提升。机器人
@@ -37,7 +37,7 @@
 \subsection{日本仿人机器人研究现状}
 
 早在20世纪60年代末，日本就开始了对仿人双足机器人的研究。日本早稻田大学的Ichiro Kato教授于1969~1971年设计制作了液压驱动的
-双足机器人WL-3[1]以及WL-5[2] （\aref{subfig:wl5}），并以此为基础在1973年研制了仿人机器人WABOT-1[3] （\aref{subfig:wabot1}），这也被认为是最早的现代仿人机器人。
+双足机器人WL-3以及WL-5（\aref{subfig:wl5}），并以此为基础在1973年研制了仿人机器人WABOT-1 （\aref{subfig:wabot1}），这也被认为是最早的现代仿人机器人。
 尽管这些机器人运动能力相当差，只能实现一些静态动作，但也在客观上引发了学术界和产业界对仿人双足机器人研究的兴趣。
 
 \begin{figure}[htbp]
@@ -59,7 +59,7 @@
 20世纪80年代，日本本田公司（Honda）也开始了仿人机器人的研究，出于控制方便和动力源可携带等方面的考虑，本田选择了电机驱动的技术路线，
 经过E0到E6的七代步行样机研发，以及加入仿人上半身的P1到P2的原型机迭代，以及基于P系列原型机做出的小型化改进，终于在2000年推出了著名的
 仿人机器人ASIMO（\aref{fig:asimo}）。 ASIMO具有良好的外观设计，并且集成了视觉识别、语音交互等技术，是最为人所熟知的仿人机器人之一。
-本田也不断地对ASIMO¬进行改进，到2011年时ASIMO的奔跑速度就达到了9km/h，并能完成上下台阶、倒水等展示任务[4]。
+本田也不断地对ASIMO¬进行改进，到2011年时ASIMO的奔跑速度就达到了9km/h，并能完成上下台阶、倒水等展示任务\cite{Honda}。
 
 \begin{figure}[htbp]
     \centering
@@ -91,7 +91,7 @@
 
 除ASIMO外，日本产业技术综合研究院也在1998年开启了仿人机器人项目（Humanoid Robotics Project, HRP），HRP系列（\aref{fig:japan_hrp}）
 也采取了电机位置伺服驱动的思路，2018年第五代最新的HRP-5P发布（\aref{subfig:HRP-5P}）。HRP-5P高182cm，重101kg，搭载的视觉和激光传感器可以识别工具类别并灵活使用工具，
-并且具备搬运木板等较重负载的能力[5]，体现了HRP系列双足20多年的研究积累。
+并且具备搬运木板等较重负载的能力\cite{HRP}，体现了HRP系列双足20多年的研究积累。
 
 \begin{figure}[htbp]
     \centering
@@ -105,7 +105,7 @@
 创造性地给伺服电机加入液冷系统，大大提高了电机的散热效率，再加上他们设计的大电流驱动器，整套驱动系统的功率密度得到了显著提升。
 他们将改造过的驱动系统安装在了一对源于HRP-3的腿上从而得到了HRP3L-JSK（\aref{subfig:HRP3L-JSK}），HRP3L-JSK强大的驱动性能使其同时具有了快速运动和承受大负载的能力。
 Urata等人之后创建SCHAFT公司，在HRP3L-JSK的基础上开发了S-One。搭载了强大驱动系统的S-One在DRC2013中成功完成了各项任务（\aref{fig:s-one}），以大比分优势取得了第一名，
-SCHAFT也在2013年被Google收购。SCHAFT之后在2016年发布了其新研发的直线腿式双足机器人，该机器人能够自主上下楼梯，并且能够在足底打滑的情况下快速恢复平衡[6]。
+SCHAFT也在2013年被Google收购。SCHAFT之后在2016年发布了其新研发的直线腿式双足机器人，该机器人能够自主上下楼梯，并且能够在足底打滑的情况下快速恢复平衡\cite{SCHAFT}。
 
 \subsection{美国仿人机器人研究现状}
 
@@ -113,7 +113,7 @@ SCHAFT也在2013年被Google收购。SCHAFT之后在2016年发布了其新研发
 由平面到三维的由简到繁递进的研究思路，利用压缩气体动力源高能量密度的优势，实现了即使放到今天也相当惊人的效果。1980至1982年他们研制了第一台跳跃机器人
 Planar One-Leg Hopper（\aref{subfig:one-leg-2d}），该机器人由气缸驱动腿部的摆动和伸缩，可以实现平面约束下连续的稳定跳跃；在1983至1984年这个平面单腿机器人被拓展到了三维空间，
 3D One-Leg Hopper（\aref{subfig:one-leg-3d}）实现了在三维空间的连续稳定跳跃；1985至1990年间，Raibert又将平面单腿机器人拓展成为平面双足机器人Planar Biped（\aref{subfig:biped-2d}），
-实现了平面约束下的奔跑、越障、空翻等动作；后面Planar Biped 又进一步被拓展为3D Biped（\aref{subfig:biped-3d}），该双足机器人能够在三维空间进行跑跳运动并完成空翻动作[7]。
+实现了平面约束下的奔跑、越障、空翻等动作；后面Planar Biped 又进一步被拓展为3D Biped（\aref{subfig:biped-3d}），该双足机器人能够在三维空间进行跑跳运动并完成空翻动作\cite{raibert1986legged}。
 
 \begin{figure}[htbp]
     \centering
@@ -169,10 +169,10 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
     \caption{\label{fig:atlas_dance}Atlas机器人完成各种高难度动作}
 \end{figure}
 
-除Atlas外，美国的其他研究机构也在双足机器人领域取得了瞩目的成就。密歇根大学的Jessy Grizzle教授在1997年开始研究平面双足机器人，先后研发了RABBIT[10]（\aref{subfig:RABBIT}）
-和MABEL[11]（\aref{subfig:MABEL}），MABEL利用弹性机构储能，大大突破了电机功率密度的限制，可在平面约束下以1.95m/s进行奔跑，并且能够跨越障碍。在此基础上，Grizzle又和
-俄勒冈州立大学的Jonathan Hurst教授合作研发了ATRIAS[12]（\aref{subfig:ATRIAS}）以及MARLO[13]（\aref{subfig:MARLO}）两代3D双足机器人，设计有板簧储能元件以及轻量化的腿部连杆，
-几乎所有的质量都集中在身体部位，能以最高9.1km/h的速度奔跑，并能应对台阶、室外斜坡等复杂路况。
+除Atlas外，美国的其他研究机构也在双足机器人领域取得了瞩目的成就。密歇根大学的Jessy Grizzle教授在1997年开始研究平面双足机器人，先后研发了RABBIT（\aref{subfig:RABBIT}）
+和MABEL（\aref{subfig:MABEL}），MABEL利用弹性机构储能，大大突破了电机功率密度的限制，可在平面约束下以1.95m/s进行奔跑，并且能够跨越障碍。在此基础上，Grizzle又和
+俄勒冈州立大学的Jonathan Hurst教授合作研发了ATRIAS\cite{rezazadeh2015toward}（\aref{subfig:ATRIAS}）以及MARLO\cite{buss2014preliminary}（\aref{subfig:MARLO}）
+两代3D双足机器人，设计有板簧储能元件以及轻量化的腿部连杆，几乎所有的质量都集中在身体部位，能以最高9.1km/h的速度奔跑，并能应对台阶、室外斜坡等复杂路况。
 
 \begin{figure}[htbp]
     \centering
@@ -194,8 +194,8 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
     \caption{Jessy Grizzle和Jonathan Hurst合作研发的双足机器人\label{fig:michigan_biped}}
 \end{figure}
 
-Jonathan Hurst在此前研究的基础上创办了Agility Robotics，而后者于2017年发布了双足机器人Cassie[14]（\aref{subfig:Cassie}）。Cassie由电机驱动，每条腿具备5个驱动自由度和
-2个欠驱动自由度，能以2.1m/s的速度高速行走，并具备对户外复杂地形的良好适应能力。2019年Agility Robotics又发布了给cassie加入上身和双臂的双足机器人Digit[15]（\aref{subfig:Digit}），
+Jonathan Hurst在此前研究的基础上创办了Agility Robotics，而后者于2017年发布了双足机器人Cassie\cite{Cassie}（\aref{subfig:Cassie}）。Cassie由电机驱动，每条腿具备5个驱动自由度和
+2个欠驱动自由度，能以2.1m/s的速度高速行走，并具备对户外复杂地形的良好适应能力。2019年Agility Robotics又发布了给cassie加入上身和双臂的双足机器人Digit\cite{Digit}（\aref{subfig:Digit}），
 Digit的设计目标在于和无人驾驶车队配合，解决无人配送最后的送货上门问题。
 
 \begin{figure}[htbp]
@@ -212,19 +212,19 @@ Digit的设计目标在于和无人驾驶车队配合，解决无人配送最后
 
 \subsection{其他国家仿人机器人研究现状}
 
-德国慕尼黑工业大学在2009年发布了双足机器人Lola[16]。Lola多个关节采用了电机+滚珠丝杆的传动方式，尽可能减小腿部的转动惯量，可以以2.4km/h的速度步行。在2021年最新发布的视频中，
-Lola以及可以应对不规则的路面，并可以在走过易打滑路面的时候利用双手支撑侧面墙壁以避免失稳[17] （图1.11）。
+德国慕尼黑工业大学在2009年发布了双足机器人Lola\cite{buschmann2009humanoid}。Lola多个关节采用了电机+滚珠丝杆的传动方式，尽可能减小腿部的转动惯量，可以以2.4km/h的速度步行。在2021年最新发布的视频中，
+Lola以及可以应对不规则的路面，并可以在走过易打滑路面的时候利用双手支撑侧面墙壁以避免失稳\cite{Lola}（\aref{fig:lola}）。
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.60\textwidth]{lola.jpg}
-    \caption{\label{fig:atlas_dance}慕尼黑工大Lola机器人手臂辅助行走}
+    \caption{\label{fig:lola}慕尼黑工大Lola机器人手臂辅助行走}
 \end{figure}
 
-意大利技术研究院（Italian Institute of Technology，简称IIT）在腿足机器人领域有着许多卓越的成果，2007年IIT推出了儿童尺寸的仿人机器人iCub[18]（\aref{subfig:iCub}），iCub装备了
-具有触觉感知的人造皮肤等一系列传感器，但行走并不是它的主要设计目标，因此iCub的运动能力很差。除了iCub外，IIT在2012年公布了以行走功能为重点的COMAN[19]（\aref{subfig:COMAN}），
+意大利技术研究院（Italian Institute of Technology，简称IIT）在腿足机器人领域有着许多卓越的成果，2007年IIT推出了儿童尺寸的仿人机器人iCub\cite{tsagarakis2007icub}（\aref{subfig:iCub}），iCub装备了
+具有触觉感知的人造皮肤等一系列传感器，但行走并不是它的主要设计目标，因此iCub的运动能力很差。除了iCub外，IIT在2012年公布了以行走功能为重点的COMAN\cite{dallali2012global}（\aref{subfig:COMAN}），
 它的关节由SEA驱动，SEA带来的关节力控制效果使得COMAN在站立平衡恢复方面展现出优异的性能，但电机的功率限制决定了COMAN的行走性能非常一般。之后2013年IIT又参与了欧盟的
-Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研发了两款WALK-MAN机器人[20]（\aref{subfig:WALK-MAN}），但运动性能相比COMAN并未有显著的提升。
+Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研发了两款WALK-MAN机器人\cite{tsagarakis2017walk}（\aref{subfig:WALK-MAN}），但运动性能相比COMAN并未有显著的提升。
 
 \begin{figure}[htbp]
     \centering
@@ -241,7 +241,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 \end{figure}
 
 韩国先进技术研究院（Korea Advanced Institute of Science and Technology，简称KAIST）从2002年开始迭代研发了一系列KHR/HUBO双足机器人，从2002年的KHR-1开始，
-到2013年参加DRC的DRC-HUBO已经是第七代了。DRC-HUBO采用轮腿混合的设计，既能以双足形态行走，也能跪下利用膝盖上的轮子移动[21]（\aref{fig:kaist_hubo}）。
+到2013年参加DRC的DRC-HUBO已经是第七代了。DRC-HUBO采用轮腿混合的设计，既能以双足形态行走，也能跪下利用膝盖上的轮子移动\cite{zucker2015general}（\aref{fig:kaist_hubo}）。
 可以根据不同情境选择移动方式的优势使得DRC-HUBO最终夺得了DRC2015的冠军。
 
 \begin{figure}[htbp]
@@ -253,10 +253,10 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 \end{figure}
 
 \subsection{我国仿人机器人研究现状}
-早在1985年哈尔滨工业大学就研制了HIT-III双足机器人，这也被认为是我国最早的双足机器人[22]。该机器人由电机驱动，仅仅能够进行基本的静态步行。
-国防科技大学1995年公布的KDW-III双足机器人也仅能实现0.36km/h的静态步行[23]。随后国防科技大学又在2001年公布了仿人机器人“先行者”（\aref{subfig:poineer}），是国内第一台具有可运动四肢的仿人机器人。
+早在1985年哈尔滨工业大学就研制了HIT-III双足机器人，这也被认为是我国最早的双足机器人\cite{谢涛2002}。该机器人由电机驱动，仅仅能够进行基本的静态步行。
+国防科技大学1995年公布的KDW-III双足机器人也仅能实现0.36km/h的静态步行。随后国防科技大学又在2001年公布了仿人机器人“先行者”（\aref{subfig:poineer}），是国内第一台具有可运动四肢的仿人机器人。
 北京理工大学2000年开始了仿人机器人的研究，之后发布了“汇童”系列仿人机器人（\aref{subfig:sboy}）。2006年发布的第二代汇童机器人已经具备了1km/h的动态行走能力，同时可以实现打太极、舞剑等全身动作。
-第四代和第五代又分别实现了表情控制和打乒乓球的功能。目前最新的第六代汇童机器人可以实现倒地爬起、原地跳跃等功能[24]。浙江大学于2011年公布了仿人机器人KONG-II[25] （\aref{subfig:KONG}）。
+第四代和第五代又分别实现了表情控制和打乒乓球的功能。目前最新的第六代汇童机器人可以实现倒地爬起、原地跳跃等功能\cite{huang2019historical}。浙江大学于2011年公布了仿人机器人KONG-II\cite{sun2011balance}（\aref{subfig:KONG}）。
 该机器人全身共计32个自由度，高160cm，重65kg，步行速度可达1.07km/h，能够实现和人对打乒乓球的功能。
 
 \begin{figure}[htbp]
@@ -276,7 +276,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     \caption{国内部分双足机器人\label{fig:domes_biped}}
 \end{figure}
 
-截至2021年，国内公开的仿人机器人中，更多还是借鉴了日本在仿人机器人领域的技术路线，采用高速电机加大速比减速器的关节驱动方案，运动性能基本还都局限在低速静态步行，
+截至2022年，国内公开的仿人机器人中，更多还是借鉴了日本在仿人机器人领域的技术路线，采用高速电机加大速比减速器的关节驱动方案，运动性能基本还都局限在低速静态步行，
 难以实现仿人机器人的动态步行，相较国外还有相当大的差距。
 \section{腿足运动控制最新进展}
 腿的作用在于，机器人能用腿上的末端执行器来推“地”从而为身体提供主动避震，
@@ -353,7 +353,7 @@ Control architecture: 接触点$s_i$的序列通常要考虑机器人所在环�
                 (图源~\cite{carpentier2016center})}
 \end{figure}
 \aref{fig:typical_control}所示腿足运控的通用方法，原本是为双足行走开发的，并且在Kawada的HRP-2\cite{takenaka2009real}，
-本田的Asimo\cite{takenaka2009real}，Aldebaran的Nao\cite{gouaillier2010omni}，波士顿动力的Atlas[32]等等一系列的机器人上得到了成功的验证。
+本田的Asimo\cite{takenaka2009real}，Aldebaran的Nao\cite{gouaillier2010omni}，波士顿动力的Atlas\cite{Kuindersma2020Recent}等等一系列的机器人上得到了成功的验证。
 最近这种方法也被适配到了诸如ANYbotics的ANYmal\cite{bellicoso2018dynamic}，IIT的HyQ\cite{mastalli2017trajectory}，
 MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite{lafaye2014linear}，ETHZ的ANYmal\cite{bjelonic2020rolling}
 和Ascento\cite{klemm2020lqr}等轮足机器人上。
@@ -590,7 +590,49 @@ B 校正：测量模型
 其中$N$是足的个数。通过将步态规划器的期望接触状态和测量概率模型的结果融合，我们可以得到每条腿的实际接触状态的一个更好的估计。
 由于我们把卡尔曼滤波器的$\boldsymbol{A}_k$设为$\mathbf{0}_N$，融合的过程也能通过贝叶斯定理下的静态最大似然方法来得到。
 但我们还是用了标准的卡尔曼滤波来迭代更新（但这个过程是预先嵌入在标准卡尔曼滤波更新中的），这在机器人学中是更容易获得的。
-
+\begin{algorithm}[htp]
+\setstretch{1.3}
+\caption{触地状态估计迭代过程} 
+\label{alg:Framwork} 
+\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
+\STATE{$\bf{subject\ to:}$}
+\STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
+\STATE{$\boldsymbol{v}(0)=\boldsymbol{v}_0$}
+\FOR{$i=1...P$}
+\STATE{$\begin{aligned}
+    & T_i{ }^{\min } \leq T_i \leq T_i^{\max } \\
+    & \mathrm{dt}_i:=T_i / N
+    \end{aligned}$}
+\FOR{$k=((i-1)P)...(i\cdot P-1)$}
+\STATE{$\begin{aligned}
+    & \boldsymbol{x}(k+1)=\boldsymbol{x}(k)+\mathrm{dt}_i \boldsymbol{v}(k)+\frac{1}{2} \mathrm{dt}_i^2 \boldsymbol{a}(k) \\
+    & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\mathrm{dt}_i \boldsymbol{a}(k) \\
+    & \mathbf{a}:=-\boldsymbol{g}
+    \end{aligned}$}
+\IF{\fangsong{左脚触地}}
+\STATE{$\begin{aligned}
+    & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
+    & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
+    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
+    & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
+    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
+    \end{aligned}$}
+\ENDIF
+\IF{右脚触地}
+\STATE{$\begin{aligned}
+    & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
+    & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
+    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
+    & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
+    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
+    \end{aligned}$}
+\ENDIF
+\STATE{$\boldsymbol{a}(k)=\bf{a}$}
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 \subsection{触地估计实验验证}
 
 \section{质心状态估计}
@@ -617,8 +659,6 @@ B 校正：测量模型
 这篇文章的主要贡献在于在WuKong4上进行了原地平衡和行走实验，并且对比(benchmark)了两种简单的状态估计方法。对比试验同样考察了不同传感器
 的贡献度，比如IMU数据的加入，以及用力传感器来检测接触扰动。我们在第二和第三部分提出了两种不同的简化状态估计方法；
 第四部分展示并讨论了实验结果；第五部分给出了实验结论。
-
-\subsection{方法1.两阶段加权平均(WA)}
 
 \subsection{方法2.位置速度线性卡尔曼滤波器}
 本文使用的第二种方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。现在的状态估计方法已经用扩展卡尔曼滤波(EKF)
@@ -696,8 +736,49 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 为了给这个过程提供更多的灵活性，噪声模型通过一个inverse logistic sigmoid做了放大：
 
 其中 是足端速度变化的名义方差。随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计。
-
-
+\begin{algorithm}[htb] 
+\setstretch{1.3}
+\caption{质心状态估计迭代过程} 
+\label{alg:Framwork} 
+\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
+\STATE{$\bf{subject\ to:}$}
+\STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
+\STATE{$\boldsymbol{v}(0)=\boldsymbol{v}_0$}
+\FOR{$i=1...P$}
+\STATE{$\begin{aligned}
+    & T_i{ }^{\min } \leq T_i \leq T_i^{\max } \\
+    & \mathrm{dt}_i:=T_i / N
+    \end{aligned}$}
+\FOR{$k=((i-1)P)...(i\cdot P-1)$}
+\STATE{$\begin{aligned}
+    & \boldsymbol{x}(k+1)=\boldsymbol{x}(k)+\mathrm{dt}_i \boldsymbol{v}(k)+\frac{1}{2} \mathrm{dt}_i^2 \boldsymbol{a}(k) \\
+    & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\mathrm{dt}_i \boldsymbol{a}(k) \\
+    & \mathbf{a}:=-\boldsymbol{g}
+    \end{aligned}$}
+\IF{\fangsong{左脚触地}}
+\STATE{$\begin{aligned}
+    & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
+    & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
+    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
+    & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
+    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
+    \end{aligned}$}
+\ENDIF
+\IF{右脚触地}
+\STATE{$\begin{aligned}
+    & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
+    & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
+    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
+    & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
+    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
+    \end{aligned}$}
+\ENDIF
+\STATE{$\boldsymbol{a}(k)=\bf{a}$}
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \chapter{基于事件触发的双足机器人运动控制器}
 \section{双足机器人建模与控制器设计}
@@ -1110,7 +1191,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \setstretch{1.3}
 \caption{优化问题构建过程} 
 \label{alg:Framwork} 
-\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
 \STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
 \STATE{$\bf{subject\ to:}$}
 \STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
@@ -1160,70 +1241,72 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \chapter{总结与展望}
 
 \subsection{落脚点规划的最近进展}
-落脚点规划是运动规划的一个特例，这个问题通常是PSPACE难的，因此是NP难的[39]。在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
+落脚点规划是运动规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
 增加了运动规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
-混合整数公式(mixed-integer formulations)，同时还考虑了在不平整地形的运动学甚至动力学可行性约束[40,41,42]。
+混合整数公式(mixed-integer formulations)，同时还考虑了在不平整地形的运动学甚至动力学可行性约束\cite{aceituno2017simultaneous}。
 
 另外一种方法是用机器人足能到达的范围来提供接触序列存在的充分必要条件。这样机器人的运动可以不用提前设定好接触序列来实现，
 这大大降低了运动规划问题的复杂度，使机器人可以在几分之一秒内对变化的环境作出快速重规划。具体的接触序列可以在下一个阶段用各种各样的
-启发式函数来得到，比如在考虑不平整地形下运动学甚至动力学可行性约束的同时最大化准静态的鲁棒平衡[43,44,45,15]。这种多阶段的方法可以很高效，
+启发式函数来得到，比如在考虑不平整地形下运动学甚至动力学可行性约束的同时最大化准静态的鲁棒平衡\cite{tonneau2018efficient}。这种多阶段的方法可以很高效，
 但是对启发函数的依赖可能会导致失败。
 
 \subsection{简化模型的近期进展}
 运动发散量(divergent component of motion, DCM)：线性倒立摆(LIP)模型的一个好处是它足够简单，可以进行彻底的数学分析。值得注意的是，
 LIP动力学的发散部分可以用一个单独的量表示——运动发散量(DCM)，而不必用质心的完整状态(位置和速度)。DCM的线性反馈控制是双足平地运动的
-一种高效平衡控制策略[20]，简单到可以在基于位置控制[46]、力矩控制[47]等各种各种机器人平台上验证。
+一种高效平衡控制策略\cite{kajita2010biped}，简单到可以在基于位置控制、力矩控制等各种各种机器人平台上验证。
 
-DCM遵循接触力的一阶动力学，比质心的二阶动力学(1)要简单，这也帮助简化了腿足控制的其他方面。最近主要有三个进展：第一，DCM可以在
-不改变系统动力学的前提下，去掉质心的平面约束来生成三维的行走轨迹[48]；第二，通过对DCM的解析轨迹做一些变量替换，
-可以在轨迹优化中包含在线的step-timing adaption的同时保证我们要解的问题是一个小的凸问题[49]。第三，在证明MPC问题的稳定性和可行性时，
+DCM遵循接触力的一阶动力学，比质心的二阶动力学\aref{equ:newton}要简单，这也帮助简化了腿足控制的其他方面。最近主要有三个进展：第一，DCM可以在
+不改变系统动力学的前提下，去掉质心的平面约束来生成三维的行走轨迹\cite{englsberger2015three}；第二，通过对DCM的解析轨迹做一些变量替换，
+可以在轨迹优化中包含在线的step-timing adaption的同时保证我们要解的问题是一个小的凸问题\cite{khadiv2020walking}。第三，在证明MPC问题的稳定性和可行性时，
 DCM可以被用作一个可行(viability)条件。
 
 Centroidal dynamics: 在例如不平整地形、狭窄空间等有多点接触的场景中运动时，将接触力等效到ZMP是很局限的。基于完整质心动力学
 \aref{equ:newton}和\aref{equ:euler}的方法是在更广泛的接触场景下计算可行的质心轨迹、角动量和对应接触力的一种解决方案。
-接触序列甚至可以同时优化求解[51]。
+接触序列甚至可以同时优化求解\cite{winkler2018gait}。
 
-利用轨迹优化问题的稀疏性和凸性来求解的方法已经有了一定的发展[41,44,45]。另外，四足机器人的惯量通常用单刚体近似得到[34,35,51]，
-并且为了让最终的非线性优化问题可以在期望的运动行为附近快速收敛，可以根据实际运动设计启发函数来正则化优化问题[53]。加上这些改进之后，
-基于完整质心动力学的方法可以在线运行，计算时间在10ms内[54]。
+利用轨迹优化问题的稀疏性和凸性来求解的方法已经有了一定的发展\cite{ponton2016convex,tonneau2018efficient}。另外，机器人的惯量通常用单刚体近似得到\cite{mastalli2017trajectory,winkler2018gait}，
+并且为了让最终的非线性优化问题可以在期望的运动行为附近快速收敛，可以根据实际运动设计启发函数来正则化优化问题\cite{bledt2020extracting}。加上这些改进之后，
+基于完整质心动力学的方法可以在线运行，计算时间在10ms内\cite{bledt2019implementing}。
 
-质心动力学并不考虑运动学或者关节力矩约束。为了部分弥补这些缺陷，一些方法提出将接触力和力矩(wrench)锥扩展来包含力矩限制[55]，
-还有一些基于学习的方法将更复杂的全身约束表示进质心模型里面[56]。
+质心动力学并不考虑运动学或者关节力矩约束。为了部分弥补这些缺陷，一些方法提出将接触力和力矩(wrench)锥扩展来包含力矩限制\cite{orsolino2020feasible}，
+还有一些基于学习的方法将更复杂的全身约束表示进质心模型里面\cite{carpentier2018multicontact}。
 
 Mixed models: 另外一个在简化模型跟完整动力学模型之间的折中方案是，将质心动力学\aref{equ:newton}和\aref{equ:euler}和
-全身运动学模型结合，这样可以在保持适度的计算复杂度的同时得到符合动力学的全身运动[57,58]。用这种方法可以在70ms内在线计算和更新
-局部最优的反馈控制[59]。也可以用交替下降的方法(alternating descent method)将质心动力学与全身动力学模型结合，来考虑质心动力学以外的部分[60]。
-一种更早的方法将机器人的瞬间全身动力学与LIP模型在一个滚动时域内结合到一个统一的QP问题中，来获得机器人运动的长时动力学[61]。
+全身运动学模型结合，这样可以在保持适度的计算复杂度的同时得到符合动力学的全身运动\cite{dai2014whole}。用这种方法可以在70ms内在线计算和更新
+局部最优的反馈控制。也可以用交替下降的方法(alternating descent method)将质心动力学与全身动力学模型结合，来考虑质心动力学以外的部分\cite{budhiraja2019dynamics}。
+一种更早的方法将机器人的瞬间全身动力学与LIP模型在一个滚动时域内结合到一个统一的QP问题中，来获得机器人运动的长时动力学。
 
 \subsection{全身模型的最新进展}
-Trajectory optimization: 利用collocation[62,63]或multipe-shooting[64]等轨迹优化的一些技术，我们可以考虑所有的运动学和动力学约束，
+Trajectory optimization: 利用collocation\cite{posa2016optimization}或multipe-shooting\cite{koch2014optimization}等轨迹优化的一些技术，我们可以考虑所有的运动学和动力学约束，
 以及最小化能量消耗等目标函数，用机器人的完整非线性动力学模型来协调肢体的运动(其中collocation和multipe-shooting在求解速度、准确性、
-稳定性和精度上互有优势[65])。使用松弛的接触模型甚至能同时优化求解接触序列[66,67]。由于高效的开源数值求解器[68,69,70]利用了轨迹优化问题的
-稀疏性和动力学模型的精确导数[71,72,73]，在线计算全身运动可以在7ms内完成[70,74,75]。
+稳定性和精度上互有优势\cite{diehl2006fast})。使用松弛的接触模型甚至能同时优化求解接触序列\cite{posa2014direct}。由于高效的开源数值求解器利用了轨迹优化问题的
+稀疏性和动力学模型的精确导数，在线计算全身运动可以在7ms内完成\cite{neunert2018whole}。
 
 Reinforcement learning:强化学习技术的成熟使得离线用机器人的完整动力学模型，从传感器原始数据和机器人姿态估计中直接计算出
-最优的反馈控制策略成为可能[76,77]。这种方法在更难以建模的室内和室外环境中比更传统的方法表现要好。这种方法有效的关键点在于：
-(1)能产生大量行为样本的高效仿真器[78]；(2)能指引反馈控制策略的优化求解从简单场景到更复杂场景的“上课”策略；
-(3)在电机模型里用实际的硬件测量数据训练得到的神经网络表示难以建模的不确定性。
+\begin{itemize}
+\item 能产生大量行为样本的高效仿真器\cite{hwangbo2018per}；
+\item 能指引反馈控制策略的优化求解从简单场景到更复杂场景的“上课”策略；
+\item 在电机模型里用实际的硬件测量数据训练得到的神经网络表示难以建模的不确定性。
+\end{itemize}
 
 \subsection{小结}
 腿足运控就是在足和环境之间建立一系列的接触，并且在不同接触之间执行对应的符合机器人运动学和动力学的动作。数值轨迹优化在这其中扮演了关键角色，
-处理交替的接触以及对应接触力的约束。不同复杂度的模型，从最简单的LIP模型，到完整质心动力学(1)-(2)，再到完整的多刚体动力学模型，
+处理交替的接触以及对应接触力的约束。不同复杂度的模型，从最简单的LIP模型，到完整质心动力学\aref{equ:newton}和\aref{equ:euler}，再到完整的多刚体动力学模型，
 可以单独或者结合起来使用，处理运动的不同方面(层次)。正是这些模型的改进，以及高级的数值方法的改进，无论是现成的还是特殊为腿足运控设计的，
 使得近年来从平地到更普遍的室内室外环境的转变成为可能。首个用强化学习成功实现真实复杂环境下的四足运动的例子也是用同样的方法做到的。
 
 离线和在线数值优化在这个过程中扮演的核心角色，使得整个腿足运控研究领域大力发展新的优化方法和高效的数值软件。值得一提的有，安全处理不同优先级、
-多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的[79]。
-这其中涉及到包含动力学模型[80,81,82]，仿真[83]，状态估计[84]，控制器设计[85]的灵活高效开源软件的发展。
+多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的\cite{geisert2017regularized}。
+这其中涉及到包含动力学模型\cite{felis2017rbdl}，仿真\cite{lee2018dart}，状态估计\cite{camurri2020pronto}，控制器设计\cite{tedrake2019drake}的灵活高效开源软件的发展。
 
-开源软件，以及包含3D打印零件，简化的电路跟执行器的开源硬件[86,87]，可以促进完善、鲁棒、经过大量测试的解决方案的复现、传播和平民化，
-同时有利于快速迭代和创新，并且使得这些现有实现方法可以扩展和改进(表1列出了一部分)。
+% 开源软件，以及包含3D打印零件，简化的电路跟执行器的开源硬件[86,87]，可以促进完善、鲁棒、经过大量测试的解决方案的复现、传播和平民化，
+% 同时有利于快速迭代和创新，并且使得这些现有实现方法可以扩展和改进(表1列出了一部分)。
 
-腿足运控控制的现有文献大多数都只用了状态反馈，但有意思的是由于质心是虚拟点，并且和环境的接触是很难检测和测量的，所以质心的位置和速度是
-不能直接测量得到的。因此状态估计是另一个关键的部分，但这部分被探索的少得惊人[84,2,88,89,90,91,92]。对状态估计和反馈控制的依赖使得
-现有的腿足机器人极度依赖昂贵、精细的硬件带来的准确信息。基于传感器的控制可能是另一种方案[93]，很大程度上还尚待探索。
-鲁棒控制也是一种可能的方案[94,95,96,97]，同样尚待研究。腿足机器人的鲁棒控制分析得出的最新结论是，正如在人形[96]和四足机器人[59]上
-已经验证过的那样，在低的惊人的频率下就可以得到完美稳定的反馈控制。
+% 腿足运控控制的现有文献大多数都只用了状态反馈，但有意思的是由于质心是虚拟点，并且和环境的接触是很难检测和测量的，所以质心的位置和速度是
+% 不能直接测量得到的。因此状态估计是另一个关键的部分，但这部分被探索的少得惊人[84,2,88,89,90,91,92]。对状态估计和反馈控制的依赖使得
+% 现有的腿足机器人极度依赖昂贵、精细的硬件带来的准确信息。基于传感器的控制可能是另一种方案[93]，很大程度上还尚待探索。
+% 鲁棒控制也是一种可能的方案[94,95,96,97]，同样尚待研究。腿足机器人的鲁棒控制分析得出的最新结论是，正如在人形[96]和四足机器人[59]上
+% 已经验证过的那样，在低的惊人的频率下就可以得到完美稳定的反馈控制。
 
-基于上文提到的开源软件和硬件的控制方法可以促进更便宜，更鲁棒，功能更多的机器人的发展。这也是腿足运动在室内外各种环境得到验证，
-接近真实工业场景[98,99]后将会迈出的很合理的一步。可变形的元素也会推动这一目标[100]。
+% 基于上文提到的开源软件和硬件的控制方法可以促进更便宜，更鲁棒，功能更多的机器人的发展。这也是腿足运动在室内外各种环境得到验证，
+% 接近真实工业场景[98,99]后将会迈出的很合理的一步。可变形的元素也会推动这一目标[100]。
