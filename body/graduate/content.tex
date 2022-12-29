@@ -300,15 +300,15 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 ，更通用的不平整地形的多接触运动的转换成为可能。
 
 \subsection{腿足运动控制的典型方法}
-The dynamics of legged locomotion: 牛顿方程说明和环境接触产生的外力$f_i$减去重力$mg$决定了机器人质心$c$变化的方向：
+The dynamics of legged locomotion: 牛顿方程说明和环境接触产生的外力$\boldsymbol{f}_i$减去重力$m\boldsymbol{g}$决定了机器人质心$\boldsymbol{c}$变化的方向：
 \begin{equation}
     \label{equ:newton}
-    m(\ddot{c}-g)=\sum_i f_i
+    m(\ddot{\boldsymbol{c}}-\boldsymbol{g})=\sum_i \boldsymbol{f}_i
 \end{equation}
 其中$m$是机器人的总质量。同时对应的欧拉方程表明接触点$s_i$相对质心$c$的位置是控制机器人身体相对质心的角动量$L$的关键：
 \begin{equation}
     \label{equ:euler}
-    \dot{L}=\sum_i\left(s_i-c\right) \times f_i
+    \dot{\boldsymbol{L}}=\sum_i\left(\boldsymbol{s}_i-\boldsymbol{c}\right) \times \boldsymbol{f}_i
 \end{equation}
 
 Artificial synergy synthesis 方法认为，应该更加关注和地面接触力直接绑定的质心动力学
@@ -453,9 +453,8 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 \begin{equation}
     \label{equ:est_state}
     \hat{\boldsymbol{x}}_k=\left\{\begin{array}{c}
-        P_1(c) \\
-        \vdots \\
-        P_N(c)
+        P_l(c) \\
+        P_r(c)
         \end{array}\right\}_k
 \end{equation}
 自然而然地，我们可以用概率接触模型作为先验来融合所有可用的数据。虽然测量中涉及到的动力学很复杂，但把接触的概率作为状态，
@@ -490,15 +489,14 @@ A 预测：过程模型
 \begin{equation}
     \label{equ:est_input}
     \boldsymbol{u}_k=\left\{\begin{array}{c}
-        P_1\left(c \mid s_\phi, \phi\right) \\
-        \vdots \\
-        P_N\left(c \mid s_\phi, \phi\right)
+        P_l\left(c \mid s_\phi, \phi\right) \\
+        P_r\left(c \mid s_\phi, \phi\right)
         \end{array}\right\}_k
 \end{equation}
 下面的协方差矩阵 大致表示了我们对基于相位的状态切换模型的置信度：
 \begin{equation}
     \label{equ:est_process_noise}
-    \boldsymbol{\Sigma}_{w_k}=\left[\begin{array}{ccc}
+    \boldsymbol{Q}_{w_k}=\left[\begin{array}{ccc}
         \sigma_{\phi, 1}^2 & \cdots & 0 \\
         \vdots & \ddots & \vdots \\
         0 & \cdots & \sigma_{\phi, N}^2
@@ -531,13 +529,11 @@ B 校正：测量模型
 \begin{equation}
     \label{equ:est_height_noise}
     \tilde{\boldsymbol{z}}_{1, k}=\left\{\begin{array}{c}
-        P_1\left(c \mid p_z\right) \\
-        \vdots \\
-        P_N\left(c \mid p_z\right)
-        \end{array}\right\}_k \boldsymbol{\Sigma}_{v_{1, k}}=\left[\begin{array}{ccc}
-        \sigma_{p_{z, 1}}^2 & \cdots & 0 \\
-        \vdots & \ddots & \vdots \\
-        0 & \cdots & \sigma_{p_{z, N}}^2
+        P_l\left(c \mid p_z\right) \\
+        P_r\left(c \mid p_z\right)
+        \end{array}\right\}_k \boldsymbol{R}_{v_{1, k}}=\left[\begin{array}{ccc}
+        \sigma_{p_{z, l}}^2 & & 0 \\
+        0 & & \sigma_{p_{z, r}}^2
         \end{array}\right]_k
 \end{equation}
 该协方差矩阵表示我们对接触高度模型信任度的度量。
@@ -558,13 +554,11 @@ B 校正：测量模型
 \begin{equation}
     \label{equ:est_force_noise}
     \tilde{\boldsymbol{z}}_{2, k}=\left\{\begin{array}{c}
-        P_1\left(c \mid f_z\right) \\
-        \vdots \\
-        P_N\left(c \mid f_z\right)
+        P_l\left(c \mid f_z\right) \\
+        P_r\left(c \mid f_z\right)
         \end{array}\right\}_k \boldsymbol{\Sigma}_{v_{2, k}}=\left[\begin{array}{ccc}
-        \sigma_{f_{z, 1}}^2 & \cdots & 0 \\
-        \vdots & \ddots & \vdots \\
-        0 & \ldots & \sigma_{f_{z, N}}^2
+        \sigma_{f_{z, l}}^2 & & 0 \\
+        0 & & \sigma_{f_{z, r}}^2
         \end{array}\right]_k
 \end{equation}
 
@@ -574,9 +568,9 @@ B 校正：测量模型
     \tilde{\boldsymbol{z}}_k=\left[\begin{array}{c}
         \tilde{\boldsymbol{z}}_{1, k} \\
         \tilde{\boldsymbol{z}}_{2, k}
-        \end{array}\right] \quad \boldsymbol{\Sigma}_{v_k}=\left[\begin{array}{cc}
-        \boldsymbol{\Sigma}_{v_{1, k}} & \mathbf{0}_N \\
-        \mathbf{0}_N & \boldsymbol{\Sigma}_{v_{2, k}}
+        \end{array}\right] \quad \boldsymbol{R}_{v_k}=\left[\begin{array}{cc}
+        \boldsymbol{R}_{v_{1, k}} & \mathbf{0}_N \\
+        \mathbf{0}_N & \boldsymbol{R}_{v_{2, k}}
         \end{array}\right]
 \end{equation}
 输出矩阵$\boldsymbol{H}_k$由两个$N\times N$的单位矩阵叠在一起组成：
@@ -587,50 +581,35 @@ B 校正：测量模型
         \mathbf{I}_N
         \end{array}\right]
 \end{equation}
-其中$N$是足的个数。通过将步态规划器的期望接触状态和测量概率模型的结果融合，我们可以得到每条腿的实际接触状态的一个更好的估计。
+其中$N$是足的个数，对于本文中的双足机器人而言$N=2$。通过将步态规划器的期望接触状态和测量概率模型的结果融合，我们可以得到每条腿的实际接触状态的一个更好的估计。
 由于我们把卡尔曼滤波器的$\boldsymbol{A}_k$设为$\mathbf{0}_N$，融合的过程也能通过贝叶斯定理下的静态最大似然方法来得到。
 但我们还是用了标准的卡尔曼滤波来迭代更新（但这个过程是预先嵌入在标准卡尔曼滤波更新中的），这在机器人学中是更容易获得的。
 \begin{algorithm}[htp]
 \setstretch{1.3}
 \caption{触地状态估计迭代过程} 
 \label{alg:Framwork} 
-\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
-\STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
-\STATE{$\bf{subject\ to:}$}
-\STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
-\STATE{$\boldsymbol{v}(0)=\boldsymbol{v}_0$}
-\FOR{$i=1...P$}
-\STATE{$\begin{aligned}
-    & T_i{ }^{\min } \leq T_i \leq T_i^{\max } \\
-    & \mathrm{dt}_i:=T_i / N
+\begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\STATE{\fangsong{\textbf{输入}}：$\hat{\boldsymbol{x}}_{k-1}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k-1}, \boldsymbol{Q}_{w_k}, \boldsymbol{R}_{v_k}$}
+\STATE{\fangsong{\textbf{输出}}：$\hat{\boldsymbol{x}}_{k}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k}$}
+\STATE{\textbf{Step 1}\ \fangsong{初始化}$\boldsymbol{A}_0, \boldsymbol{B}_0, \boldsymbol{H}_0, \boldsymbol{Q}_0,\boldsymbol{R}_0, \boldsymbol{\Sigma}_0，\boldsymbol{x}_0=\left[P_{l,0}(c), P_{r,0}(c)\right]^{\top}$}
+\STATE{\textbf{Step 2}\ \fangsong{预测}：}
+\STATE{$\ \ \begin{gathered}
+        \hat{\boldsymbol{x}}_{k \mid k-1}=\boldsymbol{u}_k \\
+        \boldsymbol{\Sigma}_{k \mid k-1}=\boldsymbol{Q}_{w_k}
+        \end{gathered}$}
+\STATE{\textbf{Step 3}\ \fangsong{计算卡尔曼增益}：}
+\STATE{$\ \ \boldsymbol{K}_{k,1}=\boldsymbol{\Sigma}_{k \mid k-1} \left(\boldsymbol{\Sigma}_{k \mid k-1}+\boldsymbol{R}_{v_{1,k}}\right)$}
+\STATE{$\ \ \boldsymbol{K}_{k,2}=\boldsymbol{\Sigma}_{k \mid k-1} \left(\boldsymbol{\Sigma}_{k \mid k-1}+\boldsymbol{R}_{v_{2,k}}\right)$}
+\STATE{\textbf{Step 4}\ \fangsong{高度测量校正}：}
+\STATE{$\ \ \begin{aligned}
+    \hat{\boldsymbol{x}}_{k \mid k}&=\hat{\boldsymbol{x}}_{k \mid k-1}+\boldsymbol{K}_{k,1}\left(\tilde{\boldsymbol{z}}_{1,k}-\hat{\boldsymbol{x}}_{k \mid k-1}\right) \\
+    \boldsymbol{\Sigma}_{k \mid {k,1}}&=\left(\mathbf{I}-\boldsymbol{K}_{k,1} \right) \boldsymbol{\Sigma}_{k \mid k-1}
     \end{aligned}$}
-\FOR{$k=((i-1)P)...(i\cdot P-1)$}
-\STATE{$\begin{aligned}
-    & \boldsymbol{x}(k+1)=\boldsymbol{x}(k)+\mathrm{dt}_i \boldsymbol{v}(k)+\frac{1}{2} \mathrm{dt}_i^2 \boldsymbol{a}(k) \\
-    & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\mathrm{dt}_i \boldsymbol{a}(k) \\
-    & \mathbf{a}:=-\boldsymbol{g}
-    \end{aligned}$}
-\IF{\fangsong{左脚触地}}
-\STATE{$\begin{aligned}
-    & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
-    & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
-    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
-    & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
-    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
-    \end{aligned}$}
-\ENDIF
-\IF{右脚触地}
-\STATE{$\begin{aligned}
-    & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
-    & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
-    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
-    & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
-    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
-    \end{aligned}$}
-\ENDIF
-\STATE{$\boldsymbol{a}(k)=\bf{a}$}
-\ENDFOR
-\ENDFOR
+\STATE{\textbf{Step 4}\ \fangsong{接触力测量校正}：}
+\STATE{$\ \ \begin{aligned}
+    \hat{\boldsymbol{x}}_{k \mid k}&=\hat{\boldsymbol{x}}_{k \mid k-1}+\boldsymbol{K}_k\left(\tilde{\boldsymbol{z}}_{2,k}-\hat{\boldsymbol{x}}_{k \mid k-1}\right) \\
+    \boldsymbol{\Sigma}_{k \mid {k,2}}&=\left(\mathbf{I}-\boldsymbol{K}_{k,2} \right) \boldsymbol{\Sigma}_{k \mid k-1}
+    \end{aligned}$}       
 \end{algorithmic}
 \end{algorithm}
 \subsection{触地估计实验验证}
@@ -644,17 +623,16 @@ B 校正：测量模型
 那么关节的角度就足够重建出浮动基的位姿。但实际上接触很有可能会发生打滑，或者是踩到边缘脚板翻转，而且环境可能是不规则的，
 机器人的几何模型中也可能有不确定性(比如柔性零件引起的变形)。因此关节角度信息是不足以实现可靠的状态估计的。
 
-力/力矩传感器和惯性测量单元(IMU)可以帮忙解决这个问题。力测量可以用来检测触地，打滑，以及脚板翻转。这些测量也可以用来估计柔性零件的形变，
-例如HRP-2中的柔性脚踝。IMU通常会提供安装位置处的角速度和线加速度，其测量仅足以测量偏航角。
+惯性测量单元(IMU)可以帮忙解决这个问题IMU通常会提供安装位置处的姿态角，角速度和线加速度。
 
-最近的方法集中在融合IMU信息，力传感器数据和运动学测量来实现高保真的状态估计。IMU和运动学数据的融合最开始是用来实现里程计[1][2]。
-之后，融合两者的高频率状态估计被用来估计速度并给闭环控制器使用：这可以在运动学层面进行[3][4][5]，也可以扩展到动力学模型[6][7]。
-其他传感器包括激光雷达的数据也可以被融合进来[8]。这些方法的共性是，解一个全耦合的推理问题来从传感器测量中估计位置和姿态。
-然而这种全耦合的推理计算十分耗时，同时很难调参，并且通常代码实现和debug是很复杂的。
+% 最近的方法集中在融合IMU信息，力传感器数据和运动学测量来实现高保真的状态估计。IMU和运动学数据的融合最开始是用来实现里程计[1][2]。
+% 之后，融合两者的高频率状态估计被用来估计速度并给闭环控制器使用：这可以在运动学层面进行[3][4][5]，也可以扩展到动力学模型[6][7]。
+% 其他传感器包括激光雷达的数据也可以被融合进来[8]。这些方法的共性是，解一个全耦合的推理问题来从传感器测量中估计位置和姿态。
+% 然而这种全耦合的推理计算十分耗时，同时很难调参，并且通常代码实现和debug是很复杂的。
 
-也有更简单的状态估计器和平衡控制器一起被提出，并且通常可以实现很震撼的实物效果[9][10][11][12][13]。这些估计器将姿态和位置估计解耦
-来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
-的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
+% 也有更简单的状态估计器和平衡控制器一起被提出，并且通常可以实现很震撼的实物效果[9][10][11][12][13]。这些估计器将姿态和位置估计解耦
+% 来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
+% 的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
 
 这篇文章的主要贡献在于在WuKong4上进行了原地平衡和行走实验，并且对比(benchmark)了两种简单的状态估计方法。对比试验同样考察了不同传感器
 的贡献度，比如IMU数据的加入，以及用力传感器来检测接触扰动。我们在第二和第三部分提出了两种不同的简化状态估计方法；
@@ -677,10 +655,10 @@ A 过程模型
 \begin{equation}
     \label{equ:est_posvel}
     \boldsymbol{x}_{n+1}=\left[\begin{array}{c}
-        { }^{\top} \boldsymbol{p}_{b, n}+{ }^{\top} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right](\Delta t)^2 \\
-        { }^{\top} \boldsymbol{v}_{b, n}+\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right] \Delta t \\
-        { }^{\top} \boldsymbol{p}_{L, n} \\
-        { }^{\top} \boldsymbol{p}_{R, n}
+        { }^{\mathcal{I}} \boldsymbol{p}_{b, n}+{ }^{\mathcal{I}} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right](\Delta t)^2 \\
+        { }^{\mathcal{I}} \boldsymbol{v}_{b, n}+\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right] \Delta t \\
+        { }^{\mathcal{I}} \boldsymbol{p}_{L, n} \\
+        { }^{\mathcal{I}} \boldsymbol{p}_{R, n}
         \end{array}\right]
 \end{equation}
 我们假设足是保持静止的。
@@ -736,51 +714,53 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 为了给这个过程提供更多的灵活性，噪声模型通过一个inverse logistic sigmoid做了放大：
 
 其中 是足端速度变化的名义方差。随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计。
-\begin{algorithm}[htb] 
+\begin{algorithm}[htb]
 \setstretch{1.3}
 \caption{质心状态估计迭代过程} 
-\label{alg:Framwork} 
-\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
-\STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
-\STATE{$\bf{subject\ to:}$}
-\STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
-\STATE{$\boldsymbol{v}(0)=\boldsymbol{v}_0$}
-\FOR{$i=1...P$}
+\label{alg:com_state_est} 
+\begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\STATE{\fangsong{\textbf{输入}}：$\hat{\boldsymbol{x}}_{k-1}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k-1}, \boldsymbol{Q}_{w_k}, \boldsymbol{R}_{v_k}, \phi$}
+\STATE{\fangsong{\textbf{输出}}：$\hat{\boldsymbol{x}}_{k}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k}$}
+\STATE{\textbf{Step 1}\ \fangsong{初始化}$\boldsymbol{A}_0, \boldsymbol{B}_0, \boldsymbol{H}_0, \boldsymbol{Q}_0,\boldsymbol{R}_0, \boldsymbol{\Sigma}_0,Noise$}
+\STATE{$\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \boldsymbol{x}_0=\left[{ }^\mathcal{I} \boldsymbol{p}_{b,0}^{\top},{ }^\mathcal{I} \boldsymbol{v}_{b,0}^{\top},{ }^\mathcal{I} \boldsymbol{p}_{L,0}^{\top},{ }^\mathcal{I} \boldsymbol{p}_{R,0}^{\top}\right]^{\top}$}
+\STATE{\textbf{Step 2}\ \fangsong{更新每条腿运动学信息的噪声}：}
+\FOR{$i=0, 1$}
 \STATE{$\begin{aligned}
-    & T_i{ }^{\min } \leq T_i \leq T_i^{\max } \\
-    & \mathrm{dt}_i:=T_i / N
-    \end{aligned}$}
-\FOR{$k=((i-1)P)...(i\cdot P-1)$}
-\STATE{$\begin{aligned}
-    & \boldsymbol{x}(k+1)=\boldsymbol{x}(k)+\mathrm{dt}_i \boldsymbol{v}(k)+\frac{1}{2} \mathrm{dt}_i^2 \boldsymbol{a}(k) \\
-    & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\mathrm{dt}_i \boldsymbol{a}(k) \\
-    & \mathbf{a}:=-\boldsymbol{g}
-    \end{aligned}$}
-\IF{\fangsong{左脚触地}}
-\STATE{$\begin{aligned}
-    & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
-    & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
-    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
-    & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
-    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
-    \end{aligned}$}
+    id &= 3 \times i\\
+    q_{id} &= 6 + id\\
+    r_{id1} &= id\\
+    r_{id2} &= 6 + id\\
+    r_{id3} &= 12 + i
+\end{aligned}$
+}
+\IF{$\phi \le 0.2$}
+\STATE{$\rho_{trust}=\phi / 0.2$}
+\ELSIF{$\phi > 0.8$}
+\STATE{$\rho_{trust}=(1-\phi) / 0.2$}
 \ENDIF
-\IF{右脚触地}
 \STATE{$\begin{aligned}
-    & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
-    & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
-    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
-    & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
-    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
+        \boldsymbol{Q}.block(q_{id}, q_{id}, 3, 3) &= (1 + Noise * (1 - \rho_{trust})) * \boldsymbol{Q}.block(q_{id}, q_{id}, 3, 3)\\
+        \boldsymbol{R}.block(r_{id2}, r_{id2}, 3, 3) &= (1 + Noise * (1 - \rho_{trust})) * \boldsymbol{R}.block(r_{id2}, r_{id2}, 3, 3)\\
+        \boldsymbol{R}(r_{id3}, r_{id3}) &= (1 + Noise * (1 - \rho_{trust})) * \boldsymbol{R}(r_{id3}, r_{id3})
+        \end{aligned}$}
+\ENDFOR
+\STATE{\textbf{Step 3}\ \fangsong{预测}：}
+\STATE{$\ \ \begin{gathered}
+        \hat{\boldsymbol{x}}_{k \mid k-1}=\boldsymbol{A}_k \hat{\boldsymbol{x}}_{k-1}+\boldsymbol{B}_k \boldsymbol{u}_k \\
+        \boldsymbol{\Sigma}_{k \mid k-1}=\boldsymbol{A}_k \boldsymbol{\Sigma}_{k-1} \boldsymbol{A}_k^T+\boldsymbol{Q}_{w_k}
+        \end{gathered}$}
+\STATE{\textbf{Step 4}\ \fangsong{计算卡尔曼增益}：}
+\STATE{$\ \ \boldsymbol{K}_k=\boldsymbol{\Sigma}_{k \mid k-1} \boldsymbol{H}_k^T\left(\boldsymbol{H}_k \boldsymbol{\Sigma}_{k \mid k-1} \boldsymbol{H}_k^T+\boldsymbol{R}_{v_k}\right)$}
+\STATE{\textbf{Step 5}\ \fangsong{校正}：}
+\STATE{$\ \ \begin{aligned}
+    \hat{\boldsymbol{x}}_{k \mid k}&=\hat{\boldsymbol{x}}_{k \mid k-1}+\boldsymbol{K}_k\left(\tilde{\boldsymbol{z}}_k-\boldsymbol{H}_k \hat{\boldsymbol{x}}_{k \mid k-1}\right) \\
+    \boldsymbol{\Sigma}_{k \mid k}&=\left(\mathbf{I}-\boldsymbol{K}_k \boldsymbol{H}_k\right) \boldsymbol{\Sigma}_{k \mid k-1}
     \end{aligned}$}
-\ENDIF
-\STATE{$\boldsymbol{a}(k)=\bf{a}$}
-\ENDFOR
-\ENDFOR
+
 \end{algorithmic}
 \end{algorithm}
 
-\chapter{基于事件触发的双足机器人运动控制器}
+\chapter{基于QP的双足机器人运动控制器}
 \section{双足机器人建模与控制器设计}
 \begin{figure}[htbp]
     \centering
@@ -916,6 +896,66 @@ ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\tim
 \end{equation}
 其中，$b={{\dot{h}}_{d}}-\dot{A}v$，${{\dot{h}}_{d}}\in {{\mathbb{R}}^{6}}$表示期望的质心动量变化率。
 ${{C}_{{\dot{h}}}},\ {{C}_{\rho }},\ {{C}_{{\dot{v}}}}$是由更上层的控制器决定的目标函数权重矩阵。5.4给出了行走行为下的权重矩阵示例。
+\begin{table}[!htbp]
+	\centering
+	\caption{频率型、强度型和相对比型指标}
+	%\label{频率型、强度型和相对比型指标}也可以用这个
+	\begin{tabular}{lp{3cm}p{3cm}p{4cm}}
+		\toprule  %添加表格头部粗线
+		\fangsong{参数符号}   &数值  \\
+		\midrule  %添加表格中横线
+		概念    & 近似反映某一时间出现概率\\
+		计算公式 &  某事件发生的个体数/可能发生某件事的个体数$\times$k\\
+		有无量纲 &无 \\
+		取值范围 &【0,1】\\
+		本质   & 大样本时作为概率近似值分子式分母的一部分\\
+		\bottomrule %添加表格底部粗线
+	\end{tabular}
+\end{table}
+
+\begin{algorithm}[htb] 
+\setstretch{1.3}
+\caption{二次规划问题构建过程} 
+\label{alg:quadratic_program} 
+\begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
+\STATE{$\bf{subject\ to:}$}
+\STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
+\STATE{$\boldsymbol{v}(0)=\boldsymbol{v}_0$}
+\FOR{$i=1...P$}
+\STATE{$\begin{aligned}
+    & T_i{ }^{\min } \leq T_i \leq T_i^{\max } \\
+    & \mathrm{dt}_i:=T_i / N
+    \end{aligned}$}
+\FOR{$k=((i-1)P)...(i\cdot P-1)$}
+\STATE{$\begin{aligned}
+    & \boldsymbol{x}(k+1)=\boldsymbol{x}(k)+\mathrm{dt}_i \boldsymbol{v}(k)+\frac{1}{2} \mathrm{dt}_i^2 \boldsymbol{a}(k) \\
+    & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\mathrm{dt}_i \boldsymbol{a}(k) \\
+    & \mathbf{a}:=-\boldsymbol{g}
+    \end{aligned}$}
+\IF{\fangsong{左脚触地}}
+\STATE{$\begin{aligned}
+    & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
+    & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
+    & {\left[1\ 1\ -\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
+    & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
+    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
+    \end{aligned}$}
+\ENDIF
+\IF{右脚触地}
+\STATE{$\begin{aligned}
+    & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
+    & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
+    & {\left[1\ 1\ -\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
+    & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
+    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
+    \end{aligned}$}
+\ENDIF
+\STATE{$\boldsymbol{a}(k)=\bf{a}$}
+\ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
 \section{行走实验}
 
 \chapter{双足机器人质心轨迹优化}
@@ -1128,7 +1168,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
 
 \subsection{任务（目标函数设计）}
 \label{cost_function}
-目标函数的设计是为了生成机器人利用自身动量跨越高台阶的质心轨迹，由几个任务组成，完整的目标函数在优化问题1的顶部。
+目标函数的设计是为了生成机器人利用自身动量跨越高台阶的质心轨迹，由几个任务组成，完整的目标函数在\aref{alg:traj_optimization}的顶部。
 
 第一个任务是在衡量末状态和期望位置${x}_d$，期望速度${v}_d$之间的距离：
 \begin{equation}
@@ -1181,7 +1221,7 @@ $w_{\tau}, w_{\tau_{max}} \in \mathbb{R}^+$是确定两项的相对优先级的�
 初始状态$\boldsymbol{x}_0$，$\boldsymbol{v}_0$初始化，即$\boldsymbol{x}(0)=\boldsymbol{x}_0$，$\boldsymbol{v}(0)=\boldsymbol{v}_0$。
 $\boldsymbol{\chi}$也包含每个阶段的时长。
 
-问题求解的完整过程在优化问题1中，其中含有下标$i$的量取决于某个特定的阶段，并且在该阶段的时长内是固定的。算法的实现基于CasADi[29]，求解器使用了Ipopt。
+问题求解的完整过程在\aref{alg:traj_optimization}中，其中含有下标$i$的量取决于某个特定的阶段，并且在该阶段的时长内是固定的。算法的实现基于CasADi\cite{andersson2019casadi}，求解器使用了Ipopt。
 
 由于系统模型、摩擦约束、以及相关目标函数的非线性，我们构建的优化问题是非凸的。为了加速求解，我们用每个阶段期望的时长来初始化$T_i$，
 质心轨迹用从$\boldsymbol{x}_0$到$\boldsymbol{x}_d$的线性插值来初始化，其他变量均被初始化为0。
@@ -1189,8 +1229,8 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 
 \begin{algorithm}[htb] 
 \setstretch{1.3}
-\caption{优化问题构建过程} 
-\label{alg:Framwork} 
+\caption{轨迹优化问题构建过程} 
+\label{alg:traj_optimization} 
 \begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
 \STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
 \STATE{$\bf{subject\ to:}$}
@@ -1211,7 +1251,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \STATE{$\begin{aligned}
     & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
     & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
-    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
+    & {\left[1\ 1\ -\mu^2\right]\left(\boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right)\right)^2 \leq 0} \\
     & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
     & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
     \end{aligned}$}
@@ -1220,7 +1260,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \STATE{$\begin{aligned}
     & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
     & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
-    & {\left[11-\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
+    & {\left[1\ 1\ -\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
     & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
     & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
     \end{aligned}$}
