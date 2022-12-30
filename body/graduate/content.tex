@@ -613,7 +613,11 @@ B 校正：测量模型
 \end{algorithmic}
 \end{algorithm}
 \subsection{触地估计实验验证}
-
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{contact_prob.pdf}
+    \caption{\label{fig:contact_est}触地估计示意图}
+\end{figure}
 \section{质心状态估计}
 包括人形机器人在内的腿足机器人有驱动关节，但并没有和环境刚性固定。因此驱动关节的角度并不能决定机器人相对环境的位姿。
 腿足机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态。这个连杆就是所谓的浮动基。
@@ -759,8 +763,26 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 
 \end{algorithmic}
 \end{algorithm}
+\section{实物实验}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{rectangle.pdf}
+    \caption{\label{fig:com_pos_est}质心位置估计结果}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{rectangle_track.pdf}
+    \caption{\label{fig:com_pos_track}质心位置跟踪曲线}
+\end{figure}
 
 \chapter{基于QP的双足机器人运动控制器}
+
+\section{实验平台介绍}
+
+\subsection{WuKong-IV双足机器人}
+
+\subsection{简化连杆模型}
+
 \section{双足机器人建模与控制器设计}
 \begin{figure}[htbp]
     \centering
@@ -1041,7 +1063,7 @@ $\lambda_* \in \mathbb{R}^{3}$是系数，可以理解成弹簧的刚度。\aref
     \label{equ:cop}
     { }^{\mathcal{I}} \boldsymbol{p}_*=\boldsymbol{x}_*+{ }^{\mathcal{I}} \boldsymbol{R}_* \boldsymbol{p}_*
 \end{equation}
-其中$\boldsymbol{x}_* \in \mathbb{R}^{3}$是足底位置，$\boldsymbol{p}_equ:acceleration*$是足坐标系下的CoP，因此$z$坐标为0。
+其中$\boldsymbol{x}_* \in \mathbb{R}^{3}$是足底位置，$\boldsymbol{p}_*$是足坐标系下的CoP，因此$z$坐标为0。
 ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$间的相对旋转，为了简化表达，下文我们省略掉上标，
 将${ }^{\mathcal{I}} \boldsymbol{R}_*$表示为$\boldsymbol{R}_*$。
 
@@ -1166,7 +1188,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
 \end{equation}
 其中$l^{\min}, l^{\max} \in \mathbb{R}$分别是上下限，这些约束可以分别施加到每条腿上。
 
-\subsection{任务（目标函数设计）}
+\subsection{目标函数设计}
 \label{cost_function}
 目标函数的设计是为了生成机器人利用自身动量跨越高台阶的质心轨迹，由几个任务组成，完整的目标函数在\aref{alg:traj_optimization}的顶部。
 
