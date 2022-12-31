@@ -388,7 +388,8 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 器人前进过程中的方向控制。
 
 \section{本文主要结构}
-根据本文的研究内容以及顺序，各章节的内容安排如图1.7 所示，具体如下：
+根据本文的研究内容以及顺序，各章节的内容安排如下：
+
 第一章 本章主要介绍国内外双足机器人的情况，对国内外知名双足机器人简单介绍，
 介绍双足机器人跑跳步态的研究现状。
 
@@ -641,7 +642,7 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 \subsection{触地估计实验验证}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{contact_prob.pdf}
+    \includegraphics[width=1.\linewidth]{contact_est.eps}
     \caption{\label{fig:contact_est}触地估计示意图}
 \end{figure}
 \aref{fig:contact_est}展示了上述算法的实验结果。
@@ -677,7 +678,7 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 
 \subsection{预测——过程模型}
 
-和[3]中一样，机器人的位置和速度估计的状态量$\boldsymbol{x}$将机器人足的位置也包括了进去：
+首先我们将机器人足的位置也包括进机器人的位置和速度估计的状态量$\boldsymbol{x}$中去：
 \begin{equation}
     \label{equ:est_posvel}
     \boldsymbol{x}=\left[{ }^\mathcal{I} \boldsymbol{p}_b^{\top},{ }^\mathcal{I} \boldsymbol{v}_b^{\top},{ }^\mathcal{I} \boldsymbol{p}_L^{\top},{ }^\mathcal{I} \boldsymbol{p}_R^{\top}\right]^{\top}
@@ -692,13 +693,13 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
         { }^{\mathcal{I}} \boldsymbol{p}_{R, n}
         \end{array}\right]
 \end{equation}
-我们假设足是保持静止的。
+我们假设每支脚和地面都是保持静止的。
 
 通常，如果${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计是和$\boldsymbol{x}$同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的。
 然而如果近似将${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计与$\boldsymbol{x}$的估计解耦，
 那么将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\aref{equ:est_posvel}就变成了线性时不变的模型。
 
-我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$(和第二部分B中描述的类似)。我们使用了[14]中提出估计的第二种版本。
+我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$。我们使用了[14]中提出估计的第二种版本。
 原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
 
 \subsection{校正——测量模型}
@@ -740,7 +741,7 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里我们用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的状态具体有多长。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.8\linewidth]{trust.pdf}
+    \includegraphics[width=1.\linewidth]{trust.pdf}
     \caption{\label{fig:kin_trust}支撑腿运动学信息可信度随相位变化图}
 \end{figure}
 
@@ -807,9 +808,8 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 
 \chapter{基于二次规划的双足机器人运动控制器}
 本章提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人WuKong-IV上进行了实现。该控制架构的核心是一个二次规划问题，
-该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
-我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
-以及在斜面上的多接触点平衡(后者仅在仿真中实现)
+该二次规划问题协调了用关节加速度向量的约束表达的运动任务，以及单边的地面接触约束和摩擦约束、关节力矩约束带来的限制。
+该架构在实际硬件平台上得到了验证，可以实现双足机器人的高速稳定行走，和对期望轨迹的稳定跟随。
 \section{实验平台介绍}
 \begin{figure}[htbp]
     \centering
@@ -832,6 +832,7 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 其余关节电机均采用齿轮减速器，减速比恒定不变，腿部各关节电机与关节信息见\aref{joint_motor}。
 \begin{table}[htbp]
 	\centering
+    \setstretch{1.3}
 	\caption{WuKong-IV双足机器人各关节信息}
 	\label{joint_motor}
 	\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}m{1.5cm}<{\centering}m{2cm}<{\centering}m{2.5cm}<{\centering}}
@@ -850,25 +851,25 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 	\end{tabular}
 \end{table}
 \subsection{坐标系定义}
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=.8\linewidth]{关节构型.eps}
     \caption{\label{fig:centroid}双足机器人坐标系定义}
 \end{figure}
-在定义的机器人坐标系下，按照每个关节的旋转轴方向可以根据转轴分为横滚(Roll) ,
-俯仰(Pitch)和偏航(Yaw)三种，因此可以将全部的关节根据基于前一个链接连杆的旋转角
-度方向定义为横滚角关节、俯仰角关节和偏航角关节。同时定义机器人坐标系下x轴、
-Y轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯仰为正角度，向右横滚
+在\aref{fig:centroid}定义的机器人坐标系下，按照每个关节的旋转轴方向可以根据转轴分为横滚($roll$) ,
+俯仰($pitch$)和偏航($yaw$)三种，因此可以将全部的关节根据基于前一个连杆的旋转角
+度方向定义为横滚角关节、俯仰角关节和偏航角关节。同时定义机器人坐标系下$x$轴、
+$y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯仰为正角度，向右横滚
 为正角度，向左偏航为正角度。
 
 在世界坐标系下，定义机器人身体姿态角为绕机器人坐标系坐标轴转动的角度，也
 就是机器人坐标系相对于世界坐标系的旋转角度;定义机器人的质心高度为世界坐标系
-下质心在z轴方向的位置;定义质心速度为世界坐标系下机器人的x轴和Y轴方向的速
+下质心在$z$轴方向的位置;定义质心速度为世界坐标系下机器人的$x$轴和$y$轴方向的速
 度，定义摆动腿的落脚点和摆动轨迹为机器人坐标系下摆动腿的位置。
 \subsection{简化连杆模型}
 
 实物机器人有着较为复杂的连杆关系与机械结构，为了方便运动学和动力学的运算，
-本文将“悟空一III”仿人机器人的机械结构简化成多连杆模型，如图所示。由于两款机器
+本文将WuKong-IV仿人机器人的机械结构简化成多连杆模型，如图所示。由于两款机器
 人的简化连杆模型除了连杆长度参数不一致以外其他基本一致，因此两款机器人可以采
 用同一套多连杆模型。关节命名的顺序就是从上文定义的质心位置开始往外延伸依次定
 义。关节0表示腰偏航关节，关节1, 2, 3分别表示左腿髓偏航、左腿髓横滚、左腿髓
@@ -892,10 +893,10 @@ Y轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯
 \end{figure}
 \section{双足机器人动力学建模与控制器设计}
 
-本文提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人Atlas上进行了实现。该控制架构的核心是一个二次规划问题，
-该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
-我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
-以及在斜面上的多接触点平衡(后者仅在仿真中实现)。
+% 本文提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人Atlas上进行了实现。该控制架构的核心是一个二次规划问题，
+% 该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
+% 我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
+% 以及在斜面上的多接触点平衡(后者仅在仿真中实现)。
 \subsection{质心动力学}
 \begin{figure}[htbp]
     \centering
@@ -905,7 +906,7 @@ Y轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯
 % 这部分简要地回顾了机器人的质心动力学的一些关键性质。对于更深层次的讨论，见[25]。
 % 在本文中，
 我们把机器人看作刚体，其有广义关节力矩向量$\tau \in {{\mathbb{R}}^{n}}$，关节构型向量$q\in {{\mathbb{R}}^{m}}$，
-关节速度向量$v\in {{\mathbb{R}}^{n+6}}$（区分$v$和$\dot q$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是rpy来表示浮动基姿态)，
+关节速度向量$v\in {{\mathbb{R}}^{n+6}}$（区分$v$和$\dot q$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是$rpy$来表示浮动基姿态)，
 同时使用最少的参数来表示速度向量(比如使用角速度而不是四元数的导数)）。我们假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
 \begin{equation}
     \label{equ:momentum}
@@ -925,7 +926,8 @@ Y轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯
 	
 其中${{\boldsymbol{W}}_{g}}={{[\mathbf{0}_{3\times 1}^{\top }\ \ m{{\mathbf{g}}^{\top }}]}^{\top }}$表示重力矩，
 ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环境作用力旋量，${\boldsymbol{W}}_{ext,i}$表示机器人受到的接触力和重力之外的
-其它外部力旋量。注意机器人系统的动量变化率和内部力或者力矩无关。Orin和Goswami指出关节速度向量$v$和机器人的质心动量之间存在着简单的线性关系[2]
+其它外部力旋量。注意机器人系统的动量变化率和内部力或者力矩无关。
+% Orin和Goswami指出关节速度向量$v$和机器人的质心动量之间存在着简单的线性关系[2]
 \begin{equation}
     \label{equ:euler_linear_equ}
     \boldsymbol{h}=\boldsymbol{A}(q)\boldsymbol{v}
@@ -961,9 +963,9 @@ QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器�
 \end{equation}
 
 
-\subsubsection{外部力旋量}
-本节是关于动量变化率方程\aref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
-两种形式的地面接触是可行的：单边地面接触(4.2.1)和有限抓地力接触(4.2.2)。其他的待补偿的外部力旋量 在4.2.3中讨论。
+% \subsubsection{外部力旋量}
+% 本节是关于动量变化率方程\aref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
+% 两种形式的地面接触是可行的：单边地面接触(4.2.1)和有限抓地力接触(4.2.2)。其他的待补偿的外部力旋量 在4.2.3中讨论。
 \subsubsection{单边地面接触}
 单边地面接触被建模成有静摩擦力的点接触。有分布的负载的平的，多边形的接触面可以被等效地建模成顶点处的点接触。
 对于法向量为${{\boldsymbol{n}}_{i}}$的第$i$个点接触，接触力${{\boldsymbol{f}}_{i}}$的摩擦约束可以写成：
@@ -984,7 +986,7 @@ QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器�
 其中$\boldsymbol{\beta}_{ij} \in \mathbb{R}^3$是基向量，$\rho_{ij}$是坐标。在本文提出的结果中我们用了四个基向量，将$\mu$设为0.8。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{摩擦锥.eps}
+    \includegraphics[width=.8\linewidth]{摩擦锥.eps}
     \caption{\label{fig:friction_cone}质心系下$\boldsymbol{r}_{i}$处法向量为${{\boldsymbol{n}}_{i}}$的单边接触，摩擦锥由基向量$\boldsymbol{\beta}_{ij}$近似}
 \end{figure}
 质心系下的地面接触力旋量${{\boldsymbol{W}}_{gr,i}}$和接触力${{\boldsymbol{f}}_{i}}$的关系可以表示成：
@@ -1016,7 +1018,9 @@ ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\tim
   实际我们用了和接触的刚体表面固定的坐标系的面法向量${{\boldsymbol{n}}_{j}}$。
 %   我们更愿意使用Pollard和Reitsma的射线参数化，
 %   而不是Stewart和Trinkle的另一种参数化，因为射线参数化每个接触点要求的决策变量都会少一个。
-\subsection{QP构建过程}
+\subsection{二次规划构建过程}
+
+最终我们得到的二次规划问题如\ref{equ:qp_control}所示：
 \begin{equation}
     \label{equ:qp_control}
     \begin{aligned}
@@ -1029,6 +1033,7 @@ ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\tim
 其中，$\boldsymbol{b}={{\dot{\boldsymbol{h}}}_{d}}-\dot{\boldsymbol{A}}\boldsymbol{v}$，${{\dot{\boldsymbol{h}}}_{d}}\in {{\mathbb{R}}^{6}}$表示期望的质心动量变化率。
 ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho} }},{\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$是由更上层的控制器决定的目标函数权重矩阵。\aref{tab:qp_weight}给出了行走行为下的权重矩阵示例。
 \begin{table}[htbp]
+    \setstretch{1.3}
 	\centering
 	\caption{权重矩阵的数值}
 	\label{tab:qp_weight}
@@ -1042,13 +1047,13 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 		\bottomrule %添加表格底部粗线
 	\end{tabular}
 \end{table}
-
+二次规划问题构建的具体算法流程由\aref{alg:quadratic_program}给出，最终我们使用了pOASES求解库来进行问题的数值求解，平均求解时间在2ms左右。
 \begin{algorithm}[htb] 
 \setstretch{1.3}
 \caption{二次规划问题构建过程} 
 \label{alg:quadratic_program} 
-\begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
-\STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
+\begin{algorithmic}[] %这个1 表示从第一行开始显示行号，不写就不会显示行号
+\STATE{$\underset{{{{\dot{\boldsymbol{v}}}}_{\text{d}}},\boldsymbol{\rho}}{\mathop{\operatorname{minimize}}}\,\quad {{\left( \boldsymbol{A}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}-\boldsymbol{b} \right)}^{\top }}{{C}_{{\dot{\boldsymbol{h}}}}}\left( \boldsymbol{A}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}-\boldsymbol{b} \right)+{{\boldsymbol{\rho} }^{\top }}{{\boldsymbol{C}}_{\boldsymbol{\rho} }}\boldsymbol{\rho} +\dot{\boldsymbol{v}}_{\text{d}}^{\top }{{\boldsymbol{C}}_{{\dot{\boldsymbol{v}}}}}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}$}
 \STATE{$\bf{subject\ to:}$}
 \STATE{$\boldsymbol{x}(0)=\boldsymbol{x}_0$}
 \STATE{$\boldsymbol{v}(0)=\boldsymbol{v}_0$}
@@ -1063,7 +1068,6 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     & \boldsymbol{v}(k+1)=\boldsymbol{v}(k)+\mathrm{dt}_i \boldsymbol{a}(k) \\
     & \mathbf{a}:=-\boldsymbol{g}
     \end{aligned}$}
-\IF{\fangsong{左脚触地}}
 \STATE{$\begin{aligned}
     & \mathbf{a}:=\mathbf{a}+\lambda_l(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \\
     & \boldsymbol{A}_{l, i} \boldsymbol{p}_l(k) \leq \boldsymbol{b}_{l, i} \\
@@ -1071,85 +1075,110 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     & \boldsymbol{F}_{l, i} \boldsymbol{R}_{l, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{l, i}-\boldsymbol{R}_{l, i} \boldsymbol{p}_l(k)\right) \leq 0 \\
     & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{l, i}\right\| \leq l^{\max }
     \end{aligned}$}
-\ENDIF
-\IF{右脚触地}
-\STATE{$\begin{aligned}
-    & \mathbf{a}:=\mathbf{a}+\lambda_r(k)\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \\
-    & \boldsymbol{A}_{r, i} \boldsymbol{p}_r(k) \leq \boldsymbol{b}_{r, i} \\
-    & {\left[1\ 1\ -\mu^2\right]\left(\boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right)\right)^2 \leq 0} \\
-    & \boldsymbol{F}_{r, i} \boldsymbol{R}_{r, i}^{\top}\left(\boldsymbol{x}(k)-\boldsymbol{x}_{r, i}-\boldsymbol{R}_{r, i} \boldsymbol{p}_r(k)\right) \leq 0 \\
-    & l^{\text {min }} \leq\left\|\boldsymbol{x}-\boldsymbol{x}_{r, i}\right\| \leq l^{\max }
-    \end{aligned}$}
-\ENDIF
 \STATE{$\boldsymbol{a}(k)=\bf{a}$}
 \ENDFOR
 \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 \section{行走实验}
+
+我们在WuKong-IV实物样机上部署了上述算法，并进行了相关行走实验验证了算法的有效性。\aref{fig:track_exp}是轨迹跟踪实验的实验截图，在该实验中，
+我们让机器人跟随一段规划好的五次多项式轨迹，跟踪曲线如\aref{fig:com_pos_track}所示。
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{rectangle_track.pdf}
+    \includegraphics[height=.32\linewidth]{walk_1.jpg}
+    \includegraphics[height=.32\linewidth]{walk_2.jpg}
+    \includegraphics[height=.32\linewidth]{walk_3.jpg}
+    \includegraphics[height=.32\linewidth]{walk_4.jpg}
+
+    \includegraphics[height=.32\linewidth]{walk_5.jpg}
+    \includegraphics[height=.32\linewidth]{walk_6.jpg}
+    \includegraphics[height=.32\linewidth]{walk_7.jpg}
+    \includegraphics[height=.32\linewidth]{walk_8.jpg}   
+    \caption{\label{fig:track_exp}WuKong-IV轨迹跟踪实验截图}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.8\linewidth]{rectangle_track.pdf}
     \caption{\label{fig:com_pos_track}质心位置跟踪曲线}
 \end{figure}
+除此之外，我们还通过快速行走实验验证了上述算法在高速场景下的鲁棒性。实验截图如\aref{fig:track_exp}所示。由质心速度估计得到的速度曲线如\aref{fig:com_vel_track}。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[height=.32\linewidth]{fast_walk1.jpg}
+    \includegraphics[height=.32\linewidth]{fast_walk2.jpg}
+    \includegraphics[height=.32\linewidth]{fast_walk3.jpg}
+    \includegraphics[height=.32\linewidth]{fast_walk4.jpg}
+
+    \includegraphics[height=.32\linewidth]{fast_walk5.jpg}
+    \includegraphics[height=.32\linewidth]{fast_walk6.jpg}
+    \includegraphics[height=.32\linewidth]{fast_walk7.jpg}
+    \includegraphics[height=.32\linewidth]{fast_walk8.jpg}   
+    \caption{\label{fig:track_exp}WuKong-IV快速行走实验截图}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{velo.eps}
+    \caption{\label{fig:com_vel_track}质心速度曲线}
+\end{figure}
 \chapter{双足机器人质心轨迹优化}
-\section{基于QP的全身控制器}
-机器人运动由基于QP的全身控制器控制[22]，该控制器输出一组期望关节加速度，包括浮动基关节在惯性系$\mathcal{I}$下的空间加速度，
-这里我们用$\dot{\boldsymbol{\nu}}_d \in \mathbb{R}^{n+6}$表示，$n$是驱动关节的数量。另外，该全身控制器也会生成
-期望的接触力和力矩(wrenches)。
+% \section{基于二次规划的全身控制器}
+% 机器人运动由基于QP的全身控制器控制[22]，该控制器输出一组期望关节加速度，包括浮动基关节在惯性系$\mathcal{I}$下的空间加速度，
+% 这里我们用$\dot{\boldsymbol{\nu}}_d \in \mathbb{R}^{n+6}$表示，$n$是驱动关节的数量。另外，该全身控制器也会生成
+% 期望的接触力和力矩(wrenches)。
 
-该全身控制器处理包括笛卡尔空间和质心任务的不同运动控制任务。前者的实现是通过最小化下面的目标函数：
-\begin{equation}
-    \label{equ:qp_objective}
-    \left\|\boldsymbol{J}_t \dot{\boldsymbol{\nu}}_d-\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)\right\|^2
-\end{equation}
-其中$\boldsymbol{J}_t \in \mathbb{R}^{n_j \times (n+6)}$是任务雅可比，$n_j$是任务$j$的自由度数量，
-$\boldsymbol{\alpha}_d \in \mathbb{R}^{n_j}$是任务的期望加速度，$\boldsymbol{\nu}$是由状态估计得到的浮动基和关节速度向量。
-$\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)$是不依赖决策变量的向量，用符号$\boldsymbol{\alpha}_i$代替。
+% 该全身控制器处理包括笛卡尔空间和质心任务的不同运动控制任务。前者的实现是通过最小化下面的目标函数：
+% \begin{equation}
+%     \label{equ:qp_objective}
+%     \left\|\boldsymbol{J}_t \dot{\boldsymbol{\nu}}_d-\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)\right\|^2
+% \end{equation}
+% 其中$\boldsymbol{J}_t \in \mathbb{R}^{n_j \times (n+6)}$是任务雅可比，$n_j$是任务$j$的自由度数量，
+% $\boldsymbol{\alpha}_d \in \mathbb{R}^{n_j}$是任务的期望加速度，$\boldsymbol{\nu}$是由状态估计得到的浮动基和关节速度向量。
+% $\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)$是不依赖决策变量的向量，用符号$\boldsymbol{\alpha}_i$代替。
 
-质心任务由控制机器人的动量$\boldsymbol{h}$实现，$\boldsymbol{h} \in \mathbb{R}^{6}$。我们特意利用了下面的关系：
-\begin{equation}
-    \label{equ:qp_momentum}
-    \dot{\boldsymbol{h}}=\boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\sum_i \boldsymbol{W}_{\mathrm{gr}, i}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i}
-\end{equation}
-其中$\boldsymbol{J}_{CMM} \in \mathbb{R}^{6 \times (n+6)}$是质心动量矩阵[23]，
-$\boldsymbol{W}_g=\left[\begin{array}{ll}0_{3 \times 1}^{\top} & m \boldsymbol{g}^{\top}\end{array}\right]^{\top}$是由于重力产生的力和力矩(wrench)，
-$\sum_i {\boldsymbol{W}_{gr,i}}$表示作用在机器人身体上的接触力，$\sum_i {\boldsymbol{W}_{ext,i}}$表示除上述两种力外作用在机器人上的力和力矩的总和。
+% 质心任务由控制机器人的动量$\boldsymbol{h}$实现，$\boldsymbol{h} \in \mathbb{R}^{6}$。我们特意利用了下面的关系：
+% \begin{equation}
+%     \label{equ:qp_momentum}
+%     \dot{\boldsymbol{h}}=\boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\sum_i \boldsymbol{W}_{\mathrm{gr}, i}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i}
+% \end{equation}
+% 其中$\boldsymbol{J}_{CMM} \in \mathbb{R}^{6 \times (n+6)}$是质心动量矩阵[23]，
+% $\boldsymbol{W}_g=\left[\begin{array}{ll}0_{3 \times 1}^{\top} & m \boldsymbol{g}^{\top}\end{array}\right]^{\top}$是由于重力产生的力和力矩(wrench)，
+% $\sum_i {\boldsymbol{W}_{gr,i}}$表示作用在机器人身体上的接触力，$\sum_i {\boldsymbol{W}_{ext,i}}$表示除上述两种力外作用在机器人上的力和力矩的总和。
 
-不同的接触力作用在接触面(contact patch)的每个顶点上，这些力被特意用一个坐标向量$\boldsymbol{\rho}_i$定义，$\boldsymbol{\rho}_i \in \mathbb{R}^{m}$，
-它的基是摩擦锥表面上的$m$个向量(extreme rays)。通过限制$\boldsymbol{\rho}_i$的每一个元素都在$\left[\rho_{min}, \rho_{max}\right]$内，我们避免过分大的力和力矩。
-另外更重要的一点是，这样做隐式地满足了摩擦约束和CoP约束。一般来说由接触产生的法向力也一定是正的。
-我们可以把接触相关的力和力矩$\sum_i {\boldsymbol{W}_{gr,i}}$在惯性系$\mathcal{I}$中表示为$\boldsymbol{\rho}_i$的函数：
-\begin{equation}
-    \label{equ:qp_grf_coord}
-    \boldsymbol{W}_{\mathrm{gr}, i}=\boldsymbol{Q}_i \boldsymbol{\rho}_i
-\end{equation}
-其中$\boldsymbol{Q}_i \in \mathbb{R}^{6 \times m}$取决于接触顶点$i$的位置和基向量的选择，通过把所有的$\boldsymbol{Q}_i$和$\boldsymbol{\rho}_i$接到一起，
-我们可以得到$\sum_i {\boldsymbol{W}_{\mathrm{gr}, i}}=\boldsymbol{Q}_i \boldsymbol{\rho}_i$。
+% 不同的接触力作用在接触面(contact patch)的每个顶点上，这些力被特意用一个坐标向量$\boldsymbol{\rho}_i$定义，$\boldsymbol{\rho}_i \in \mathbb{R}^{m}$，
+% 它的基是摩擦锥表面上的$m$个向量(extreme rays)。通过限制$\boldsymbol{\rho}_i$的每一个元素都在$\left[\rho_{min}, \rho_{max}\right]$内，我们避免过分大的力和力矩。
+% 另外更重要的一点是，这样做隐式地满足了摩擦约束和CoP约束。一般来说由接触产生的法向力也一定是正的。
+% 我们可以把接触相关的力和力矩$\sum_i {\boldsymbol{W}_{gr,i}}$在惯性系$\mathcal{I}$中表示为$\boldsymbol{\rho}_i$的函数：
+% \begin{equation}
+%     \label{equ:qp_grf_coord}
+%     \boldsymbol{W}_{\mathrm{gr}, i}=\boldsymbol{Q}_i \boldsymbol{\rho}_i
+% \end{equation}
+% 其中$\boldsymbol{Q}_i \in \mathbb{R}^{6 \times m}$取决于接触顶点$i$的位置和基向量的选择，通过把所有的$\boldsymbol{Q}_i$和$\boldsymbol{\rho}_i$接到一起，
+% 我们可以得到$\sum_i {\boldsymbol{W}_{\mathrm{gr}, i}}=\boldsymbol{Q}_i \boldsymbol{\rho}_i$。
 
-最终笛卡尔和质心任务被组合成如下形式：
-\begin{equation}
-    \label{equ:qp_cartesian_com_task}
-    \hat{\boldsymbol{J}}=\left[\begin{array}{c}
-        \boldsymbol{J} \\
-        \boldsymbol{J}_{\mathrm{CMM}}
-        \end{array}\right], \quad \hat{\boldsymbol{\beta}}=\left[\begin{array}{c}
-        \boldsymbol{\beta} \\
-        \dot{\boldsymbol{h}}_d-\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}
-        \end{array}\right]
-\end{equation}
-其中$\boldsymbol{J}$和$\boldsymbol{\beta}$分别是所有的任务雅可比$\boldsymbol{J}_i$和$\boldsymbol{\beta}_i$的接合，
-$\dot{\boldsymbol{h}}_d$是期望的动量变化率。
-在每个控制周期，要解的QP问题可以写成：
-\begin{equation}
-    \label{equ:qp_final}
-    \begin{aligned}
-        \underset{\dot{\nu}_d, \boldsymbol{\rho}}{\operatorname{minimize}} & \left\|\hat{\boldsymbol{J}} \dot{\boldsymbol{\nu}}_d-\hat{\boldsymbol{\beta}}\right\|_{C_t}^2+\|\boldsymbol{\rho}\|_{C_\rho}^2+\left\|\dot{\boldsymbol{\nu}}_d\right\|_{C_{\dot{\boldsymbol{\nu}}}}^2 \\
-        \text { subject to: } & \boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}_d+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\boldsymbol{Q} \boldsymbol{\rho}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i} \\
-        & \boldsymbol{\rho}^{\min } \leq \boldsymbol{\rho} \leq \boldsymbol{\rho}^{\max }
-        \end{aligned}
-\end{equation}
-期望的广义关节加速度和接触力被用于计算机器人期望的关节力矩输入。
+% 最终笛卡尔和质心任务被组合成如下形式：
+% \begin{equation}
+%     \label{equ:qp_cartesian_com_task}
+%     \hat{\boldsymbol{J}}=\left[\begin{array}{c}
+%         \boldsymbol{J} \\
+%         \boldsymbol{J}_{\mathrm{CMM}}
+%         \end{array}\right], \quad \hat{\boldsymbol{\beta}}=\left[\begin{array}{c}
+%         \boldsymbol{\beta} \\
+%         \dot{\boldsymbol{h}}_d-\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}
+%         \end{array}\right]
+% \end{equation}
+% 其中$\boldsymbol{J}$和$\boldsymbol{\beta}$分别是所有的任务雅可比$\boldsymbol{J}_i$和$\boldsymbol{\beta}_i$的接合，
+% $\dot{\boldsymbol{h}}_d$是期望的动量变化率。
+% 在每个控制周期，要解的QP问题可以写成：
+% \begin{equation}
+%     \label{equ:qp_final}
+%     \begin{aligned}
+%         \underset{\dot{\nu}_d, \boldsymbol{\rho}}{\operatorname{minimize}} & \left\|\hat{\boldsymbol{J}} \dot{\boldsymbol{\nu}}_d-\hat{\boldsymbol{\beta}}\right\|_{C_t}^2+\|\boldsymbol{\rho}\|_{C_\rho}^2+\left\|\dot{\boldsymbol{\nu}}_d\right\|_{C_{\dot{\boldsymbol{\nu}}}}^2 \\
+%         \text { subject to: } & \boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}_d+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\boldsymbol{Q} \boldsymbol{\rho}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i} \\
+%         & \boldsymbol{\rho}^{\min } \leq \boldsymbol{\rho} \leq \boldsymbol{\rho}^{\max }
+%         \end{aligned}
+% \end{equation}
+% 期望的广义关节加速度和接触力被用于计算机器人期望的关节力矩输入。
 
 \section{变高度双摆模型}
 由牛顿第二定律可以得到线动量的变化率：
@@ -1194,7 +1223,9 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
 \aref{equ:newton_linear_2}表示双摆的模型，在包含双腿的同时也保持了较低的维度。
 
 \section{上台阶动力学规划}
-本文中表述的跨台阶规划器利用了[16][26][27]中阐述的基于阶段的轨迹优化。我们假设预先知道接触的序列，
+本文中表述的跨台阶规划器利用了
+% [16][26][27]中阐述的
+基于阶段的轨迹优化。我们假设预先知道接触的序列，
 这样简化了对接触的激活和失活的处理。本节提出了解决相关的非线性轨迹优化问题的约束，任务和方法论。
 首先我们将\aref{equ:newton_linear_2}简化为：
 \begin{equation}
@@ -1407,71 +1438,99 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 
 \section{上台阶实验验证}
 \label{stair_experiment}
+为了验证上述轨迹优化算法的有效性，我们设计了双足机器人上台阶实验。实验过程如\aref{fig:track_exp}所示。实验结果表明优化出的质心轨迹相对直接插值得到
+的轨迹而言，对膝关节力矩的减小有显著的效果，如\aref{fig:knee_torque}所示，蓝色曲线为执行轨迹优化得到的膝关节力矩曲线，其峰值力矩约为478$N\cdot m$，
+红色曲线为执行插值轨迹得到的膝关节力矩曲线，其峰值力矩约为591$N\cdot m$，降低了近$20\%$。\aref{fig:track_com}为跟随优化轨迹过程中的质心位置曲线。
 % $\mathcal{I}$
 % \boldsymbol{\rho}
 % \in \mathbb{R}^{3}
 % { }^* \boldsymbol{f}_*
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[height=.32\linewidth]{stairs_1.jpg}
+    \includegraphics[height=.32\linewidth]{stairs_2.jpg}
+    \includegraphics[height=.32\linewidth]{stairs_3.jpg}
+    \includegraphics[height=.32\linewidth]{stairs_4.jpg}
 
+    \includegraphics[height=.32\linewidth]{stairs_5.jpg}
+    \includegraphics[height=.32\linewidth]{stairs_6.jpg}
+    \includegraphics[height=.32\linewidth]{stairs_7.jpg}
+    \includegraphics[height=.32\linewidth]{stairs_8.jpg}   
+    \caption{\label{fig:track_exp}WuKong-IV上台阶实验截图}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.8\linewidth]{knee.eps} 
+    \caption{\label{fig:knee_torque}WuKong-IV上台阶膝关节力矩曲线}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.8\linewidth]{stair_tracking.eps} 
+    \caption{\label{fig:track_com}WuKong-IV上台阶质心跟随曲线}
+\end{figure}
 \chapter{总结与展望}
+\section{总结}
 
-\subsection{落脚点规划的最近进展}
-落脚点规划是运动规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
-增加了运动规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
-混合整数公式(mixed-integer formulations)，同时还考虑了在不平整地形的运动学甚至动力学可行性约束\cite{aceituno2017simultaneous}。
+% 本文对双足机器人的运动控制进行了各个层次的研究
+\section{展望}
+% \subsection{落脚点规划的最近进展}
+% 落脚点规划是运动规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
+% 增加了运动规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
+% 混合整数公式(mixed-integer formulations)，同时还考虑了在不平整地形的运动学甚至动力学可行性约束\cite{aceituno2017simultaneous}。
 
-另外一种方法是用机器人足能到达的范围来提供接触序列存在的充分必要条件。这样机器人的运动可以不用提前设定好接触序列来实现，
-这大大降低了运动规划问题的复杂度，使机器人可以在几分之一秒内对变化的环境作出快速重规划。具体的接触序列可以在下一个阶段用各种各样的
-启发式函数来得到，比如在考虑不平整地形下运动学甚至动力学可行性约束的同时最大化准静态的鲁棒平衡\cite{tonneau2018efficient}。这种多阶段的方法可以很高效，
-但是对启发函数的依赖可能会导致失败。
+% 另外一种方法是用机器人足能到达的范围来提供接触序列存在的充分必要条件。这样机器人的运动可以不用提前设定好接触序列来实现，
+% 这大大降低了运动规划问题的复杂度，使机器人可以在几分之一秒内对变化的环境作出快速重规划。具体的接触序列可以在下一个阶段用各种各样的
+% 启发式函数来得到，比如在考虑不平整地形下运动学甚至动力学可行性约束的同时最大化准静态的鲁棒平衡\cite{tonneau2018efficient}。这种多阶段的方法可以很高效，
+% 但是对启发函数的依赖可能会导致失败。
 
-\subsection{简化模型的近期进展}
-运动发散量(divergent component of motion, DCM)：线性倒立摆(LIP)模型的一个好处是它足够简单，可以进行彻底的数学分析。值得注意的是，
-LIP动力学的发散部分可以用一个单独的量表示——运动发散量(DCM)，而不必用质心的完整状态(位置和速度)。DCM的线性反馈控制是双足平地运动的
-一种高效平衡控制策略\cite{kajita2010biped}，简单到可以在基于位置控制、力矩控制等各种各种机器人平台上验证。
+% \subsection{简化模型的近期进展}
+% 运动发散量(divergent component of motion, DCM)：线性倒立摆(LIP)模型的一个好处是它足够简单，可以进行彻底的数学分析。值得注意的是，
+% LIP动力学的发散部分可以用一个单独的量表示——运动发散量(DCM)，而不必用质心的完整状态(位置和速度)。DCM的线性反馈控制是双足平地运动的
+% 一种高效平衡控制策略\cite{kajita2010biped}，简单到可以在基于位置控制、力矩控制等各种各种机器人平台上验证。
 
-DCM遵循接触力的一阶动力学，比质心的二阶动力学\aref{equ:newton}要简单，这也帮助简化了腿足控制的其他方面。最近主要有三个进展：第一，DCM可以在
-不改变系统动力学的前提下，去掉质心的平面约束来生成三维的行走轨迹\cite{englsberger2015three}；第二，通过对DCM的解析轨迹做一些变量替换，
-可以在轨迹优化中包含在线的step-timing adaption的同时保证我们要解的问题是一个小的凸问题\cite{khadiv2020walking}。第三，在证明MPC问题的稳定性和可行性时，
-DCM可以被用作一个可行(viability)条件。
+% DCM遵循接触力的一阶动力学，比质心的二阶动力学\aref{equ:newton}要简单，这也帮助简化了腿足控制的其他方面。最近主要有三个进展：第一，DCM可以在
+% 不改变系统动力学的前提下，去掉质心的平面约束来生成三维的行走轨迹\cite{englsberger2015three}；第二，通过对DCM的解析轨迹做一些变量替换，
+% 可以在轨迹优化中包含在线的step-timing adaption的同时保证我们要解的问题是一个小的凸问题\cite{khadiv2020walking}。第三，在证明MPC问题的稳定性和可行性时，
+% DCM可以被用作一个可行(viability)条件。
 
-Centroidal dynamics: 在例如不平整地形、狭窄空间等有多点接触的场景中运动时，将接触力等效到ZMP是很局限的。基于完整质心动力学
-\aref{equ:newton}和\aref{equ:euler}的方法是在更广泛的接触场景下计算可行的质心轨迹、角动量和对应接触力的一种解决方案。
-接触序列甚至可以同时优化求解\cite{winkler2018gait}。
+% Centroidal dynamics: 在例如不平整地形、狭窄空间等有多点接触的场景中运动时，将接触力等效到ZMP是很局限的。基于完整质心动力学
+% \aref{equ:newton}和\aref{equ:euler}的方法是在更广泛的接触场景下计算可行的质心轨迹、角动量和对应接触力的一种解决方案。
+% 接触序列甚至可以同时优化求解\cite{winkler2018gait}。
 
-利用轨迹优化问题的稀疏性和凸性来求解的方法已经有了一定的发展\cite{ponton2016convex,tonneau2018efficient}。另外，机器人的惯量通常用单刚体近似得到\cite{mastalli2017trajectory,winkler2018gait}，
-并且为了让最终的非线性优化问题可以在期望的运动行为附近快速收敛，可以根据实际运动设计启发函数来正则化优化问题\cite{bledt2020extracting}。加上这些改进之后，
-基于完整质心动力学的方法可以在线运行，计算时间在10ms内\cite{bledt2019implementing}。
+% 利用轨迹优化问题的稀疏性和凸性来求解的方法已经有了一定的发展\cite{ponton2016convex,tonneau2018efficient}。另外，机器人的惯量通常用单刚体近似得到\cite{mastalli2017trajectory,winkler2018gait}，
+% 并且为了让最终的非线性优化问题可以在期望的运动行为附近快速收敛，可以根据实际运动设计启发函数来正则化优化问题\cite{bledt2020extracting}。加上这些改进之后，
+% 基于完整质心动力学的方法可以在线运行，计算时间在10ms内\cite{bledt2019implementing}。
 
-质心动力学并不考虑运动学或者关节力矩约束。为了部分弥补这些缺陷，一些方法提出将接触力和力矩(wrench)锥扩展来包含力矩限制\cite{orsolino2020feasible}，
-还有一些基于学习的方法将更复杂的全身约束表示进质心模型里面\cite{carpentier2018multicontact}。
+% 质心动力学并不考虑运动学或者关节力矩约束。为了部分弥补这些缺陷，一些方法提出将接触力和力矩(wrench)锥扩展来包含力矩限制\cite{orsolino2020feasible}，
+% 还有一些基于学习的方法将更复杂的全身约束表示进质心模型里面\cite{carpentier2018multicontact}。
 
-Mixed models: 另外一个在简化模型跟完整动力学模型之间的折中方案是，将质心动力学\aref{equ:newton}和\aref{equ:euler}和
-全身运动学模型结合，这样可以在保持适度的计算复杂度的同时得到符合动力学的全身运动\cite{dai2014whole}。用这种方法可以在70ms内在线计算和更新
-局部最优的反馈控制。也可以用交替下降的方法(alternating descent method)将质心动力学与全身动力学模型结合，来考虑质心动力学以外的部分\cite{budhiraja2019dynamics}。
-一种更早的方法将机器人的瞬间全身动力学与LIP模型在一个滚动时域内结合到一个统一的QP问题中，来获得机器人运动的长时动力学。
+% Mixed models: 另外一个在简化模型跟完整动力学模型之间的折中方案是，将质心动力学\aref{equ:newton}和\aref{equ:euler}和
+% 全身运动学模型结合，这样可以在保持适度的计算复杂度的同时得到符合动力学的全身运动\cite{dai2014whole}。用这种方法可以在70ms内在线计算和更新
+% 局部最优的反馈控制。也可以用交替下降的方法(alternating descent method)将质心动力学与全身动力学模型结合，来考虑质心动力学以外的部分\cite{budhiraja2019dynamics}。
+% 一种更早的方法将机器人的瞬间全身动力学与LIP模型在一个滚动时域内结合到一个统一的QP问题中，来获得机器人运动的长时动力学。
 
-\subsection{全身模型的最新进展}
-Trajectory optimization: 利用collocation\cite{posa2016optimization}或multipe-shooting\cite{koch2014optimization}等轨迹优化的一些技术，我们可以考虑所有的运动学和动力学约束，
-以及最小化能量消耗等目标函数，用机器人的完整非线性动力学模型来协调肢体的运动(其中collocation和multipe-shooting在求解速度、准确性、
-稳定性和精度上互有优势\cite{diehl2006fast})。使用松弛的接触模型甚至能同时优化求解接触序列\cite{posa2014direct}。由于高效的开源数值求解器利用了轨迹优化问题的
-稀疏性和动力学模型的精确导数，在线计算全身运动可以在7ms内完成\cite{neunert2018whole}。
+% \subsection{全身模型的最新进展}
+% Trajectory optimization: 利用collocation\cite{posa2016optimization}或multipe-shooting\cite{koch2014optimization}等轨迹优化的一些技术，我们可以考虑所有的运动学和动力学约束，
+% 以及最小化能量消耗等目标函数，用机器人的完整非线性动力学模型来协调肢体的运动(其中collocation和multipe-shooting在求解速度、准确性、
+% 稳定性和精度上互有优势\cite{diehl2006fast})。使用松弛的接触模型甚至能同时优化求解接触序列\cite{posa2014direct}。由于高效的开源数值求解器利用了轨迹优化问题的
+% 稀疏性和动力学模型的精确导数，在线计算全身运动可以在7ms内完成\cite{neunert2018whole}。
 
-Reinforcement learning:强化学习技术的成熟使得离线用机器人的完整动力学模型，从传感器原始数据和机器人姿态估计中直接计算出
-\begin{itemize}
-\item 能产生大量行为样本的高效仿真器\cite{hwangbo2018per}；
-\item 能指引反馈控制策略的优化求解从简单场景到更复杂场景的“上课”策略；
-\item 在电机模型里用实际的硬件测量数据训练得到的神经网络表示难以建模的不确定性。
-\end{itemize}
+% Reinforcement learning:强化学习技术的成熟使得离线用机器人的完整动力学模型，从传感器原始数据和机器人姿态估计中直接计算出
+% \begin{itemize}
+% \item 能产生大量行为样本的高效仿真器\cite{hwangbo2018per}；
+% \item 能指引反馈控制策略的优化求解从简单场景到更复杂场景的“上课”策略；
+% \item 在电机模型里用实际的硬件测量数据训练得到的神经网络表示难以建模的不确定性。
+% \end{itemize}
 
-\subsection{小结}
-腿足运控就是在足和环境之间建立一系列的接触，并且在不同接触之间执行对应的符合机器人运动学和动力学的动作。数值轨迹优化在这其中扮演了关键角色，
-处理交替的接触以及对应接触力的约束。不同复杂度的模型，从最简单的LIP模型，到完整质心动力学\aref{equ:newton}和\aref{equ:euler}，再到完整的多刚体动力学模型，
-可以单独或者结合起来使用，处理运动的不同方面(层次)。正是这些模型的改进，以及高级的数值方法的改进，无论是现成的还是特殊为腿足运控设计的，
-使得近年来从平地到更普遍的室内室外环境的转变成为可能。首个用强化学习成功实现真实复杂环境下的四足运动的例子也是用同样的方法做到的。
+% \subsection{小结}
+% 腿足运控就是在足和环境之间建立一系列的接触，并且在不同接触之间执行对应的符合机器人运动学和动力学的动作。数值轨迹优化在这其中扮演了关键角色，
+% 处理交替的接触以及对应接触力的约束。不同复杂度的模型，从最简单的LIP模型，到完整质心动力学\aref{equ:newton}和\aref{equ:euler}，再到完整的多刚体动力学模型，
+% 可以单独或者结合起来使用，处理运动的不同方面(层次)。正是这些模型的改进，以及高级的数值方法的改进，无论是现成的还是特殊为腿足运控设计的，
+% 使得近年来从平地到更普遍的室内室外环境的转变成为可能。首个用强化学习成功实现真实复杂环境下的四足运动的例子也是用同样的方法做到的。
 
-离线和在线数值优化在这个过程中扮演的核心角色，使得整个腿足运控研究领域大力发展新的优化方法和高效的数值软件。值得一提的有，安全处理不同优先级、
-多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的\cite{geisert2017regularized}。
-这其中涉及到包含动力学模型\cite{felis2017rbdl}，仿真\cite{lee2018dart}，状态估计\cite{camurri2020pronto}，控制器设计\cite{tedrake2019drake}的灵活高效开源软件的发展。
+% 离线和在线数值优化在这个过程中扮演的核心角色，使得整个腿足运控研究领域大力发展新的优化方法和高效的数值软件。值得一提的有，安全处理不同优先级、
+% 多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的\cite{geisert2017regularized}。
+% 这其中涉及到包含动力学模型\cite{felis2017rbdl}，仿真\cite{lee2018dart}，状态估计\cite{camurri2020pronto}，控制器设计\cite{tedrake2019drake}的灵活高效开源软件的发展。
 
 % 开源软件，以及包含3D打印零件，简化的电路跟执行器的开源硬件[86,87]，可以促进完善、鲁棒、经过大量测试的解决方案的复现、传播和平民化，
 % 同时有利于快速迭代和创新，并且使得这些现有实现方法可以扩展和改进(表1列出了一部分)。
