@@ -410,13 +410,42 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 第五章 本章对本文工作进行简要总结，提出工作的不足之处，并对进一步的工作提
 出一些展望。
 \chapter{双足机器人状态估计}
-\section{机器人质心运动模型}
+\section{机器人浮动基模型}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.6\linewidth]{浮动基.eps}
-    \caption{\label{fig:zju-logo}机器人浮动基运动模型}
+    \caption{\label{fig:floating_base}双足机器人浮动基运动模型}
 \end{figure}
 
+与工业机械臂、轮履式机器人等传统类型机器人的运动不同，双足机器人或者说腿足机器人的运动包括两个显著的特征：
+\begin{itemize}
+    \item 机器人和环境之间不存在刚性的连接，或者说机器人的基座是“浮动”的。
+    \item 机器人和环境的接触是不连续的，随着腿的交替运动，机器人的动力学也随之产生阶段性的不连续变化。
+\end{itemize}
+
+基于以上两个特征，浮动基描述成为了现在对腿足运动通用的表示方法。如\aref{fig:floating_base}所示，我们假设双足机器人和环境之间存在$n_b$个虚拟关节，它们的数值组成了浮动基的坐标$\boldsymbol{q}_b$，
+$\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标$\boldsymbol{q}_j$，组成了机器人的广义坐标$\boldsymbol{q}$，即：
+\begin{equation}
+    \label{equ:general_coor}
+    \boldsymbol{q}=\left(\begin{array}{c}
+        \boldsymbol{q}_b \\
+        \boldsymbol{q}_j
+        \end{array}\right)
+\end{equation}
+其中，
+\begin{equation}
+    \label{equ:floating_coor}
+    \boldsymbol{q}_b=\left(\begin{array}{c}
+        \boldsymbol{q}_{b_P} \\
+        \boldsymbol{q}_{b_R}
+        \end{array}\right) \in \mathbb{R}^3 \times SO(3)
+\end{equation}
+\aref{equ:floating_coor}中$ \boldsymbol{q}_{b_P}$表示浮动基的位置，$\boldsymbol{q}_{b_R}$表示浮动基的姿态。在本文中我们用笛卡尔坐标表示位置，$rpy$姿态角表示姿态，因此$n_b = 6$。
+
+基于这样的坐标表示，如何利用机器人的本体感知，即惯性测量单元(Inertial Measurement Unit，IMU)和机器人内部关节的编码器，来获得机器人的浮动基坐标，对于实现机器人的稳定运动控制来说是至关重要的。
+
+本章介绍了利用卡尔曼滤波的方法来实现浮动基坐标的估计，标准卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。\aref{sec:contact_est}和\aref{sec:com_est}分别介绍了对机器人与环境的接触状态和机器人浮动基相对于惯性系的
+位置、速度的估计方法。
 \begin{algorithm}[htbp] 
 \setstretch{1.3}
 \caption{线性卡尔曼滤波} 
@@ -440,10 +469,9 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 
 \end{algorithmic}
 \end{algorithm}
-标准卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。
-
 \section{触地状态估计}
-\subsection{概率触地模型融合}
+\label{sec:contact_est}
+\subsection{概率触地模合}
 实际上，我们不能完全信任控制器会按时将脚抬离或者放回地面，完美地按照规划出的相位执行。同样地，我们也不能假设地面是完全平整的，
 由于复杂的地形或者是未知的物体，地面的高度可能是未知的。在没有外部力传感器的情况下，我们必须从关节编码器的数据，本体力感知，
 以及腿的动力学模型来估计外部作用力。编码器有离散误差，同时模型误差会导致在没有外力的时候也会计算出非0的外力。
@@ -460,8 +488,7 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 自然而然地，我们可以用概率接触模型作为先验来融合所有可用的数据。虽然测量中涉及到的动力学很复杂，但把接触的概率作为状态，
 我们就能用一个简单的线性卡尔曼滤波来实现。在估计时使用概率而不是离散的二进制接触状态的好处之一是，在概率增大或者减小时
 我们可以预测会发生接触状态的变化。
-
-A 预测：过程模型
+\subsection{预测——过程模型}
 
 对于给定的步态规划和当前某条腿的相位$\phi$，步态规划器会给出每条腿期望的接触状态$s_{\phi}$。在理想情况下，$s = s_{\phi}$，
 并且状态切换是同时发生的。然而机器人的控制系统很容易有延时，这可能导致腿抬得晚了，或者由于摆动腿轨迹跟随的误差以及未知的地面高度变化
@@ -507,8 +534,7 @@ A 预测：过程模型
     \label{equ:est_process_matrix}
     \boldsymbol{A}_k=\mathbf{0}_N \quad \text { and } \quad \boldsymbol{B}_k=\mathbf{I}_N
 \end{equation}
-
-B 校正：测量模型
+\subsection{校正——测量模型}
 
 1）地面高度测量模型：在缺少环境感知系统的情况下，地面高度$z_g$可以概率地被建模出来。
 表示地面高度的随机变量$z_g$符合高斯分布，即$Z_g \sim \mathcal{N}\left(\mu_{z_g}, \sigma_{z_g}^2\right)$。$\mu_{z_g}$表示地面高度的均值，
@@ -538,7 +564,7 @@ B 校正：测量模型
 \end{equation}
 该协方差矩阵表示我们对接触高度模型信任度的度量。
 
-1）接触力测量模型：足底的外力是唯一真实能表明发生了触地的信息。然而机器人当前并没有安装直接力传感器。通过第三部分中估计出的外力，
+2）接触力测量模型：足底的外力是唯一真实能表明发生了触地的信息。然而机器人当前并没有安装直接力传感器。通过第三部分中估计出的外力，
 我们可以建立另一个力接触的简单概率模型，用随机变量$f_c$表示，$f_c$满足高斯分布：$F_c \sim \mathcal{N}\left(\mu_{f_c}, \sigma_{f_c}^2\right)$。
 这里$\mu_{f_c}$是在接触处感知到的外力的均值，$\sigma_{f_c}^2$度量估计出的外力的噪声大小。对于给定估计接触力，触地概率可以写成：
 \begin{equation}
@@ -618,7 +644,9 @@ B 校正：测量模型
     \includegraphics[width=1.\linewidth]{contact_prob.pdf}
     \caption{\label{fig:contact_est}触地估计示意图}
 \end{figure}
+\aref{fig:contact_est}展示了上述算法的实验结果。
 \section{质心状态估计}
+\label{sec:com_est}
 包括人形机器人在内的腿足机器人有驱动关节，但并没有和环境刚性固定。因此驱动关节的角度并不能决定机器人相对环境的位姿。
 腿足机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态。这个连杆就是所谓的浮动基。
 器人每个连杆的位置可以用浮动基的位姿和编码器测量得到的关节角度重建出来。
@@ -642,13 +670,12 @@ B 校正：测量模型
 的贡献度，比如IMU数据的加入，以及用力传感器来检测接触扰动。我们在第二和第三部分提出了两种不同的简化状态估计方法；
 第四部分展示并讨论了实验结果；第五部分给出了实验结论。
 
-\subsection{方法2.位置速度线性卡尔曼滤波器}
-本文使用的第二种方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。现在的状态估计方法已经用扩展卡尔曼滤波(EKF)
-在人形和四足机器人的浮动基状态估计上取得了很好的效果[4][5]。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
-并且在实际中可能很难调整参数。第三部分讨论了浮动基状态估计如何能在一个轻微的假设下分解成分级的姿态和位置滤波器，这是一个关键的结论。
-有了这个结论之后，浮动基的位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
+\subsection{位置速度线性卡尔曼滤波器}
+扩展卡尔曼滤波在人形和四足机器人的浮动基状态估计上取得了很好的效果。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
+并且在实际中可能很难调整参数。本章使用的状态估计方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。
+浮动基状态估计能在一个轻微的假设下分解成分级的姿态和位置滤波器，位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
 
-A 过程模型
+\subsection{预测——过程模型}
 
 和[3]中一样，机器人的位置和速度估计的状态量$\boldsymbol{x}$将机器人足的位置也包括了进去：
 \begin{equation}
@@ -674,7 +701,7 @@ A 过程模型
 我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$(和第二部分B中描述的类似)。我们使用了[14]中提出估计的第二种版本。
 原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
 
-B 测量模型
+\subsection{校正——测量模型}
 
 为了估计$\boldsymbol{x}$，需要用运动学测量得到IMU相对脚的位置。除此之外，脚的高度$z_L$和$z_R$(这里假设为0)也被用作伪测量：
 \begin{equation}
@@ -697,7 +724,7 @@ B 测量模型
         \hat{z}_R
         \end{array}\right]:=\boldsymbol{C} \hat{\boldsymbol{y}}
 \end{equation}
-C 加权噪声模型
+\subsection{腿部运动学噪声模型}
 基于上文的解耦假设，$\boldsymbol{x}$的估计可以写成随机过程下的标准线性卡尔曼滤波：
 \begin{equation}
     \label{equ:std_kf}
@@ -706,18 +733,18 @@ C 加权噪声模型
         \boldsymbol{y}_{n+1} & =C \boldsymbol{x}_{n+1}+\mathcal{N}\left(0, \boldsymbol{R}_{n+1}\right)
         \end{aligned}
 \end{equation}
-$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了和WA滤波器的操作大致符合，测量噪声被设计成：
+$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了正确地表示支撑相和摆动相之间的切换，我们设计了一种根据腿的触地状态
+来调整腿部运动学信息的噪声大小。
 
-和 被设计成：
+我们用$\rho_{trust}$来表示某一条腿的运动学信息的可信度，由于我们的预测模型假设腿和地面是相对静止的，因此摆动腿运动学信息的可信度为0，摆动腿的相位和可信度$\rho_{trust}$的关系如\aref{fig:kin_trust}。
+在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里我们用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的状态具体有多长。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.8\linewidth]{trust.pdf}
+    \caption{\label{fig:kin_trust}支撑腿运动学信息可信度随相位变化图}
+\end{figure}
 
-和 是固定的名义标准差。 的值向下会饱和到一个较小的正值 来避免除0。右腿的测量噪声模型也采用了类似的放缩。
-
-过程噪声被建模成：
-
-其中 是加速度计的固定均方根误差， 也是自适应放缩的足端位置的标准差，这样的噪声模型使得估计器可以在走路的过程中自动捕捉摆动腿的位置变化。
-为了给这个过程提供更多的灵活性，噪声模型通过一个inverse logistic sigmoid做了放大：
-
-其中 是足端速度变化的名义方差。随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计。
+运动学测量的方差根据可信度$\rho_{trust}$计算，随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计，具体的算法流程在\aref{alg:com_state_est}中给出。
 \begin{algorithm}[htb]
 \setstretch{1.3}
 \caption{质心状态估计迭代过程} 
@@ -764,35 +791,46 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 \end{algorithmic}
 \end{algorithm}
 \section{实物实验}
+借助动作捕捉系统，我们验证了质心位置估计的准确性。实验环境如\aref{fig:capture_exp}所示，对比行走过程中质心位置估计结果和动作捕捉的数据(\aref{fig:com_pos_est})，可以看出二者基本相符。
+图中虚线内的部分是由于机器人走到了动捕镜头的盲区，所以出现了较大的偏差。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.8\linewidth]{动捕.jpg}
+    \caption{\label{fig:capture_exp}动作捕捉实验图}
+\end{figure}
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.\linewidth]{rectangle.pdf}
     \caption{\label{fig:com_pos_est}质心位置估计结果}
 \end{figure}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=1.\linewidth]{rectangle_track.pdf}
-    \caption{\label{fig:com_pos_track}质心位置跟踪曲线}
-\end{figure}
 
 \chapter{基于二次规划的双足机器人运动控制器}
-
+本章提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人WuKong-IV上进行了实现。该控制架构的核心是一个二次规划问题，
+该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
+我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
+以及在斜面上的多接触点平衡(后者仅在仿真中实现)
 \section{实验平台介绍}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=.4\linewidth]{正视图.png}
-    \caption{\label{fig:centroid}WuKong-IV双足机器人实物样机}
+    \subcaptionbox{正视图\label{subfig:wukong_front}}
+        {%
+            \includegraphics[height = .5\linewidth]{正视图.png}}
+    \subcaptionbox{侧视图\label{subfig:wukong_side}}
+        {%
+            \includegraphics[height = .5\linewidth]{侧视图.png}}
+    \caption{WuKong-IV双足机器人实物样机\label{fig:wukong_pic}}
 \end{figure}
-本文研究基于双足机器人WuKong-IV实验平台实现，实物图见图2.1，WuKong-IV双
-足机器人是浙江大学研发的双足仿人机器人移动实验平台。机器人身高约1.3m，重约
-48kg，其中大腿连杆长度为0.3m，小腿连杆长度0.285m。全身共有21个自由度，其中
+本文研究基于双足机器人WuKong-IV实验平台实现，实物图见\aref{fig:wukong_pic}，WuKong-IV双
+足机器人是浙江大学研发的双足仿人机器人移动实验平台。机器人身高约1.5m，重约
+46kg，其中大腿连杆长度为0.3m，小腿连杆长度0.3m。全身共有21个自由度，其中
 左腿与右腿各有6个自由度，腰关节有1个自由度，左手臂与右手臂各有4个自由度。
 其中每条腿的髋关节部分有3个自由度，按照关节旋转方向将髋关节3个自由度命名为
 髋关节侧摆关节，髋关节俯仰关节，髋关节偏航关节。机器人膝关节有1个
 自由度，踝关节有两个自由度。机器人腿部的每个自由度均由高能量密度的无刷直流电机执行，采用“大力矩
 电机+低减速比”结构，腰关节采用的为高转速力矩电机。其中踝关节电机采用了连杆结构，
 其余关节电机均采用齿轮减速器，减速比恒定不变，腿部各关节电机与关节信息见\aref{joint_motor}。
-\begin{table}[!htbp]
+\begin{table}[htbp]
 	\centering
 	\caption{WuKong-IV双足机器人各关节信息}
 	\label{joint_motor}
@@ -852,15 +890,21 @@ Y轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯
     \includegraphics[width=.4\linewidth]{简化连杆.eps}
     \caption{\label{fig:link_model}WuKong-IV双足机器人的简化连杆模型}
 \end{figure}
-\section{双足机器人建模与控制器设计}
+\section{双足机器人动力学建模与控制器设计}
 
 本文提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人Atlas上进行了实现。该控制架构的核心是一个二次规划问题，
 该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
 我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
 以及在斜面上的多接触点平衡(后者仅在仿真中实现)。
-\section{质心动力学}
-这部分简要地回顾了机器人的质心动力学的一些关键性质。对于更深层次的讨论，见[25]。
-在本文中，我们把机器人看作刚体，其有广义关节力矩向量$\tau \in {{\mathbb{R}}^{n}}$，关节构型向量$q\in {{\mathbb{R}}^{m}}$，
+\subsection{质心动力学}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.8\linewidth]{质心模型.eps}
+    \caption{\label{fig:com_model}WuKong-IV双足机器人质心模型}
+\end{figure}
+% 这部分简要地回顾了机器人的质心动力学的一些关键性质。对于更深层次的讨论，见[25]。
+% 在本文中，
+我们把机器人看作刚体，其有广义关节力矩向量$\tau \in {{\mathbb{R}}^{n}}$，关节构型向量$q\in {{\mathbb{R}}^{m}}$，
 关节速度向量$v\in {{\mathbb{R}}^{n+6}}$（区分$v$和$\dot q$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是rpy来表示浮动基姿态)，
 同时使用最少的参数来表示速度向量(比如使用角速度而不是四元数的导数)）。我们假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
 \begin{equation}
@@ -894,7 +938,7 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
 \end{equation}
 \aref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，我们在后续的控制架构中利用了这一点。
 
-\section{控制架构}
+\subsection{控制架构}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.\linewidth]{qp控制框架.eps}
@@ -907,7 +951,7 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
 3）	期望质心动量的变化率。
 QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器输出关节加速度和与环境接触的连杆所受的环境接触力。
 这些信息随后通过一种逆动力学算法来计算期望的关节力矩。计算出的力矩随后用来确定发送给机器人关节电机的力矩指令。
-\subsection{期望运动}
+\subsubsection{期望运动}
 在我们的架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\aref{equ:euler_wrench}等式左边的部分。
 我们将运动任务定义为和机器人期望的广义速度向量线性相关的方程，${\dot{\boldsymbol{v}}}_{d}\in {\mathbb{R}}^{(n+6)}$，
 包括了机器人浮动基关节相对于世界系的空间加速度。$n$是驱动关节的数量。第$i$个运动任务可以写成
@@ -917,7 +961,7 @@ QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器�
 \end{equation}
 
 
-\subsection{外部力旋量}
+\subsubsection{外部力旋量}
 本节是关于动量变化率方程\aref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
 两种形式的地面接触是可行的：单边地面接触(4.2.1)和有限抓地力接触(4.2.2)。其他的待补偿的外部力旋量 在4.2.3中讨论。
 \subsubsection{单边地面接触}
@@ -969,33 +1013,32 @@ ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\tim
    & {{\boldsymbol{\beta}}_{im}} \\ 
   \end{aligned} \right]
   $。
-  实际我们用了和接触的刚体表面固定的坐标系的面法向量${{\boldsymbol{n}}_{j}}$。我们更愿意使用Pollard和Reitsma的射线参数化，
-  而不是Stewart和Trinkle的另一种参数化，因为射线参数化每个接触点要求的决策变量都会少一个。
+  实际我们用了和接触的刚体表面固定的坐标系的面法向量${{\boldsymbol{n}}_{j}}$。
+%   我们更愿意使用Pollard和Reitsma的射线参数化，
+%   而不是Stewart和Trinkle的另一种参数化，因为射线参数化每个接触点要求的决策变量都会少一个。
 \subsection{QP构建过程}
 \begin{equation}
     \label{equ:qp_control}
     \begin{aligned}
-       \underset{{{{\dot{v}}}_{\text{d}}},\rho }{\mathop{\operatorname{minimize}}}\,\quad {{\left( A{{{\dot{v}}}_{\text{d}}}-b \right)}^{\top }}&{{C}_{{\dot{h}}}}\left( A{{{\dot{v}}}_{\text{d}}}-b \right)+{{\rho }^{\top }}{{C}_{\rho }}\rho +\dot{v}_{\text{d}}^{\top }{{C}_{{\dot{v}}}}{{{\dot{v}}}_{\text{d}}} \\ 
-        \text{subject to}\quad A{{{\dot{v}}}_{\text{d}}}+\dot{A}v&={{W}_{g}}+Q\rho +\sum\limits_{i}{{{W}_{\text{ext },i}}} \\ 
-        J{{{\dot{v}}}_{\text{d}}}&=p \\ 
-        {{\rho }_{\min }}&\le \rho \le {{\rho }_{\max }} 
+       \underset{{{{\dot{\boldsymbol{v}}}}_{\text{d}}},\boldsymbol{\rho}}{\mathop{\operatorname{minimize}}}\,\quad {{\left( \boldsymbol{A}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}-\boldsymbol{b} \right)}^{\top }}&{{C}_{{\dot{\boldsymbol{h}}}}}\left( \boldsymbol{A}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}-\boldsymbol{b} \right)+{{\boldsymbol{\rho} }^{\top }}{{\boldsymbol{C}}_{\boldsymbol{\rho} }}\boldsymbol{\rho} +\dot{\boldsymbol{v}}_{\text{d}}^{\top }{{\boldsymbol{C}}_{{\dot{\boldsymbol{v}}}}}{{{\dot{\boldsymbol{v}}}}_{\text{d}}} \\ 
+        \text{subject to}\quad \boldsymbol{A}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}+\dot{\boldsymbol{A}}\boldsymbol{v}&={\boldsymbol{{}W}_{g}}+\boldsymbol{Q}\boldsymbol{\rho} +\sum\limits_{i}{{{\boldsymbol{W}}_{\text{ext },i}}} \\ 
+        \boldsymbol{J}{{{\dot{\boldsymbol{v}}}}_{\text{d}}}&=\boldsymbol{p} \\ 
+        {{\boldsymbol{\rho} }_{\min }}&\le \boldsymbol{\rho} \le {{\boldsymbol{\rho} }_{\max }} 
       \end{aligned}
 \end{equation}
-其中，$b={{\dot{h}}_{d}}-\dot{A}v$，${{\dot{h}}_{d}}\in {{\mathbb{R}}^{6}}$表示期望的质心动量变化率。
-${{C}_{{\dot{h}}}},\ {{C}_{\rho }},\ {{C}_{{\dot{v}}}}$是由更上层的控制器决定的目标函数权重矩阵。5.4给出了行走行为下的权重矩阵示例。
-\begin{table}[!htbp]
+其中，$\boldsymbol{b}={{\dot{\boldsymbol{h}}}_{d}}-\dot{\boldsymbol{A}}\boldsymbol{v}$，${{\dot{\boldsymbol{h}}}_{d}}\in {{\mathbb{R}}^{6}}$表示期望的质心动量变化率。
+${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho} }},{\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$是由更上层的控制器决定的目标函数权重矩阵。\aref{tab:qp_weight}给出了行走行为下的权重矩阵示例。
+\begin{table}[htbp]
 	\centering
-	\caption{频率型、强度型和相对比型指标}
-	%\label{频率型、强度型和相对比型指标}也可以用这个
-	\begin{tabular}{lp{3cm}p{3cm}p{4cm}}
+	\caption{权重矩阵的数值}
+	\label{tab:qp_weight}
+	\begin{tabular}{m{2cm}<{\centering}m{2cm}<{\centering}}
 		\toprule  %添加表格头部粗线
-		\fangsong{参数符号}   &数值  \\
+		\fangsong{参数名称}   &数值  \\
 		\midrule  %添加表格中横线
-		概念    & 近似反映某一时间出现概率\\
-		计算公式 &  某事件发生的个体数/可能发生某件事的个体数$\times$k\\
-		有无量纲 &无 \\
-		取值范围 &【0,1】\\
-		本质   & 大样本时作为概率近似值分子式分母的一部分\\
+		${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}}$    & $\mathbf{I}$\\
+		${\boldsymbol{{C}}_{\boldsymbol{\rho} }}$ &  $0.01 \mathbf{I}$ \\
+		${\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$ & $0.05 \mathbf{I}$ \\
 		\bottomrule %添加表格底部粗线
 	\end{tabular}
 \end{table}
@@ -1044,7 +1087,11 @@ ${{C}_{{\dot{h}}}},\ {{C}_{\rho }},\ {{C}_{{\dot{v}}}}$是由更上层的控制�
 \end{algorithmic}
 \end{algorithm}
 \section{行走实验}
-
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1.\linewidth]{rectangle_track.pdf}
+    \caption{\label{fig:com_pos_track}质心位置跟踪曲线}
+\end{figure}
 \chapter{双足机器人质心轨迹优化}
 \section{基于QP的全身控制器}
 机器人运动由基于QP的全身控制器控制[22]，该控制器输出一组期望关节加速度，包括浮动基关节在惯性系$\mathcal{I}$下的空间加速度，
