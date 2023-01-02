@@ -39,9 +39,9 @@
 早在20世纪60年代末，日本就开始了对仿人仿人机器人的研究。日本早稻田大学的Ichiro Kato教授于1969~1971年设计制作了液压驱动的
 仿人机器人WL-3以及WL-5（\aref{subfig:wl5}），并以此为基础在1973年研制了仿人机器人WABOT-1 （\aref{subfig:wabot1}），这也被认为是最早的现代仿人机器人。
 尽管这些机器人运动能力相当差，只能实现一些静态动作，但也在客观上引发了学术界和产业界对仿人仿人机器人研究的兴趣。
-
 \begin{figure}[htbp]
     \centering
+    \raggedbottom
     \subcaptionbox{WL-5\label{subfig:wl5}}
         {%
             \includegraphics[height = .5\linewidth]{WL-5.jpg}}
@@ -50,17 +50,17 @@
             \includegraphics[height = .5\linewidth]{WABOT-1.jpg}}
     \caption{早稻田大学研制的早期仿人机器人\label{fig:japan_old}}
 \end{figure}
+%\vspace{-8pt}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.\linewidth]{asimo.jpg}
     \caption{\label{fig:asimo}本田公司研制的ASIMO仿人机器人及其历代原型机}
 \end{figure}
-
+%\vspace{-8pt}
 20世纪80年代，日本本田公司（Honda）也开始了仿人机器人的研究，出于控制方便和动力源可携带等方面的考虑，本田选择了电机驱动的技术路线，
 经过E0到E6的七代步行样机研发，以及加入仿人上半身的P1到P2的原型机迭代，以及基于P系列原型机做出的小型化改进，终于在2000年推出了著名的
 仿人机器人ASIMO（\aref{fig:asimo}）。 ASIMO具有良好的外观设计，并且集成了视觉识别、语音交互等技术，是最为人所熟知的仿人机器人之一。
 本田也不断地对ASIMO¬进行改进，到2011年时ASIMO的奔跑速度就达到了9km/h，并能完成上下台阶、倒水等展示任务\cite{Honda}。
-
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{HRP-1\label{subfig:HRP-1}}
@@ -88,19 +88,18 @@
 
     \caption{HRP系列仿人机器人\label{fig:japan_hrp}}
 \end{figure}
-
+%\vspace{-8pt}
 除ASIMO外，日本产业技术综合研究院也在1998年开启了仿人机器人项目（Humanoid Robotics Project, HRP），HRP系列（\aref{fig:japan_hrp}）
 也采取了电机位置伺服驱动的思路，2018年第五代最新的HRP-5P发布（\aref{subfig:HRP-5P}）。HRP-5P高182cm，重101kg，搭载的视觉和激光传感器可以识别工具类别并灵活使用工具，
 并且具备搬运木板等较重负载的能力\cite{HRP}，体现了HRP系列仿人20多年的研究积累。
-
 \begin{figure}[htbp]
     \centering
-    \includegraphics[height=.35\textwidth]{s-one1.jpg}
-    \includegraphics[height=.35\textwidth]{s-one2.jpg}
-    \includegraphics[width=.6\textwidth]{s-one3.jpg}
+    \includegraphics[height=.3\textwidth]{s-one1.jpg}
+    \includegraphics[height=.3\textwidth]{s-one2.jpg}
+    \includegraphics[height=.3\textwidth]{s-one3.jpg}
     \caption{\label{fig:s-one}S-One机器人完成DRC的各项任务}
 \end{figure}
-
+%\vspace{-8pt}
 在参与HRP计划的研究机构中，东京大学的情报工学研究室（Johou Systems Kougaku Laboratory，简称JSK）取得的成果较为突出，2010年，JSK的Urata和Nakanishi
 创造性地给伺服电机加入液冷系统，大大提高了电机的散热效率，再加上他们设计的大电流驱动器，整套驱动系统的功率密度得到了显著提升。
 他们将改造过的驱动系统安装在了一对源于HRP-3的腿上从而得到了HRP3L-JSK（\aref{subfig:HRP3L-JSK}），HRP3L-JSK强大的驱动性能使其同时具有了快速运动和承受大负载的能力。
@@ -114,7 +113,6 @@ SCHAFT也在2013年被Google收购。SCHAFT之后在2016年发布了其新研发
 Planar One-Leg Hopper（\aref{subfig:one-leg-2d}），该机器人由气缸驱动腿部的摆动和伸缩，可以实现平面约束下连续的稳定跳跃；在1983至1984年这个平面单腿机器人被拓展到了三维空间，
 3D One-Leg Hopper（\aref{subfig:one-leg-3d}）实现了在三维空间的连续稳定跳跃；1985至1990年间，Raibert又将平面单腿机器人拓展成为平面仿人机器人Planar Biped（\aref{subfig:biped-2d}），
 实现了平面约束下的奔跑、越障、空翻等动作；后面Planar Biped 又进一步被拓展为3D Biped（\aref{subfig:biped-3d}），该仿人机器人能够在三维空间进行跑跳运动并完成空翻动作\cite{raibert1986legged}。
-
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{Planar One-Leg Hopper\label{subfig:one-leg-2d}}
@@ -125,6 +123,7 @@ Planar One-Leg Hopper（\aref{subfig:one-leg-2d}），该机器人由气缸驱�
             \includegraphics[height = .45\linewidth]{leglab2.jpg}}
     \caption{MIT LegLab 早期的单腿跳跃机器人\label{fig:leglab}}
 \end{figure}
+%\vspace{-8pt}
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{Planar Biped\label{subfig:biped-2d}}
@@ -135,11 +134,10 @@ Planar One-Leg Hopper（\aref{subfig:one-leg-2d}），该机器人由气缸驱�
             \includegraphics[height = .425\linewidth]{leglab4.jpg}}
     \caption{MIT LegLab 早期的仿人机器人\label{fig:leglab_biped}}
 \end{figure}
-
+%\vspace{-8pt}
 此后Raibert离开MIT，创建了波士顿动力公司（Boston Dynamics）继续进行腿足机器人的相关研究。2009年，波士顿动力发布了新一代的仿人机器人PETMAN（\aref{fig:leglab_biped}），
 PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的液压驱动方案，它能模仿人的行走步态，并具有一定抗外界干扰的能力[8]。在PETMAN的基础上，
 波士顿动力公司从2013年开始又进一步研发了Atlas，为其升级了动力系统，并增加了深度相机、激光雷达等传感器。Atlas被IHMC使用参加了DRC2015(\aref{fig:atlas})并取得了第二名。
-
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{PETMAN Prototype\label{subfig:biped-2d}}
@@ -155,11 +153,10 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
     \includegraphics[height=.42\linewidth]{atlas.jpg}
     \caption{\label{fig:atlas}IHMC参加DRC2015使用的Atlas机器人}
 \end{figure}
-
+%\vspace{-8pt}
 随后波士顿动力公司将Atlas进一步小型化，为其开发了人机协作搬运货物等功能。小型化的Atlas能够自带电池在野外复杂环境行走，不再依赖于实验室的理想环境。从2018年开始，
 波士顿动力公司每年都会发布Atlas的最新进展，采取液压驱动方案的Atlas也被公认为是世界上最先进的仿人仿人机器人。到2021年，Atlas已经能够完成后空翻、高难度跑酷、
 甚至是跳舞等各种复杂高动态动作（\aref{fig:atlas_dance}），目前其他所有公开的仿人仿人机器人都无法在运动能力上望其项背。
-
 \begin{figure}[htbp]
     \centering
     \includegraphics[height=.43\linewidth]{dance1.jpg}
@@ -168,18 +165,16 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
     \includegraphics[height=.4\linewidth]{dance4.jpg}
     \caption{\label{fig:atlas_dance}Atlas机器人完成各种高难度动作}
 \end{figure}
-
+%\vspace{-8pt}
 除Atlas外，美国的其他研究机构也在仿人机器人领域取得了瞩目的成就。密歇根大学的Jessy Grizzle教授在1997年开始研究平面仿人机器人，先后研发了RABBIT（\aref{subfig:RABBIT}）
 和MABEL（\aref{subfig:MABEL}），MABEL利用弹性机构储能，大大突破了电机功率密度的限制，可在平面约束下以1.95m/s进行奔跑，并且能够跨越障碍。在此基础上，Grizzle又和
 俄勒冈州立大学的Jonathan Hurst教授合作研发了ATRIAS\cite{rezazadeh2015toward}（\aref{subfig:ATRIAS}）以及MARLO\cite{buss2014preliminary}（\aref{subfig:MARLO}）
 两代3D仿人机器人，设计有板簧储能元件以及轻量化的腿部连杆，几乎所有的质量都集中在身体部位，能以最高9.1km/h的速度奔跑，并能应对台阶、室外斜坡等复杂路况。
-
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{RABBIT\label{subfig:RABBIT}}
         {%
             \includegraphics[height = .225\textheight]{michigan1.jpg}}
-    \hspace{1in}
     \subcaptionbox{MABEL\label{subfig:MABEL}}
         {%
             \includegraphics[height = .225\textheight]{michigan2.png}}
@@ -187,17 +182,15 @@ PETMAN继承了MIT LegLab 时期的驱动思路，采用了同为流体驱动的
     \subcaptionbox{ATRIAS\label{subfig:ATRIAS}}
         {%
             \includegraphics[height = .225\textheight]{michigan3.jpg}}
-    \hspace{1in}
     \subcaptionbox{MARLO\label{subfig:MARLO}}
         {%
             \includegraphics[height = .225\textheight]{michigan4.jpg}}
     \caption{Jessy Grizzle和Jonathan Hurst合作研发的仿人机器人\label{fig:michigan_biped}}
 \end{figure}
-
+%\vspace{-8pt}
 Jonathan Hurst在此前研究的基础上创办了Agility Robotics，而后者于2017年发布了仿人机器人Cassie\cite{Cassie}（\aref{subfig:Cassie}）。Cassie由电机驱动，每条腿具备5个驱动自由度和
 2个欠驱动自由度，能以2.1m/s的速度高速行走，并具备对户外复杂地形的良好适应能力。2019年Agility Robotics又发布了给cassie加入上身和双臂的仿人机器人Digit\cite{Digit}（\aref{subfig:Digit}），
 Digit的设计目标在于和无人驾驶车队配合，解决无人配送最后的送货上门问题。
-
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{Cassie\label{subfig:Cassie}}
@@ -209,7 +202,7 @@ Digit的设计目标在于和无人驾驶车队配合，解决无人配送最后
             \includegraphics[height = .4\linewidth]{digit.jpg}}
     \caption{Agility Robotics研发的两款仿人机器人产品\label{fig:michigan_biped}}
 \end{figure}
-
+%\vspace{-8pt}
 \subsection{其他国家仿人机器人研究现状}
 
 德国慕尼黑工业大学在2009年发布了仿人机器人Lola\cite{buschmann2009humanoid}。Lola多个关节采用了电机+滚珠丝杆的传动方式，尽可能减小腿部的转动惯量，可以以2.4km/h的速度步行。在2021年最新发布的视频中，
@@ -220,7 +213,7 @@ Lola以及可以应对不规则的路面，并可以在走过易打滑路面的�
     \includegraphics[width=0.60\textwidth]{lola.jpg}
     \caption{\label{fig:lola}慕尼黑工大Lola机器人手臂辅助行走}
 \end{figure}
-
+%\vspace{-8pt}
 意大利技术研究院（Italian Institute of Technology，简称IIT）在腿足机器人领域有着许多卓越的成果，2007年IIT推出了儿童尺寸的仿人机器人iCub\cite{tsagarakis2007icub}（\aref{subfig:iCub}），iCub装备了
 具有触觉感知的人造皮肤等一系列传感器，但行走并不是它的主要设计目标，因此iCub的运动能力很差。除了iCub外，IIT在2012年公布了以行走功能为重点的COMAN\cite{dallali2012global}（\aref{subfig:COMAN}），
 它的关节由SEA驱动，SEA带来的关节力控制效果使得COMAN在站立平衡恢复方面展现出优异的性能，但电机的功率限制决定了COMAN的行走性能非常一般。之后2013年IIT又参与了欧盟的
@@ -239,7 +232,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
             \includegraphics[height = .4\linewidth]{walkman.jpg}}            
     \caption{Agility Robotics研发的两款仿人机器人产品\label{fig:iit_biped}}
 \end{figure}
-
+%\vspace{-8pt}
 韩国先进技术研究院（Korea Advanced Institute of Science and Technology，简称KAIST）从2002年开始迭代研发了一系列KHR/HUBO仿人机器人，从2002年的KHR-1开始，
 到2013年参加DRC的DRC-HUBO已经是第七代了。DRC-HUBO采用轮腿混合的设计，既能以仿人形态行走，也能跪下利用膝盖上的轮子移动\cite{zucker2015general}（\aref{fig:kaist_hubo}）。
 可以根据不同情境选择移动方式的优势使得DRC-HUBO最终夺得了DRC2015的冠军。
@@ -251,12 +244,12 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     \includegraphics[height=.4\linewidth]{kaist3.jpg}
     \caption{\label{fig:kaist_hubo}KAIST-HUBO机器人及其多种运动形态}
 \end{figure}
-
+%\vspace{-8pt}
 \subsection{我国仿人机器人研究现状}
 早在1985年哈尔滨工业大学就研制了HIT-III仿人机器人，这也被认为是我国最早的仿人机器人\cite{谢涛2002}。该机器人由电机驱动，仅仅能够进行基本的静态步行。
 国防科技大学1995年公布的KDW-III仿人机器人也仅能实现0.36km/h的静态步行。随后国防科技大学又在2001年公布了仿人机器人“先行者”（\aref{subfig:poineer}），是国内第一台具有可运动四肢的仿人机器人。
 北京理工大学2000年开始了仿人机器人的研究，之后发布了“汇童”系列仿人机器人（\aref{subfig:sboy}）。2006年发布的第二代汇童机器人已经具备了1km/h的动态行走能力，同时可以实现打太极、舞剑等全身动作。
-第四代和第五代又分别实现了表情控制和打乒乓球的功能。目前最新的第六代汇童机器人可以实现倒地爬起、原地跳跃等功能\cite{huang2019historical}。浙江大学于2011年公布了仿人机器人KONG-II\cite{sun2011balance}（\aref{subfig:KONG}）。
+第四代和第五代又分别实现了表情控制和打乒乓球的功能。目前最新的第六代汇童机器人可以实现倒地爬起、原地跳跃等功能\cite{huang2019historical}。浙江大学于2011年公布了仿人机器人KONG\cite{sun2011balance}（\aref{subfig:KONG}）。
 该机器人全身共计32个自由度，高160cm，重65kg，步行速度可达1.07km/h，能够实现和人对打乒乓球的功能。
 
 \begin{figure}[htbp]
@@ -275,28 +268,24 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     %         \includegraphics[height = .4\linewidth]{domestic3.jpg}}         
     \caption{国内部分仿人机器人\label{fig:domes_biped}}
 \end{figure}
-
+%\vspace{-8pt}
 截至2022年，国内公开的仿人机器人中，更多还是借鉴了日本在仿人机器人领域的技术路线，采用高速电机加大速比减速器的关节驱动方案，运动性能基本还都局限在低速静态步行，
 难以实现仿人机器人的动态步行，相较国外还有相当大的差距。
 \section{腿足运动控制最新进展}
-腿的作用在于，机器人能用腿上的末端执行器来推“地”从而为身体提供主动避震，
+腿的作用在于，机器人能用腿上的末端执行器来推“地”从而为身体提供主动支撑力和避震，
 使得机器人身体的运动要比地表的轮廓更平滑。我们把所有用来推“地”的末端执行器统一叫做“足”，
-不管它们的形式和功能具体是什么。腿可以暂时离开地面来迈步，因此可以通过不连续的地形，
+尽管这些足有着不同的形态或其他功能。腿可以暂时离开地面来迈步，因此可以通过不连续的地形，
 在轮子无法到达的地方运动。无论腿的数量、运动学构型和自由度数，
 足的类型(平面足，可变形足，点足，轮足)如何变化，根本的原理是一样的。
-因此，最近几年原本在平面足人形机器人上发展的方法也快速适配了四足机器人以及其他形式足的腿足机器人。
+因此，最近几年原本在平面足仿人机器人上发展的方法也快速适配了四足机器人以及其他形式足的腿足机器人。
 
 控制的目标是找到足够多的可以在足和环境之间建立接触的位置，并且执行对应的动力学可行的轨迹。
 为了处理腿足运动控制的关键难题——交替的触地和对应的接触力约束，
-目前几乎推广到所有形式的腿足机器人的通用方法大量使用了数值轨迹优化及其在线实现——MPC。
+目前几乎推广到所有形式的腿足机器人的通用方法大量使用了数值轨迹优化及其在线实现。
 
 除了将这种通用的方法适配到不同数量的腿和不同类型的足，
 近几年在腿足运动控制领域的主要进展是如何用“提纯”的模型和“提纯”的数值模型来处理轨迹优化问题。
 这使得从在多为平地的仿人行走到更多样的机器人形态
-，更通用的不平整地形的多接触运动的转换成为可能。
-除了将这种通用的方法适配到不同数量的腿和不同类型的足，
-近几年在腿足运动控制领域的主要进展是如何用“提纯”的模型和“提纯”的数值模型来处理
-轨迹优化问题。这使得从在多为平地的仿人行走到更多样的机器人形态
 ，更通用的不平整地形的多接触运动的转换成为可能。
 
 \subsection{腿足运动控制的典型方法}
@@ -319,7 +308,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.5\linewidth]{质心动力学.eps}
-    \caption{\label{fig:centroid}质心动力学及其与全身动力学的联系释图(图源~\cite{carpentier2016center})}
+    \caption{\label{fig:centroid}质心动力学及其与全身动力学的联系释图}
 \end{figure}
 这种方法在现在是机器人运动控制的核心，但在需要紧密协调机器人平衡和姿态的情况下，基于完整多刚体拉格朗日动力学的方法才是首选，
 因为它天然包含了质心动力学\cite{orin2013centroidal}。
@@ -361,58 +350,52 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 和Ascento\cite{klemm2020lqr}等轮足机器人上。
 
 \section{本文的主要研究内容}
-本文针对仿人机器人跑跳步态的实现，首先简要介绍仿人机器人的实验平台“悟空
--II”机器人，其次根据仿人机器人状态机设计，分别对机器人处于单腿支撑相时与双腿
+本文针对仿人机器人跑跳步态的实现，首先简要介绍仿人机器人的实验平台“悟空-IV”机器人，
+其次根据仿人机器人状态机设计，分别对机器人处于单腿支撑相时与双腿
 腾空相时设计控制器，同时面对机器人在前进过程中前进方向出现偏差的问题，提出相
 应的解决方法。
 
 本文的主要研究内容：
 
-1) 构造了仿人机器人跑跳步态的状态机，设计了姿态平衡控制器和高度控制器。
-将仿人机器人前进过程分为单腿支撑相与双腿腾空相。机器人处于单腿支撑相
-时，设计控制器保持身体的姿态；利用对地面反作用力的控制维持身体质心高
-度，为机器人能够采用跑跳步态前进提供前提。
+1) 设计了仿人机器人状态估计器。首先对仿人机器人每条腿触地的概率进行了估计，
+为步行状态机提供了切换信号；其次对仿人机器人质心在世界系下的位置、速度进行了估计
+为后续的运动控制和轨迹规划建立了基础。
 
-2) 设计了仿人机器人快速运动的速度控制器。描述结合运动学与陀螺仪数据，采
-用卡尔曼滤波器估计质心速度的方法；重点介绍摆动腿的轨迹规划与落脚点控
-制，根据LIP 模型控制，利用机器人摆动腿的落脚点实现对机器人的速度控制，
-同时规划摆动腿摆动曲线以及添加摆动腿摆动过程中的重力补偿。
+2) 设计了基于二次规划的仿人机器人运动控制器。将仿人机器人每条腿的运动分为支撑相和摆动相，
+摆动相采用位置控制，跟随根据质心速度计算出的落脚点位置；支撑相将上层规划器规划出的运动行为
+组合成一个二次规划问题，求解出关节的期望力矩作为电机的前馈输入，状态反馈得到的期望力矩作为
+电机的反馈输入。
 
-3) 设计了仿人机器人的转向运动控制。针对机器人前进过程中会出现方向偏差的
-问题，采用对支撑腿髋关节偏航关节的运动规划实现机器人低速运动下的方向
-控制；机器人高速前进时，采用利用腰关节转动平衡机器人支撑腿与摆动腿运
-动产生的转动力矩；同时将仿人机器人的偏转力矩加入机器人的姿态控制器中，
-期望实现仿人机器人的方向上的控制。
+3) 设计了基于轨迹优化的仿人机器人运动规划器。将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
+滑动摩擦约束、转动摩擦约束作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
+利用非线性规划求解器求解，最终得到机器人质心的期望轨迹。
 
-4) 在WuKong-IV仿人机器人实验平台上开展实验，验证上述控制算法。成功验证
-身体姿态控制器与质心高度控制器的有效性；利用卡尔曼滤波器获得更加准确
-的质心速度，利用落脚点控制实现WuKong-IV机器人前进速度的控制；改进机
-器人前进过程中的方向控制。
+4) 在“悟空-IV”仿人机器人实验平台上开展实验，验证上述控制算法。成功验证
+状态估计器的准确性，以及运动控制器，运动规划器的有效性。
 
 \section{本文主要结构}
 根据本文的研究内容以及顺序，各章节的内容安排如下：
 
 第一章 本章主要介绍国内外仿人机器人的情况，对国内外知名仿人机器人简单介绍，
-介绍仿人机器人跑跳步态的研究现状。
+以及仿人机器人运动控制的研究现状。
 
-第二章 本章主要介绍WuKong-IV仿人机器人实验平台，简要描述实物平台的机械结
-构与电气结构，根据实物模型构造简化连杆模型，规定世界坐标系与各连杆
-坐标系的方向，本章介绍了仿人机器人的状态机描述，状态的循环稳定的切
-换形成仿人机器人的跑跳步态，介绍仿人机器人处于单腿支撑下的控制方法，
-实现仿人机器人身体姿态平衡与质心高度平衡。
+第二章 本章主要设计了针对“悟空-IV”仿人机器人设计的状态估计方法。基于线性卡尔曼滤波算法分别设计了仿人机器人触地状态估计
+和浮动基位置速度估计算法，并在实物样机上验证了算法的有效性，后续章节研究内容得以在本章基础上开展。
 
-第三章 本章利用卡尔曼滤波实现对机器人质心速度更准确的估计。介绍仿人机器人
-的速度控制与摆动腿规划，利用摆动腿的落脚点的位置实现对于仿人机器人
-前进速度的控制，规划一个步态周期的摆动腿曲线，为摆动腿的运动增加重
-力补偿。
+第三章 本章主要提出了基于二次规划的仿人机器人运动控制器。根据触地状态设计了机器人的有限状态机，处于摆动相的腿采用位置控制，
+足端轨迹跟随根据质心速度计算出的落脚点位置；处于支撑相的腿将上层规划器规划出的运动行为组合成一个二次规划问题，二次规划的解
+映射到关节空间作为关节电机的前馈输入，和状态反馈得到的反馈输入一起作为关节力矩的输入。最后在“悟空-IV”仿人机器人上进行了轨迹跟踪实验。
 
-第四章 本章针对仿人机器人前进过程中方向偏转的问题，利用规划腰关节摆动实现
-偏转力矩的平衡，同时将偏转考虑进仿人机器人的姿态控制，期望实现前进
-方向的控制。
+第四章 本章主要设计了基于轨迹优化的仿人机器人运动规划器。本章针对仿人机器人上台阶的场景，将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
+滑动摩擦约束、转动摩擦约束作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
+利用非线性规划求解器求解，最终得到机器人上台阶时质心的期望轨迹。最后在“悟空-IV”仿人机器人上进行了实验验证。
 
 第五章 本章对本文工作进行简要总结，提出工作的不足之处，并对进一步的工作提
 出一些展望。
 \chapter{仿人机器人状态估计}
+\section{本章概述}
+本章介绍了利用卡尔曼滤波的方法来实现浮动基坐标的估计，标准卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。\aref{sec:contact_est}和\aref{sec:com_est}分别介绍了对机器人与环境的接触状态和机器人浮动基相对于惯性系的
+位置、速度的估计方法并在“悟空-IV”上进行了行走实验。
 \section{机器人浮动基模型}
 \begin{figure}[htbp]
     \centering
@@ -443,12 +426,10 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
         \boldsymbol{q}_{b_R}
         \end{array}\right) \in \mathbb{R}^3 \times SO(3)
 \end{equation}
-\aref{equ:floating_coor}中$ \boldsymbol{q}_{b_P}$表示浮动基的位置，$\boldsymbol{q}_{b_R}$表示浮动基的姿态。在本文中我们用笛卡尔坐标表示位置，$rpy$姿态角表示姿态，因此$n_b = 6$。
+\aref{equ:floating_coor}中$ \boldsymbol{q}_{b_P}$表示浮动基的位置，$\boldsymbol{q}_{b_R}$表示浮动基的姿态。本文中用笛卡尔坐标表示位置，$rpy$姿态角表示姿态，因此$n_b = 6$。
 
 基于这样的坐标表示，如何利用机器人的本体感知，即惯性测量单元(Inertial Measurement Unit，IMU)和机器人内部关节的编码器，来获得机器人的浮动基坐标，对于实现机器人的稳定运动控制来说是至关重要的。
 
-本章介绍了利用卡尔曼滤波的方法来实现浮动基坐标的估计，标准卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。\aref{sec:contact_est}和\aref{sec:com_est}分别介绍了对机器人与环境的接触状态和机器人浮动基相对于惯性系的
-位置、速度的估计方法。
 \begin{algorithm}[htbp] 
 \setstretch{1.3}
 \caption{线性卡尔曼滤波} 
@@ -474,8 +455,8 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 \end{algorithm}
 \section{触地状态估计}
 \label{sec:contact_est}
-\subsection{概率触地模合}
-实际上，我们不能完全信任控制器会按时将脚抬离或者放回地面，完美地按照规划出的相位执行。同样地，我们也不能假设地面是完全平整的，
+\subsection{概率触地模型}
+实际工程中不能完全信任控制器会按时将脚抬离或者放回地面，完美地按照规划出的相位执行。同样地，我们也不能假设地面是完全平整的，
 由于复杂的地形或者是未知的物体，地面的高度可能是未知的。在没有外部力传感器的情况下，我们必须从关节编码器的数据，本体力感知，
 以及腿的动力学模型来估计外部作用力。编码器有离散误差，同时模型误差会导致在没有外力的时候也会计算出非0的外力。
 这些单一的测量没有一个能告诉我们腿的真实状态，但我们能从每个测量中获取信息，并且用这些信息来得到某条腿是否有可能和地面接触的一个
@@ -669,10 +650,6 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 % 来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
 % 的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
 
-这篇文章的主要贡献在于在WuKong4上进行了原地平衡和行走实验，并且对比(benchmark)了两种简单的状态估计方法。对比试验同样考察了不同传感器
-的贡献度，比如IMU数据的加入，以及用力传感器来检测接触扰动。我们在第二和第三部分提出了两种不同的简化状态估计方法；
-第四部分展示并讨论了实验结果；第五部分给出了实验结论。
-
 \subsection{位置速度线性卡尔曼滤波器}
 扩展卡尔曼滤波在人形和四足机器人的浮动基状态估计上取得了很好的效果。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
 并且在实际中可能很难调整参数。本章使用的状态估计方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。
@@ -809,7 +786,7 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 \end{figure}
 
 \chapter{基于二次规划的仿人机器人运动控制器}
-本章提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人WuKong-IV上进行了实现。该控制架构的核心是一个二次规划问题，
+本章提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人“悟空-IV”上进行了实现。该控制架构的核心是一个二次规划问题，
 该二次规划问题协调了用关节加速度向量的约束表达的运动任务，以及单边的地面接触约束和摩擦约束、关节力矩约束带来的限制。
 该架构在实际硬件平台上得到了验证，可以实现仿人机器人的高速稳定行走，和对期望轨迹的稳定跟随。
 \section{实验平台介绍}
@@ -821,9 +798,9 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
     \subcaptionbox{侧视图\label{subfig:wukong_side}}
         {%
             \includegraphics[height = .5\linewidth]{侧视图.png}}
-    \caption{WuKong-IV仿人机器人实物样机\label{fig:wukong_pic}}
+    \caption{“悟空-IV”仿人机器人实物样机\label{fig:wukong_pic}}
 \end{figure}
-本文研究基于仿人机器人WuKong-IV实验平台实现，实物图见\aref{fig:wukong_pic}，WuKong-IV双
+本文研究基于仿人机器人“悟空-IV”实验平台实现，实物图见\aref{fig:wukong_pic}，“悟空-IV”双
 足机器人是浙江大学研发的仿人仿人机器人移动实验平台。机器人身高约1.5m，重约
 46kg，其中大腿连杆长度为0.3m，小腿连杆长度0.3m。全身共有21个自由度，其中
 左腿与右腿各有6个自由度，腰关节有1个自由度，左手臂与右手臂各有4个自由度。
@@ -835,7 +812,7 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 \begin{table}[htbp]
 	\centering
     \setstretch{1.3}
-	\caption{WuKong-IV仿人机器人各关节信息}
+	\caption{“悟空-IV”仿人机器人各关节信息}
 	\label{joint_motor}
 	\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}m{1.5cm}<{\centering}m{2cm}<{\centering}m{2.5cm}<{\centering}}
 		\toprule  %添加表格头部粗线
@@ -856,9 +833,9 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=.8\linewidth]{关节构型.eps}
-    \caption{\label{fig:centroid}仿人机器人坐标系定义}
+    \caption{\label{fig:coordination}仿人机器人坐标系定义}
 \end{figure}
-在\aref{fig:centroid}定义的机器人坐标系下，按照每个关节的旋转轴方向可以根据转轴分为横滚($roll$) ,
+在\aref{fig:coordination}定义的机器人坐标系下，按照每个关节的旋转轴方向可以根据转轴分为横滚($roll$) ,
 俯仰($pitch$)和偏航($yaw$)三种，因此可以将全部的关节根据基于前一个连杆的旋转角
 度方向定义为横滚角关节、俯仰角关节和偏航角关节。同时定义机器人坐标系下$x$轴、
 $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前俯仰为正角度，向右横滚
@@ -871,7 +848,7 @@ $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前�
 \subsection{简化连杆模型}
 
 实物机器人有着较为复杂的连杆关系与机械结构，为了方便运动学和动力学的运算，
-本文将WuKong-IV仿人机器人的机械结构简化成多连杆模型，如图所示。由于两款机器
+本文将“悟空-IV”仿人机器人的机械结构简化成多连杆模型，如图所示。由于两款机器
 人的简化连杆模型除了连杆长度参数不一致以外其他基本一致，因此两款机器人可以采
 用同一套多连杆模型。关节命名的顺序就是从上文定义的质心位置开始往外延伸依次定
 义。关节0表示腰偏航关节，关节1, 2, 3分别表示左腿髓偏航、左腿髓横滚、左腿髓
@@ -891,7 +868,7 @@ $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前�
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.4\linewidth]{简化连杆.eps}
-    \caption{\label{fig:link_model}WuKong-IV仿人机器人的简化连杆模型}
+    \caption{\label{fig:link_model}“悟空-IV”仿人机器人的简化连杆模型}
 \end{figure}
 \section{仿人机器人动力学建模与控制器设计}
 
@@ -903,13 +880,15 @@ $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前�
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{质心模型.eps}
-    \caption{\label{fig:com_model}WuKong-IV仿人机器人质心模型}
+    \caption{\label{fig:com_model}“悟空-IV”仿人机器人质心模型}
 \end{figure}
 % 这部分简要地回顾了机器人的质心动力学的一些关键性质。对于更深层次的讨论，见[25]。
 % 在本文中，
-我们把机器人看作刚体，其有广义关节力矩向量$\tau \in {{\mathbb{R}}^{n}}$，关节构型向量$q\in {{\mathbb{R}}^{m}}$，
-关节速度向量$v\in {{\mathbb{R}}^{n+6}}$（区分$v$和$\dot q$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是$rpy$来表示浮动基姿态)，
-同时使用最少的参数来表示速度向量(比如使用角速度而不是四元数的导数)）。我们假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
+将机器人看作刚体，其有广义关节力矩向量$\boldsymbol{\tau} \in {{\mathbb{R}}^{n}}$，关节构型向量$\boldsymbol{q}\in {{\mathbb{R}}^{m}}$，
+关节速度向量$\boldsymbol{v}\in {{\mathbb{R}}^{n+6}}$
+% （区分$\boldsymbol{v}$和$\dot \boldsymbol{q}$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是$rpy$来表示浮动基姿态)，
+% 同时使用最少的参数来表示速度向量(比如使用角速度而不是四元数的导数)）。
+我们假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
 \begin{equation}
     \label{equ:momentum}
     \boldsymbol{h}=\left(\begin{aligned}
@@ -918,14 +897,13 @@ $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前�
       \end{aligned} \right)\in \mathbb{R}^{6}
 \end{equation}
 表示机器人的质心动量，$\boldsymbol{k}\in {{\mathbb{R}}^{3}}$表示质心角动量，$\boldsymbol{l}\in {{\mathbb{R}}^{3}}$
-表示质心线动量(符号表示采用[25])。“质心”表示所有的量都在质心系下表示，质心系和世界系有同样方向的坐标轴，但其原点在机器人的瞬时质心处。
+表示质心线动量。“质心”表示所有的量都在质心系下表示，质心系和世界系有同样方向的坐标轴，但其原点在机器人的瞬时质心处。
 机器人的质心动量就等于所有连杆在质心系下的动量之和。众所周知，无论机器人有多复杂，其质心动力学都是简单的。
 欧拉定律表明机器人的质心动量的变化率就等于施加在机器人上的所有外部力旋量之和。可以写成：
 \begin{equation}
     \label{equ:euler's_law}
     \dot{\boldsymbol{h}}={{\boldsymbol{W}}_{g}}+\sum\limits_{i}{{{\boldsymbol{W}}_{gr,i}}}+\sum\limits_{i}{{{\boldsymbol{W}}_{ext,i}}}
 \end{equation}
-	
 其中${{\boldsymbol{W}}_{g}}={{[\mathbf{0}_{3\times 1}^{\top }\ \ m{{\mathbf{g}}^{\top }}]}^{\top }}$表示重力矩，
 ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环境作用力旋量，${\boldsymbol{W}}_{ext,i}$表示机器人受到的接触力和重力之外的
 其它外部力旋量。注意机器人系统的动量变化率和内部力或者力矩无关。
@@ -934,7 +912,7 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
     \label{equ:euler_linear_equ}
     \boldsymbol{h}=\boldsymbol{A}(q)\boldsymbol{v}
 \end{equation}
-其中$boldsymbol{A}(q)$被称作质心动量矩阵（centroidal momentum matrix,CMM）。将\aref{equ:euler_linear_equ}代入\aref{equ:euler's_law}可以得到
+其中$\boldsymbol{A}(q)$被称作质心动量矩阵（centroidal momentum matrix,CMM）。将\aref{equ:euler_linear_equ}代入\aref{equ:euler's_law}可以得到
 \begin{equation}
     \label{equ:euler_wrench}
     \boldsymbol{A}\dot{\boldsymbol{v}}+\dot{A}v={{\boldsymbol{W}}_{g}}+\sum\limits_{i}{{{\boldsymbol{W}}_{gr,i}}}
@@ -1084,7 +1062,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 \end{algorithm}
 \section{行走实验}
 
-我们在WuKong-IV实物样机上部署了上述算法，并进行了相关行走实验验证了算法的有效性。\aref{fig:track_exp}是轨迹跟踪实验的实验截图，在该实验中，
+我们在“悟空-IV”实物样机上部署了上述算法，并进行了相关行走实验验证了算法的有效性。\aref{fig:track_exp}是轨迹跟踪实验的实验截图，在该实验中，
 我们让机器人跟随一段规划好的五次多项式轨迹，跟踪曲线如\aref{fig:com_pos_track}所示。
 \begin{figure}[htbp]
     \centering
@@ -1097,7 +1075,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     \includegraphics[height=.32\linewidth]{walk_6.jpg}
     \includegraphics[height=.32\linewidth]{walk_7.jpg}
     \includegraphics[height=.32\linewidth]{walk_8.jpg}   
-    \caption{\label{fig:track_exp}WuKong-IV轨迹跟踪实验截图}
+    \caption{\label{fig:track_exp}“悟空-IV”轨迹跟踪实验截图}
 \end{figure}
 \begin{figure}[htbp]
     \centering
@@ -1116,7 +1094,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     \includegraphics[height=.32\linewidth]{fast_walk6.jpg}
     \includegraphics[height=.32\linewidth]{fast_walk7.jpg}
     \includegraphics[height=.32\linewidth]{fast_walk8.jpg}   
-    \caption{\label{fig:track_exp}WuKong-IV快速行走实验截图}
+    \caption{\label{fig:track_exp}“悟空-IV”快速行走实验截图}
 \end{figure}
 \begin{figure}[htbp]
     \centering
@@ -1315,7 +1293,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
 和上文对静摩擦力约束的处理一样，我们替换掉${ }^* \boldsymbol{f}_*$得到下面的不等式约束：
 \begin{equation}
     \label{equ:friction_stack}
-    \boldsymbol{F}_* \boldsymbol{R}_*^{\top}\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* p_*\right) \leq 0
+    \boldsymbol{F}_* \boldsymbol{R}_*^{\top}\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right) \leq 0
 \end{equation}
 其中，
 \begin{equation}
@@ -1458,21 +1436,27 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
     \includegraphics[height=.32\linewidth]{stairs_6.jpg}
     \includegraphics[height=.32\linewidth]{stairs_7.jpg}
     \includegraphics[height=.32\linewidth]{stairs_8.jpg}   
-    \caption{\label{fig:track_exp}WuKong-IV上台阶实验截图}
+    \caption{\label{fig:track_exp}“悟空-IV”上台阶实验截图}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{knee.eps} 
-    \caption{\label{fig:knee_torque}WuKong-IV上台阶膝关节力矩曲线}
+    \caption{\label{fig:knee_torque}“悟空-IV”上台阶膝关节力矩曲线}
 \end{figure}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{stair_tracking.eps} 
-    \caption{\label{fig:track_com}WuKong-IV上台阶质心跟随曲线}
+    \caption{\label{fig:track_com}“悟空-IV”上台阶质心跟随曲线}
 \end{figure}
 \chapter{总结与展望}
 \section{总结}
 
+本文从状态估计、轨迹跟踪、轨迹规划三个方面对仿人机器人的运动控制进行了研究，并在“悟空-IV”仿人机器人实验平台上进行了实验验证，
+成功实现了机器人6km/h的高速稳定行走，以及多级台阶的稳定跨越。
+
+本文各章节的内容和结论如下：
+
+1） 
 % 本文对仿人机器人的运动控制进行了各个层次的研究
 \section{展望}
 % \subsection{落脚点规划的最近进展}
