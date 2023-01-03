@@ -101,7 +101,7 @@
     \caption{\label{fig:s-one}S-One机器人完成DRC的各项任务}
 \end{figure}
 %\vspace{-8pt}
-在参与HRP计划的研究机构中，东京大学的情报工学研究室（Johou Systems Kougaku Laboratory，简称JSK）取得的成果较为突出，2010年，JSK的Urata和Nakanishi
+在参与HRP计划的研究机构中，东京大学的情报工学研究室（Johou Systems Kougaku Laboratory，JSK）取得的成果较为突出，2010年，JSK的Urata和Nakanishi
 创造性地给伺服电机加入液冷系统，大大提高了电机的散热效率，再加上他们设计的大电流驱动器，整套驱动系统的功率密度得到了显著提升。
 他们将改造过的驱动系统安装在了一对源于HRP-3的腿上从而得到了HRP3L-JSK（\aref{subfig:HRP3L-JSK}），HRP3L-JSK强大的驱动性能使其同时具有了快速运动和承受大负载的能力。
 Urata等人之后创建SCHAFT公司，在HRP3L-JSK的基础上开发了S-One。搭载了强大驱动系统的S-One在DRC2013中成功完成了各项任务（\aref{fig:s-one}），以大比分优势取得了第一名，
@@ -215,7 +215,7 @@ Lola以及可以应对不规则的路面，并可以在走过易打滑路面的�
     \caption{\label{fig:lola}慕尼黑工大Lola机器人手臂辅助行走}
 \end{figure}
 %\vspace{-8pt}
-意大利技术研究院（Italian Institute of Technology，简称IIT）在腿足机器人领域有着许多卓越的成果，2007年IIT推出了儿童尺寸的仿人机器人iCub\cite{tsagarakis2007icub}（\aref{subfig:iCub}），iCub装备了
+意大利技术研究院（Italian Institute of Technology，IIT）在腿足机器人领域有着许多卓越的成果，2007年IIT推出了儿童尺寸的仿人机器人iCub\cite{tsagarakis2007icub}（\aref{subfig:iCub}），iCub装备了
 具有触觉感知的人造皮肤等一系列传感器，但行走并不是它的主要设计目标，因此iCub的运动能力很差。除了iCub外，IIT在2012年公布了以行走功能为重点的COMAN\cite{dallali2012global}（\aref{subfig:COMAN}），
 它的关节由SEA驱动，SEA带来的关节力控制效果使得COMAN在站立平衡恢复方面展现出优异的性能，但电机的功率限制决定了COMAN的行走性能非常一般。之后2013年IIT又参与了欧盟的
 Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研发了两款WALK-MAN机器人\cite{tsagarakis2017walk}（\aref{subfig:WALK-MAN}），但运动性能相比COMAN并未有显著的提升。
@@ -234,7 +234,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     \caption{IIT的几款仿人机器人\label{fig:iit_biped}}
 \end{figure}
 %\vspace{-8pt}
-韩国先进技术研究院（Korea Advanced Institute of Science and Technology，简称KAIST）从2002年开始迭代研发了一系列KHR/HUBO仿人机器人，从2002年的KHR-1开始，
+韩国先进技术研究院（Korea Advanced Institute of Science and Technology，KAIST）从2002年开始迭代研发了一系列KHR/HUBO仿人机器人，从2002年的KHR-1开始，
 到2013年参加DRC的DRC-HUBO已经是第七代了。DRC-HUBO采用轮腿混合的设计，既能以仿人形态行走，也能跪下利用膝盖上的轮子移动\cite{zucker2015general}（\aref{fig:kaist_hubo}）。
 可以根据不同情境选择移动方式的优势使得DRC-HUBO最终夺得了DRC2015的冠军。
 
@@ -281,6 +281,27 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 截至2022年，国内公开的仿人机器人中，更多还是借鉴了日本在仿人机器人领域的技术路线，采用高速电机加大速比减速器的关节驱动方案，运动性能基本还都局限在低速静态步行，
 难以实现仿人机器人的动态步行及适应相对不平整的路面或台阶，相较国外还有相当大的差距。
 \section{腿足运动控制的典型方法}
+\subsection{基于ZMP的质心规划控制方法}
+ZMP（Zero Moment Point，零力矩点）最初由Vukobratovic等在1972年提出[26]，Vukobratovic将其作为机器人稳定性的判据，指出当ZMP位于机器人支撑多边形内时，
+机器人受到的合外力不会使其发生倾倒，从而说明机器人是稳定的，这一判据也被双足机器人界广泛接受，成为学界最为重要的双足稳定性判据之一。
+Sardain等人提出了CoP（Center of Pressure，压力中心点）的概念[27]，但后来的研究表明就衡量双足机器人行走稳定性而言，这两个指标等价。
+
+采用高转速小扭矩电机加大速比减速器关节驱动方案的双足机器人，由于传动链上摩擦等非线性因素太多导致难以做到关节实时力控制，
+同时高减速比带来的不可后驱性又导致关节柔顺性很差，这些结构性问题导致这类机器人内生性地选择了关节位置控制，而ZMP的概念又为其方便地提供了规划质心轨迹的依据，
+二者相辅相成，自然地形成了基于ZMP的位置控制技术路线。
+
+ASIMO是采用ZMP方法进行机器人行走控制的代表，前文提到的国内北京理工大学汇童系列机器人和浙江大学KONG-II机器人也均采用了这种规划质心轨迹的方法。
+图1.13给出了从步态参数到实际ZMP的流程图。
+
+基于位置控制的方法，在平地上能起到较好的控制效果，然而一旦路面变得不平整机器人就很难获得实际ZMP点的位置，从而导致控制器规划出的质心轨迹无法使机器人保持稳定。
+并且在受到外力干扰时，控制器也很难快速做出响应，往往导致机器人失稳。抗干扰能力的缺失限制了基于ZMP的控制方法，也限制了仿人机器人的应用场景。
+
+\subsection{基于简化模型的力控制方法}
+关节力控制作为一个较为通用的控制方法，在操作臂领域很早就得到了较为广泛的运用，通过控制关节空间的力矩，可使机器人在操作空间表现出不同的力特性。
+基于力控制的方法，不再追求规划仿人机器人各关节的轨迹，而是直接对机器人关节力矩做控制，使机器人在笛卡尔空间保持平衡，并执行期望的运动。
+力控制方法赋予了仿人机器人对复杂环境的适应能力，同时也能对外力扰动做出比较迅速的响应。
+\subsection{基于全身模型的力控制方法}
+
 腿的作用在于，机器人能用腿上的末端执行器来推“地”从而为身体提供主动支撑力和避震，
 使得机器人身体的运动要比地表的轮廓更平滑。我们把所有用来推“地”的末端执行器统一叫做“足”，
 尽管这些足有着不同的形态或其他功能。腿可以暂时离开地面来迈步，因此可以通过不连续的地形，
@@ -316,7 +337,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.5\linewidth]{质心动力学.eps}
-    \caption{\label{fig:centroid}质心动力学及其与全身动力学的联系释图}
+    \caption{\label{fig:centroid}质心动力学及其与全身动力学的联系释图（图源\cite{carpentier2016center}）}
 \end{figure}
 这种方法在现在是机器人运动控制的核心，但在需要紧密协调机器人平衡和姿态的情况下，基于完整多刚体拉格朗日动力学的方法才是首选，
 因为它天然包含了质心动力学\cite{orin2013centroidal}。
@@ -349,7 +370,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
     \centering
     \includegraphics[width=1.0\linewidth]{仿人经典控制框架.eps}
     \caption{\label{fig:typical_control}典型的控制框架由主要由三阶段组成：接触规划，质心动力学级规划和全身控制
-                (图源~\cite{carpentier2016center})}
+                （图源~\cite{carpentier2016center}）}
 \end{figure}
 \aref{fig:typical_control}所示腿足运控的通用方法，原本是为仿人行走开发的，并且在Kawada的HRP-2\cite{takenaka2009real}，
 本田的Asimo\cite{takenaka2009real}，Aldebaran的Nao\cite{gouaillier2010omni}，波士顿动力的Atlas\cite{Kuindersma2020Recent}等等一系列的机器人上得到了成功的验证。
@@ -404,9 +425,9 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 
 \section{概述}
 
-本章首先介绍了“悟空-IV”仿人机器人实验平台的基本硬件参数，并阐述了机器人的浮动基运动模型。对于仿人机器人来说，得到：1) 准确可靠的每条腿的触地状态，以及：2)浮动基在惯性系下的位置和速度信息是实现鲁棒的运动控制算法的基础。
+本章首先介绍了“悟空-IV”仿人机器人实验平台的基本硬件参数，并阐述了机器人的浮动基运动模型。对于仿人机器人来说，得到准确可靠的每条腿的触地状态，以及浮动基在惯性系下的位置和速度信息是实现鲁棒的运动控制算法的基础。
 
-机器人上安装有惯性测量单元（Inertial Measurement Unit，简称IMU）、关节角度编码器等内部传感器，同时关节力矩电机具备近似线性力矩特性，本章中利用了这些传感器信息的融合来对机器人触地状态和浮动基的位置速度进行了估计。
+机器人上安装有惯性测量单元（Inertial Measurement Unit，IMU）、关节角度编码器等内部传感器，同时关节力矩电机具备近似线性力矩特性，本章中利用了这些传感器信息的融合来对机器人触地状态和浮动基的位置速度进行了估计。
 本章主要使用了线性卡尔曼滤波算法来实现上述状态估计，标准线性卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。
 
 本章节组织如下：\aref{sec:exp_platform}简要介绍了“悟空-IV”仿人机器人实验平台及其基本参数；\aref{sec:floating_base}介绍了仿人机器人运动模型的浮动基描述，基于这种描述的仿人机器人运动控制，需要对浮动基相对惯性系
@@ -458,7 +479,7 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.6\linewidth]{浮动基.eps}
-    \caption{\label{fig:floating_base}仿人机器人浮动基运动模型}
+    \caption{\label{fig:floating_base}仿人机器人浮动基运动模型。“方块”表示移动关节，“圆柱”表示转动关节。}
 \end{figure}
 
 与工业机械臂、轮履式机器人等传统类型机器人的运动不同，仿人机器人或者说腿足机器人的运动包括两个显著的特征：
@@ -486,7 +507,7 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 \end{equation}
 \aref{equ:floating_coor}中$ \boldsymbol{q}_{b_P}$表示浮动基的位置，$\boldsymbol{q}_{b_R}$表示浮动基的姿态。本文中用笛卡尔坐标表示位置，$rpy$姿态角表示姿态，因此$n_b = 6$。
 
-基于这样的坐标表示，如何利用机器人的本体感知，即惯性测量单元(Inertial Measurement Unit，IMU)和机器人内部关节的编码器，来获得机器人的浮动基坐标，对于实现机器人的稳定运动控制来说是至关重要的。
+基于这样的坐标表示，如何利用机器人的本体感知，即IMU和机器人内部关节的编码器，来获得机器人的浮动基坐标，对于实现机器人的稳定运动控制来说是至关重要的。
 
 \begin{algorithm}[htbp] 
 \setstretch{1.3}
@@ -514,12 +535,13 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 \section{触地状态估计}
 \label{sec:contact_est}
 \subsection{概率触地模型}
+要想根据仿人机器人腿的交替运动估计机器人的位置和速度，获得机器人准确的触地信息是至关重要的
 实际工程中不能完全信任控制器会按时将脚抬离或者放回地面，完美地按照规划出的相位执行。同样地，也不能假设地面是完全平整的，
 由于复杂的地形或者是未知的物体，地面的高度可能是未知的。在没有外部力传感器的情况下，必须从关节编码器的数据，本体力感知，
-以及腿的动力学模型来估计外部作用力。编码器有离散误差，同时模型误差会导致在没有外力的时候也会计算出非0的外力。
+以及腿的动力学模型来估计外部作用力。但关节编码器会有离散误差，运动模型会有参数误差，本体力感知也存在电机力矩系数的近似误差。
 这些单一的测量没有一个能告诉我们腿的真实状态，但将这些测量信息融合起来可以得到某条腿是否有可能和地面接触的一个
-更好的估计$\hat s$，$\hat s \in \left\{0=swing, 1=contact\right\}$。完美的触地检测算法满足$\hat s = s$，$s$表示触地状态的真值。
-由于要使用多种测量，使用卡尔曼滤波器来实现数据融合是很自然的。将脚和地面接触的整体估计概率作为卡尔曼滤波器的状态，即：
+更准确的估计$\hat s$，$\hat s \in \left\{0=swing, 1=contact\right\}$。完美的触地检测算法应当满足$\hat s = s$，$s$表示触地状态的真值。
+本章主要使用了卡尔曼滤波器来实现多种传感器信息的数据融合，将脚和地面接触的整体估计概率作为卡尔曼滤波器的状态量，即：
 \begin{equation}
     \label{equ:est_state}
     \hat{\boldsymbol{x}}_k=\left\{\begin{array}{c}
@@ -704,18 +726,39 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 \end{figure}
 \aref{fig:contact_est}展示了上述算法的实验结果。上面三幅子图表示规划相位$\phi$、竖直方向的足底力$f_z$以及足端高度$p_z$的原始数据，底部子图表示算法输出的触地概率，图中黄色虚线表示
 实验中设置的触地概率阈值$p_{thre}$，当算法输出的触地概率$p>p_{thre}$，此时即可判断对应的腿已经处于触地状态。
-\section{质心状态估计}
+\section{浮动基状态估计}
 \label{sec:com_est}
-包括人形机器人在内的腿足机器人有驱动关节，但并没有和环境刚性固定。因此驱动关节的角度并不能决定机器人相对环境的位姿。
-腿足机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态。这个连杆就是所谓的浮动基。
-器人每个连杆的位置可以用浮动基的位姿和编码器测量得到的关节角度重建出来。
+根据\aref{sec:floating_base}中的浮动基运动模型，仿人机器人的驱动关节并没有和环境刚性固定，因此驱动关节的角度并不能决定机器人相对环境的位姿。
+确定机器人的构型还需要确定六个自由度，通常是一个特殊的连杆相对某个惯性系的位置和姿态，这个连杆就是所谓的浮动基。
+机器人每个连杆的位置可以用浮动基的位姿和编码器测量得到的关节角度重建出来。
 
-由于浮动基的状态并不是直接可测的，所以快速可靠的状态估计是在腿足机器人上实现状态反馈控制非常重要的一环。如果能知道触地点的精确位置，
-那么关节的角度就足够重建出浮动基的位姿。但实际上接触很有可能会发生打滑，或者是踩到边缘脚板翻转，而且环境可能是不规则的，
-机器人的几何模型中也可能有不确定性(比如柔性零件引起的变形)。因此关节角度信息是不足以实现可靠的状态估计的。
+由于浮动基的状态一般来说并不是直接可测的，所以快速可靠的状态估计是在腿足机器人上实现状态反馈控制非常重要的一环。实际上机器人和环境的接触很有可能会发生打滑，或者是踩到边缘脚板翻转，
+而且环境地形很可能是不规则的，机器人的几何模型中也可能有不确定性(比如柔性零件引起的变形)，所以仅仅通过机器人关节角度的测量是不足以重建出浮动基的位姿，实现可靠的状态估计的。
 
-惯性测量单元(IMU)可以帮忙解决这个问题，IMU通常会提供安装位置处的姿态角，角速度和线加速度。
-
+IMU可以帮忙解决这个问题，IMU通常会提供安装位置处的姿态角，角速度和线加速度。“悟空-IV”上安装的IMU型号为Xsens MTi-630（\aref{fig:imu}），其相关参数见\aref{tab:imu_data}。可以看到
+IMU硬件输出的姿态角精度是相当高的，$roll$和$pitch$角的误差在0.2°以内，$yaw$角的误差在1°以内，因此我们不需要再专门设计浮动基姿态估计算法，直接将IMU安装在机器人浮动基座上即可。但浮动基的位置和速度估计
+无法直接通过传感器测量获得，因此我们设计了基于卡尔曼滤波，融合加速度计测量和腿部运动学信息的位置速度估计算法，在后续章节中会详细阐述。
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=.35\linewidth]{imu.eps}
+    \caption{\label{fig:imu}Xsens MTi-630 IMU实物图}
+\end{figure}
+\begin{table}[htbp]
+    \setstretch{1.3}
+	\centering
+	\caption{Xsens MTi-630参数表}
+	\label{tab:imu_data}
+	\begin{tabular}{m{4cm}<{\centering}m{2.5cm}<{\centering}m{4cm}<{\centering}m{4cm}<{\centering}}
+		\toprule  %添加表格头部粗线
+		参数名称   &数值（范围） & 参数名称 &数值（范围）  \\
+		\midrule  %添加表格中横线
+		$roll/pitch$角度误差    & 0.2 ° & 陀螺仪噪声密度 & 0.007 °/s/√Hz \\
+		$yaw$角度误差 &  1 ° & 加速度计量程 & $0\sim10$ g\\
+		陀螺仪量程 & $0\sim2000$ °/s & 加速度计稳态漂移 & 10（xy）15（z） µg \\
+        陀螺仪稳态漂移 & 8 °/h & 加速度计噪声密度 & 60 µg/√Hz\\
+		\bottomrule %添加表格底部粗线
+	\end{tabular}
+\end{table}
 % 最近的方法集中在融合IMU信息，力传感器数据和运动学测量来实现高保真的状态估计。IMU和运动学数据的融合最开始是用来实现里程计[1][2]。
 % 之后，融合两者的高频率状态估计被用来估计速度并给闭环控制器使用：这可以在运动学层面进行[3][4][5]，也可以扩展到动力学模型[6][7]。
 % 其他传感器包括激光雷达的数据也可以被融合进来[8]。这些方法的共性是，解一个全耦合的推理问题来从传感器测量中估计位置和姿态。
@@ -725,14 +768,14 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 % 来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
 % 的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
 
-\subsection{位置速度线性卡尔曼滤波器}
-扩展卡尔曼滤波在人形和四足机器人的浮动基状态估计上取得了很好的效果。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
-并且在实际中可能很难调整参数。本章使用的状态估计方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。
-浮动基状态估计能在一个轻微的假设下分解成分级的姿态和位置滤波器，位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
+% \subsection{位置速度线性卡尔曼滤波器}
+% 扩展卡尔曼滤波在人形和四足机器人的浮动基状态估计上取得了很好的效果。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
+% 并且在实际中可能很难调整参数。本章使用的状态估计方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。
+% 浮动基状态估计能在一个轻微的假设下分解成分级的姿态和位置滤波器，位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
 
 \subsection{预测——过程模型}
 
-首先我们将机器人足的位置也包括进机器人的位置和速度估计的状态量$\boldsymbol{x}$中去：
+为了将仿人机器人腿部运动学信息利用进来，本章将机器人足在世界系下的位置也包括进机器人的位置和速度估计的状态量$\boldsymbol{x}$中去，即：
 \begin{equation}
     \label{equ:est_posvel}
     \boldsymbol{x}=\left[{ }^\mathcal{I} \boldsymbol{p}_b^{\top},{ }^\mathcal{I} \boldsymbol{v}_b^{\top},{ }^\mathcal{I} \boldsymbol{p}_L^{\top},{ }^\mathcal{I} \boldsymbol{p}_R^{\top}\right]^{\top}
@@ -741,20 +784,18 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 \begin{equation}
     \label{equ:est_posvel}
     \boldsymbol{x}_{n+1}=\left[\begin{array}{c}
-        { }^{\mathcal{I}} \boldsymbol{p}_{b, n}+{ }^{\mathcal{I}} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right](\Delta t)^2 \\
-        { }^{\mathcal{I}} \boldsymbol{v}_{b, n}+\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g\right] \Delta t \\
+        { }^{\mathcal{I}} \boldsymbol{p}_{b, n}+{ }^{\mathcal{I}} \boldsymbol{v}_{b, n} \Delta t+\frac{1}{2}\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+\boldsymbol{g}\right](\Delta t)^2 \\
+        { }^{\mathcal{I}} \boldsymbol{v}_{b, n}+\left[{ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+\boldsymbol{g}\right] \Delta t \\
         { }^{\mathcal{I}} \boldsymbol{p}_{L, n} \\
         { }^{\mathcal{I}} \boldsymbol{p}_{R, n}
         \end{array}\right]
 \end{equation}
-我们假设每支脚和地面都是保持静止的。
+这里假设每支脚和地面都是保持静止的，也就是说假设两条腿都和地面发生了接触并且没有相对滑动。实际上在机器人行走过程中一般至少有一条腿是处在摆动相的，此时这个假设并不成立，
+但这样处理可以将两条腿的运动学信息统一地包括进状态量$\boldsymbol{x}$中，后续\aref{sec:leg_noise}会阐述如何解决假设不成立的问题。
 
-通常，如果${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计是和$\boldsymbol{x}$同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的。
-然而如果近似将${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计与$\boldsymbol{x}$的估计解耦，
-那么将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\aref{equ:est_posvel}就变成了线性时不变的模型。
-
-我们用了基于IMU的姿态估计器来估计${ }^{\mathcal{I}} \boldsymbol{R}_{b}$。我们使用了[14]中提出估计的第二种版本。
-原本的估计器是设计来使用地磁计的，我们用运动学得到的浮动基姿态估计替换了地磁计信息。
+通常，如果${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计是和$\boldsymbol{x}$同时进行的，那么状态估计是在一段非线性的离散时间间隔内实现的，此时需要用扩展卡尔曼滤波的框架来处理该模型。但扩展卡尔曼滤波的误差动力学缺乏稳定性的保证，
+并且在实际中可能很难调整参数。因此本章中近似将${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计与$\boldsymbol{x}$的估计解耦，用IMU测量出的姿态角计算得到的旋转矩阵作为${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计值，
+将${ }^{\mathcal{I}} \boldsymbol{R}_{b, n} \boldsymbol{a}_n+g$看成是时变的控制输入 ，则过程模型\aref{equ:est_posvel}就变成了线性时不变的模型，也就可以使用线性卡尔曼滤波的框架来处理。
 
 \subsection{校正——测量模型}
 
@@ -768,8 +809,8 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
         z_R
         \end{array}\right]
 \end{equation}
-通过解耦状态${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计，它的估计值可以代入$\boldsymbol{y}$。
-这种方法可以在估计测量值$\hat{\boldsymbol{y}}$和估计状态值$\hat{\boldsymbol{x}}$中建立起线性的关系：
+由于本章中解耦了状态${ }^{\mathcal{I}} \boldsymbol{R}_{b}$的估计，它的估计值可以直接代入$\boldsymbol{y}$，
+由此在测量值的估计$\hat{\boldsymbol{y}}$和状态值的估计$\hat{\boldsymbol{x}}$中建立起了线性的关系：
 \begin{equation}
     \label{equ:est_mea_model}
     \hat{\boldsymbol{y}}=\left[\begin{array}{c}
@@ -780,6 +821,7 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
         \end{array}\right]:=\boldsymbol{C} \hat{\boldsymbol{y}}
 \end{equation}
 \subsection{腿部运动学噪声模型}
+\label{sec:leg_noise}
 基于上文的解耦假设，$\boldsymbol{x}$的估计可以写成随机过程下的标准线性卡尔曼滤波：
 \begin{equation}
     \label{equ:std_kf}
@@ -788,21 +830,21 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
         \boldsymbol{y}_{n+1} & =C \boldsymbol{x}_{n+1}+\mathcal{N}\left(0, \boldsymbol{R}_{n+1}\right)
         \end{aligned}
 \end{equation}
-$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了正确地表示支撑相和摆动相之间的切换，我们设计了一种根据腿的触地状态
+$A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了正确地表示支撑相和摆动相之间的切换，本章中设计了一种根据腿的触地状态
 来调整腿部运动学信息的噪声大小。
 
-我们用$\rho_{trust}$来表示某一条腿的运动学信息的可信度，由于我们的预测模型假设腿和地面是相对静止的，因此摆动腿运动学信息的可信度为0，摆动腿的相位和可信度$\rho_{trust}$的关系如\aref{fig:kin_trust}。
-在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里我们用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的状态具体有多长。
-\begin{figure}[htbp]
+首先用$\rho_{trust}$来表示某一条腿的运动学信息的可信度，由于我们的预测模型假设腿和地面是相对静止的，因此摆动腿运动学信息的可信度为0，摆动腿的相位和可信度$\rho_{trust}$的关系如\aref{fig:kin_trust}。
+在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里我们用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的时间区间具体有多长。
+\begin{figure}[h]
     \centering
     \includegraphics[width=1.\linewidth]{trust.pdf}
     \caption{\label{fig:kin_trust}支撑腿运动学信息可信度随相位变化图}
 \end{figure}
 
 运动学测量的方差根据可信度$\rho_{trust}$计算，随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计，具体的算法流程在\aref{alg:com_state_est}中给出。
-\begin{algorithm}[htb]
+\begin{algorithm}[h]
 \setstretch{1.3}
-\caption{质心状态估计迭代过程} 
+\caption{浮动基状态估计迭代过程} 
 \label{alg:com_state_est} 
 \begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
 \STATE{\fangsong{\textbf{输入}}：$\hat{\boldsymbol{x}}_{k-1}, \tilde{\boldsymbol{z}}_k, \boldsymbol{\Sigma}_{k-1}, \boldsymbol{Q}_{w_k}, \boldsymbol{R}_{v_k}, \phi$}
@@ -845,9 +887,13 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 
 \end{algorithmic}
 \end{algorithm}
-\section{实物实验}
-借助动作捕捉系统，我们验证了质心位置估计的准确性。实验环境如\aref{fig:capture_exp}所示，对比行走过程中质心位置估计结果和动作捕捉的数据(\aref{fig:com_pos_est})，可以看出二者基本相符。
-图中虚线内的部分是由于机器人走到了动捕镜头的盲区，所以出现了较大的偏差。
+\subsection{实验结果}
+本节借助动作捕捉系统来验证浮动基位置和速度估计的准确性。实验环境如\aref{fig:capture_exp}所示，动捕系统包含六颗镜头，以及数据分析处理软件。机器人身上穿的衣服主要是为了避免金属零件反光影响动捕系统的正常工作，同时机器人身体后方安装了
+四个反光标记点，来对机器人浮动基座的位置和速度信息进行捕捉。动捕系统在室内环境下可以实现厘米级的定位精度，因此我们可以将其采集到的数据作为真值，来评估浮动基位置和速度估计的输出结果。
+\subsubsection{浮动基位置估计实验结果}
+实验过程中“悟空-IV”机器人沿\aref{fig:com_pos_est}中的蓝色矩形慢速行走，蓝色矩阵的尺寸为0.5m$\times$1.0m。\aref{fig:com_pos_est}中的橙色曲线为浮动基位置估计的结果，黄色曲线为同一次行走实验中根据动捕系统采集的数据得到的浮动基位置曲线。
+图中虚线内的部分是由于机器人走到了动捕镜头的盲区附近，此时镜头只能捕捉到有限的反光标记点，所以出现了较大的偏差。
+% 对比行走过程中浮动基位置估计结果和动作捕捉的数据(\aref{fig:com_pos_est})，可以看出二者基本相符。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{动捕.jpg}
@@ -859,6 +905,8 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
     \includegraphics[width=1.\linewidth]{rectangle.pdf}
     \caption{\label{fig:com_pos_est}质心位置估计结果}
 \end{figure}
+\subsubsection{浮动基速度估计实验结果}
+\subsubsection{机器人运动速度对浮动基状态估计准确性的影响}
 \section{本章总结}
 本章首先介绍了“悟空-IV”仿人机器人的基本硬件配置，并对仿人机器人的浮动基运动模型进行了阐述。采用浮动基模型描述运动要求对浮动基相对惯性系的位置、速度和姿态做出比较准确的估计。浮动基的姿态可以方便地用安装在其上的IMU测量得到，
 但浮动基的位置和速度估计需要仿人机器人每条腿的触地信息。本章基于线性卡尔曼滤波的框架，先设计了融合相位、足端高度和足底力信息的触地状态估计算法；在触地估计的基础上，设计了融合IMU积分信息和腿部运动学信息的浮动基位置和速度估计算法。
