@@ -10,7 +10,7 @@
 器人无法适应复杂路面，比如轮式机器人无法实现在阶梯或是崎岖路面前进，履带式机
 器人也很难做到上下楼梯。相比较来说，腿足式机器人就能很好适应复杂路面，在崎岖
 路面有着得天独厚的优势，从人类通过双腿可以适应自然界绝大部分的地貌环境就可以
-看出来，足式机器人更适合于复杂的陆地环境\cite{schraft2000service}。人类通过视觉信息选取离散的落脚点
+看出来，足式机器人更适合于复杂的陆地环境\cite{Schraft2000ServiceR}。人类通过视觉信息选取离散的落脚点
 以跨过不同的障碍物和适应不同的路面，腿足式机器人可以通过步态规划以及身体平衡
 控制做到不平整路面的前进，但目前仍然存在许多挑战。
 
@@ -41,7 +41,6 @@
 尽管这些机器人运动能力相当差，只能实现一些静态动作，但也在客观上引发了学术界和产业界对仿人仿人机器人研究的兴趣。
 \begin{figure}[htbp]
     \centering
-    \raggedbottom
     \subcaptionbox{WL-5\label{subfig:wl5}}
         {%
             \includegraphics[height = .5\linewidth]{WL-5.jpg}}
@@ -60,7 +59,7 @@
 20世纪80年代，日本本田公司（Honda）也开始了仿人机器人的研究，出于控制方便和动力源可携带等方面的考虑，本田选择了电机驱动的技术路线，
 经过E0到E6的七代步行样机研发，以及加入仿人上半身的P1到P2的原型机迭代，以及基于P系列原型机做出的小型化改进，终于在2000年推出了著名的
 仿人机器人ASIMO（\aref{fig:asimo}）。 ASIMO具有良好的外观设计，并且集成了视觉识别、语音交互等技术，是最为人所熟知的仿人机器人之一。
-本田也不断地对ASIMO¬进行改进，到2011年时ASIMO的奔跑速度就达到了9km/h，并能完成上下台阶、倒水等展示任务\cite{Honda}。
+本田也不断地对ASIMO进行改进，到2011年时ASIMO的奔跑速度就达到了9km/h，并能完成上下台阶、倒水等展示任务\cite{Honda}。
 \begin{figure}[htbp]
     \centering
     \subcaptionbox{HRP-1\label{subfig:HRP-1}}
@@ -250,7 +249,8 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 国防科技大学1995年公布的KDW-III仿人机器人也仅能实现0.36km/h的静态步行。随后国防科技大学又在2001年公布了仿人机器人“先行者”（\aref{subfig:poineer}），是国内第一台具有可运动四肢的仿人机器人。
 北京理工大学2000年开始了仿人机器人的研究，之后发布了“汇童”系列仿人机器人（\aref{subfig:sboy}）。2006年发布的第二代汇童机器人已经具备了1km/h的动态行走能力，同时可以实现打太极、舞剑等全身动作。
 第四代和第五代又分别实现了表情控制和打乒乓球的功能。目前最新的第六代汇童机器人可以实现倒地爬起、原地跳跃等功能\cite{huang2019historical}。浙江大学于2011年公布了仿人机器人KONG\cite{sun2011balance}（\aref{subfig:KONG}）。
-该机器人全身共计32个自由度，高160cm，重65kg，步行速度可达1.07km/h，能够实现和人对打乒乓球的功能。
+该机器人全身共计32个自由度，高160cm，重65kg，步行速度可达1.07km/h，能够实现和人对打乒乓球的功能。在2018年浙江大学又推出了可以实现跑跳步态的仿人机器人“悟空-II”，能以4km/h的速度跑步前进。2020年的“悟空-III"机器人完成了室外草地
+行走实验，是当时国内唯一一台实现室外草地行走的仿人机器人。
 
 \begin{figure}[htbp]
     \centering
@@ -262,7 +262,14 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
             \includegraphics[height = .4\linewidth]{domestic2.jpg}}
     \subcaptionbox{KONG\label{subfig:KONG}}
         {%
-            \includegraphics[height = .4\linewidth]{domestic4.png}}              
+            \includegraphics[height = .4\linewidth]{domestic4.png}}     
+    
+    \subcaptionbox{KONG\label{subfig:wukong2}}
+        {%
+            \includegraphics[height = .4\linewidth]{wukong2.jpg}}
+    \subcaptionbox{KONG\label{subfig:wukong3}}
+        {%
+            \includegraphics[height = .4\linewidth]{wukong3.jpg}}            
     % \subcaptionbox{THBIP-I\label{subfig:THBIP-I}}
     %     {%
     %         \includegraphics[height = .4\linewidth]{domestic3.jpg}}         
@@ -271,7 +278,7 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 %\vspace{-8pt}
 截至2022年，国内公开的仿人机器人中，更多还是借鉴了日本在仿人机器人领域的技术路线，采用高速电机加大速比减速器的关节驱动方案，运动性能基本还都局限在低速静态步行，
 难以实现仿人机器人的动态步行，相较国外还有相当大的差距。
-\section{腿足运动控制最新进展}
+\section{腿足运动控制的典型方法}
 腿的作用在于，机器人能用腿上的末端执行器来推“地”从而为身体提供主动支撑力和避震，
 使得机器人身体的运动要比地表的轮廓更平滑。我们把所有用来推“地”的末端执行器统一叫做“足”，
 尽管这些足有着不同的形态或其他功能。腿可以暂时离开地面来迈步，因此可以通过不连续的地形，
@@ -288,7 +295,6 @@ Whole-body Adaptive Locomotion and Manipulation项目，在随后的四年中研
 这使得从在多为平地的仿人行走到更多样的机器人形态
 ，更通用的不平整地形的多接触运动的转换成为可能。
 
-\subsection{腿足运动控制的典型方法}
 % The dynamics of legged locomotion: 
 牛顿方程说明和环境接触产生的外力$\boldsymbol{f}_i$减去重力$m\boldsymbol{g}$决定了机器人质心$\boldsymbol{c}$变化的方向：
 \begin{equation}
@@ -393,10 +399,60 @@ MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite
 第五章 本章对本文工作进行简要总结，提出工作的不足之处，并对进一步的工作提
 出一些展望。
 \chapter{仿人机器人状态估计}
-\section{本章概述}
-本章介绍了利用卡尔曼滤波的方法来实现浮动基坐标的估计，标准卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。\aref{sec:contact_est}和\aref{sec:com_est}分别介绍了对机器人与环境的接触状态和机器人浮动基相对于惯性系的
-位置、速度的估计方法并在“悟空-IV”上进行了行走实验。
-\section{机器人浮动基模型}
+
+\section{概述}
+
+本章首先介绍了“悟空-IV”仿人机器人实验平台的基本硬件参数，并阐述了机器人的浮动基运动模型。对于仿人机器人来说，得到：1) 准确可靠的每条腿的触地状态，以及：2)浮动基在惯性系下的位置和速度信息是实现鲁棒的运动控制算法的基础。
+
+机器人上安装有惯性测量单元（Inertial Measurement Unit，IMU）、关节角度编码器等内部传感器，同时关节力矩电机具备近似线性力矩特性，本章中利用了这些传感器信息的融合来对机器人触地状态和浮动基的位置速度进行了估计。
+本章主要使用了线性卡尔曼滤波算法来实现上述状态估计，标准线性卡尔曼滤波的迭代过程可由\aref{alg:KF}表示。
+
+本章节组织如下：\aref{sec:exp_platform}简要介绍了“悟空-IV”仿人机器人实验平台及其基本参数；\aref{sec:floating_base}介绍了仿人机器人运动模型的浮动基描述，基于这种描述的仿人机器人运动控制，需要对浮动基相对惯性系
+的位置、速度和姿态做出相对准确的估计；\aref{sec:contact_est}和\aref{sec:com_est}分别介绍了对机器人与环境的接触状态和机器人浮动基相对于惯性系的位置、速度的估计算法，其中后者是建立在前者的基础之上的。这两种状态估计算法
+均在“悟空-IV”仿人机器人实验平台上进行了实验验证。
+\section{实验平台介绍}
+\label{sec:exp_platform}
+\begin{figure}[htbp]
+    \centering
+    \subcaptionbox{正视图\label{subfig:wukong_front}}
+        {%
+            \includegraphics[height = .5\linewidth]{正视图.png}}
+    \subcaptionbox{侧视图\label{subfig:wukong_side}}
+        {%
+            \includegraphics[height = .5\linewidth]{侧视图.png}}
+    \caption{“悟空-IV”仿人机器人实物样机\label{fig:wukong_pic}}
+\end{figure}
+本文研究基于仿人机器人“悟空-IV”实验平台实现，实物图见\aref{fig:wukong_pic}，“悟空-IV”双
+足机器人是浙江大学研发的仿人机器人移动实验平台。机器人身高约1.5m，重约
+46kg，其中大腿连杆长度为0.3m，小腿连杆长度0.3m。全身共有21个自由度，其中
+左腿与右腿各有6个自由度，腰关节有1个自由度，左手臂与右手臂各有4个自由度。
+其中每条腿的髋关节部分有3个自由度，按照关节旋转方向将髋关节3个自由度命名为
+髋关节侧摆关节，髋关节俯仰关节，髋关节偏航关节。机器人膝关节有1个
+自由度，踝关节有两个自由度。机器人腿部的每个自由度均由高能量密度的无刷直流电机执行，采用“大力矩
+电机+低减速比”结构，腰关节采用的为高转速力矩电机。其中踝关节电机采用了连杆结构，
+其余关节电机均采用齿轮减速器，减速比恒定不变，腿部各关节电机与关节信息见\aref{joint_motor}。
+\begin{table}[htbp]
+	\centering
+    \setstretch{1.3}
+	\caption{“悟空-IV”仿人机器人各关节信息}
+	\label{joint_motor}
+	\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}m{1.5cm}<{\centering}m{2cm}<{\centering}m{2.5cm}<{\centering}}
+		\toprule  %添加表格头部粗线
+		关节名称   &电机型号  &减速比  &输出最大力矩/$N \cdot m$ &关节额定转速/$rad\cdot s^{-1}$ \\
+		\midrule  %添加表格中横线
+		膝关节 & 105ZWS04 & 12 & 180 & 12.00\\
+		腰关节 & 85ZWS02 & 12 & 84.0 & 7.85\\        
+		髋偏航关节 & 85ZWS02 & 12 & 84.0 & 7.85\\
+		髋横滚关节 & 85ZWS02 & 12 & 84.0 & 7.85\\
+		髋俯仰关节 & 85ZWS02 & 12 & 84.0 & 7.85\\
+        踝横滚关节 & 60ZWS01-1J22 & 7 & 28.0 & 14.65\\
+        踝横滚关节 & 60ZWS01-1J22 & 7 & 28.0 & 14.65\\
+        手臂所有关节 & 60ZWS01-1J22 & 25 & 100.0 & 4.1\\
+		\bottomrule %添加表格底部粗线
+	\end{tabular}
+\end{table}
+\section{机器人浮动基运动模型}
+\label{sec:floating_base}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.6\linewidth]{浮动基.eps}
@@ -784,53 +840,30 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
     \includegraphics[width=1.\linewidth]{rectangle.pdf}
     \caption{\label{fig:com_pos_est}质心位置估计结果}
 \end{figure}
-
+\section{本章总结}
+本章首先介绍了“悟空-IV”仿人机器人的基本硬件配置，并对仿人机器人的浮动基运动模型进行了阐述。采用浮动基模型描述运动要求对浮动基相对惯性系的位置、速度和姿态做出比较准确的估计。浮动基的姿态可以方便地用安装在其上的IMU测量得到，
+但浮动基的位置和速度估计需要仿人机器人每条腿的触地信息。本章基于线性卡尔曼滤波的框架，先设计了融合相位、足端高度和足底力信息的触地状态估计算法；在触地估计的基础上，设计了融合IMu积分信息和腿部运动学信息的浮动基位置和速度估计算法。
+最后在“悟空-IV”仿人机器人实验平台上开展实物实验验证了算法的有效性。
 \chapter{基于二次规划的仿人机器人运动控制器}
-本章提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人“悟空-IV”上进行了实现。该控制架构的核心是一个二次规划问题，
+\section{概述}
+本章提出了针对浮动基机器人的一种基于弹簧倒立摆模型的控制架构，并在“悟空-IV”仿人机器人上进行了实现。该控制架构的核心是一个二次规划问题，
 该二次规划问题协调了用关节加速度向量的约束表达的运动任务，以及单边的地面接触约束和摩擦约束、关节力矩约束带来的限制。
 该架构在实际硬件平台上得到了验证，可以实现仿人机器人的高速稳定行走，和对期望轨迹的稳定跟随。
-\section{实验平台介绍}
+
+本章节组织如下：\aref{sec:state_machine}主要介绍了仿人机器人运动控制使用的状态机，以及各种层面的坐标系定义；\aref{sec:dynamics}介绍了仿人机器人的弹簧倒立摆动力学模型；
+\aref{sec:controller}介绍了针对仿人机器人设计的控制架构，阐述了期望运动任务的生成，单边地面接触的建模，以及二次规划问题的构建过程；\aref{sec:controller_exp}介绍了本文中阐述的控制架构在实物平台的实验效果。
+\section{机器人状态机介绍与坐标系定义}
+\label{sec:state_machine}
+\subsection{机器人状态机}
+
 \begin{figure}[htbp]
     \centering
-    \subcaptionbox{正视图\label{subfig:wukong_front}}
-        {%
-            \includegraphics[height = .5\linewidth]{正视图.png}}
-    \subcaptionbox{侧视图\label{subfig:wukong_side}}
-        {%
-            \includegraphics[height = .5\linewidth]{侧视图.png}}
-    \caption{“悟空-IV”仿人机器人实物样机\label{fig:wukong_pic}}
+    \includegraphics[width=.8\linewidth]{相位转换.pdf}
+    \caption{\label{fig:state_machine}仿人机器人状态机及其切换示意图}
 \end{figure}
-本文研究基于仿人机器人“悟空-IV”实验平台实现，实物图见\aref{fig:wukong_pic}，“悟空-IV”双
-足机器人是浙江大学研发的仿人仿人机器人移动实验平台。机器人身高约1.5m，重约
-46kg，其中大腿连杆长度为0.3m，小腿连杆长度0.3m。全身共有21个自由度，其中
-左腿与右腿各有6个自由度，腰关节有1个自由度，左手臂与右手臂各有4个自由度。
-其中每条腿的髋关节部分有3个自由度，按照关节旋转方向将髋关节3个自由度命名为
-髋关节侧摆关节，髋关节俯仰关节，髋关节偏航关节。机器人膝关节有1个
-自由度，踝关节有两个自由度。机器人腿部的每个自由度均由高能量密度的无刷直流电机执行，采用“大力矩
-电机+低减速比”结构，腰关节采用的为高转速力矩电机。其中踝关节电机采用了连杆结构，
-其余关节电机均采用齿轮减速器，减速比恒定不变，腿部各关节电机与关节信息见\aref{joint_motor}。
-\begin{table}[htbp]
-	\centering
-    \setstretch{1.3}
-	\caption{“悟空-IV”仿人机器人各关节信息}
-	\label{joint_motor}
-	\begin{tabular}{m{3cm}<{\centering}m{3cm}<{\centering}m{1.5cm}<{\centering}m{2cm}<{\centering}m{2.5cm}<{\centering}}
-		\toprule  %添加表格头部粗线
-		关节名称   &电机型号  &减速比  &输出最大力矩/$N \cdot m$ &关节额定转速/$rad\cdot s^{-1}$ \\
-		\midrule  %添加表格中横线
-		膝关节 & 105ZWS04 & 12 & 180 & 12.00\\
-		腰关节 & 85ZWS02 & 12 & 84.0 & 7.85\\        
-		髋偏航关节 & 85ZWS02 & 12 & 84.0 & 7.85\\
-		髋横滚关节 & 85ZWS02 & 12 & 84.0 & 7.85\\
-		髋俯仰关节 & 85ZWS02 & 12 & 84.0 & 7.85\\
-        踝横滚关节 & 60ZWS01-1J22 & 7 & 28.0 & 14.65\\
-        踝横滚关节 & 60ZWS01-1J22 & 7 & 28.0 & 14.65\\
-        手臂所有关节 & 60ZWS01-1J22 & 25 & 100.0 & 4.1\\
-		\bottomrule %添加表格底部粗线
-	\end{tabular}
-\end{table}
+
 \subsection{坐标系定义}
-\begin{figure}[!htbp]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{关节构型.eps}
     \caption{\label{fig:coordination}仿人机器人坐标系定义}
@@ -870,13 +903,14 @@ $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前�
     \includegraphics[width=.4\linewidth]{简化连杆.eps}
     \caption{\label{fig:link_model}“悟空-IV”仿人机器人的简化连杆模型}
 \end{figure}
-\section{仿人机器人动力学建模与控制器设计}
+% \section{仿人机器人动力学建模与控制器设计}
 
 % 本文提出了针对浮动基机器人的一种基于动量的控制架构，并在仿人机器人Atlas上进行了实现。该控制架构的核心是一个二次规划问题，
 % 该二次规划问题协调了用关节加速度向量的约束表达的运动任务，和单边的地面接触和有限的抓地力(force-limited grasping)带来的限制。
 % 我们竭力做了一些必要的改动，使得该架构可以从仿真环境移植到实际硬件平台上，并且提出了机器人走过复杂地形，一些基本的操作任务，
 % 以及在斜面上的多接触点平衡(后者仅在仿真中实现)。
-\subsection{质心动力学}
+\section{质心动力学}
+\label{sec:dynamics}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{质心模型.eps}
@@ -920,7 +954,8 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
 \end{equation}
 \aref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，我们在后续的控制架构中利用了这一点。
 
-\subsection{控制架构}
+\section{控制架构}
+\label{sec:controller}
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.\linewidth]{qp控制框架.eps}
@@ -933,7 +968,7 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
 3）	期望质心动量的变化率。
 QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器输出关节加速度和与环境接触的连杆所受的环境接触力。
 这些信息随后通过一种逆动力学算法来计算期望的关节力矩。计算出的力矩随后用来确定发送给机器人关节电机的力矩指令。
-\subsubsection{期望运动}
+\subsection{期望运动}
 在我们的架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\aref{equ:euler_wrench}等式左边的部分。
 我们将运动任务定义为和机器人期望的广义速度向量线性相关的方程，${\dot{\boldsymbol{v}}}_{d}\in {\mathbb{R}}^{(n+6)}$，
 包括了机器人浮动基关节相对于世界系的空间加速度。$n$是驱动关节的数量。第$i$个运动任务可以写成
@@ -946,7 +981,7 @@ QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器�
 % \subsubsection{外部力旋量}
 % 本节是关于动量变化率方程\aref{equ:euler_wrench}的等式右边：外部力旋量。地面作用旋量${\boldsymbol{W}}_{gr,i}$由特定约束下的QP中的决策变量参数化。
 % 两种形式的地面接触是可行的：单边地面接触(4.2.1)和有限抓地力接触(4.2.2)。其他的待补偿的外部力旋量 在4.2.3中讨论。
-\subsubsection{单边地面接触}
+\subsection{单边地面接触}
 单边地面接触被建模成有静摩擦力的点接触。有分布的负载的平的，多边形的接触面可以被等效地建模成顶点处的点接触。
 对于法向量为${{\boldsymbol{n}}_{i}}$的第$i$个点接触，接触力${{\boldsymbol{f}}_{i}}$的摩擦约束可以写成：
 \begin{equation}
@@ -1027,7 +1062,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 		\bottomrule %添加表格底部粗线
 	\end{tabular}
 \end{table}
-二次规划问题构建的具体算法流程由\aref{alg:quadratic_program}给出，最终我们使用了pOASES求解库来进行问题的数值求解，平均求解时间在2ms左右。
+二次规划问题构建的具体算法流程由\aref{alg:quadratic_program}给出，最终我们使用了qpOASES求解库来进行问题的数值求解，平均求解时间在2ms左右。
 \begin{algorithm}[htb] 
 \setstretch{1.3}
 \caption{二次规划问题构建过程} 
@@ -1060,8 +1095,9 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 \ENDFOR
 \end{algorithmic}
 \end{algorithm}
-\section{行走实验}
-
+\section{实验结果}
+\subsection{轨迹跟踪实验}
+\label{sec:controller_exp}
 我们在“悟空-IV”实物样机上部署了上述算法，并进行了相关行走实验验证了算法的有效性。\aref{fig:track_exp}是轨迹跟踪实验的实验截图，在该实验中，
 我们让机器人跟随一段规划好的五次多项式轨迹，跟踪曲线如\aref{fig:com_pos_track}所示。
 \begin{figure}[htbp]
@@ -1082,6 +1118,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     \includegraphics[width=.8\linewidth]{rectangle_track.pdf}
     \caption{\label{fig:com_pos_track}质心位置跟踪曲线}
 \end{figure}
+\subsection{高速行走实验}
 除此之外，我们还通过快速行走实验验证了上述算法在高速场景下的鲁棒性。实验截图如\aref{fig:track_exp}所示。由质心速度估计得到的速度曲线如\aref{fig:com_vel_track}。
 \begin{figure}[htbp]
     \centering
@@ -1101,7 +1138,15 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     \includegraphics[width=1.\linewidth]{velo.eps}
     \caption{\label{fig:com_vel_track}质心速度曲线}
 \end{figure}
+\section{本章总结}
+本章首先介绍了“悟空-IV”仿人机器人使用的状态机以及各级坐标系的定义，之后推导了仿人机器人弹簧倒立摆简化动力学模型，该模型也是本章提出的仿人机器人运动控制算法的基础。随后提出了针对仿人机器人
+设计的控制架构，从期望运动任务的生成，到单边的地面接触约束和摩擦约束、关节力矩约束的处理，最终构建了一个二次规划问题来求解控制输入。该控制架构在“悟空-IV”仿人机器人上得到了验证。
 \chapter{仿人机器人质心轨迹优化}
+\section{概述}
+本章主要介绍了“悟空-IV”仿人机器人上台阶场景下的质心轨迹规划方法，该方法的核心在于轨迹优化问题的构建。首先将上一章中的弹簧倒立摆模型拓展成了变高度双摆，将其作为质心轨迹优化的动力学模型，将摩擦力、腿长等
+作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出质心轨迹优化问题，利用非线性规划求解软件CasADi求解得到质心轨迹后再由第三章中的运动控制器执行期望轨迹，最终实现期望的登上台阶的运动。
+本章节组织如下：\aref{vari_height_pendu}主要介绍了变高度双摆模型动力学方程的推导过程；\aref{sec:traj_plan}介绍了轨迹优化问题的构建过程，首先介绍了摩擦力约束和腿长约束的处理，然后介绍了优化问题目标函数的建立，
+最终将轨迹优化问题交给非线性规划求解软件处理，最终得到仿人机器人登上台阶的期望质心轨迹。
 % \section{基于二次规划的全身控制器}
 % 机器人运动由基于QP的全身控制器控制[22]，该控制器输出一组期望关节加速度，包括浮动基关节在惯性系$\mathcal{I}$下的空间加速度，
 % 这里我们用$\dot{\boldsymbol{\nu}}_d \in \mathbb{R}^{n+6}$表示，$n$是驱动关节的数量。另外，该全身控制器也会生成
@@ -1161,6 +1206,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 % 期望的广义关节加速度和接触力被用于计算机器人期望的关节力矩输入。
 
 \section{变高度双摆模型}
+\label{vari_height_pendu}
 由牛顿第二定律可以得到线动量的变化率：
 \begin{equation}
     \label{equ:newton_2}
@@ -1202,7 +1248,8 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
 \end{equation}
 \aref{equ:newton_linear_2}表示双摆的模型，在包含双腿的同时也保持了较低的维度。
 
-\section{上台阶动力学规划}
+\section{上台阶质心轨迹规划}
+\label{sec:traj_plan}
 本文中表述的跨台阶规划器利用了
 % [16][26][27]中阐述的
 基于阶段的轨迹优化。我们假设预先知道接触的序列，
@@ -1374,8 +1421,6 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 
 \begin{algorithm}[htb] 
 \setstretch{1.3}
-\caption{轨迹优化问题构建过程} 
-\label{alg:traj_optimization} 
 \begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
 \STATE{$\underset{\chi}{\operatorname{\bf{minimize}}} \ \ \Gamma_{x_d}+\Gamma_\tau+\Gamma_{\Delta_u}+\Gamma_{\text {reg }}$}
 \STATE{$\bf{subject\ to:}$}
@@ -1414,6 +1459,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \ENDFOR
 \ENDFOR
 \end{algorithmic}
+\caption{\label{alg:traj_optimization}轨迹优化问题构建过程} 
 \end{algorithm}
 
 \section{上台阶实验验证}
@@ -1448,17 +1494,43 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
     \includegraphics[width=.8\linewidth]{stair_tracking.eps} 
     \caption{\label{fig:track_com}“悟空-IV”上台阶质心跟随曲线}
 \end{figure}
+\section{本章总结}
+本章首先将第三章中的弹簧倒立摆模型进行了拓展，从而得到了变高度双摆模型及其动力学方程。然后阐述了针对上台阶场景的轨迹优化问题的构建过程：首先变高度双摆动力学模型作为动力学约束，和摩擦力约束、腿长约束一起组成了轨迹优化问题
+的约束条件；然后设计了一系列目标函数和正则项，来使优化问题的解向我们期望的方向收敛。最终得到的优化问题由非线性规划求解器Ipopt求解，得到的期望质心轨迹由第三章介绍的运动控制器来执行，在“悟空-IV”机器人上成功实现了登上台阶的动作。
 \chapter{总结与展望}
 \section{总结}
 
-本文从状态估计、轨迹跟踪、轨迹规划三个方面对仿人机器人的运动控制进行了研究，并在“悟空-IV”仿人机器人实验平台上进行了实验验证，
+本文建立了仿人机器人的模型，并从状态估计、轨迹跟踪、轨迹规划三个方面对仿人机器人的运动控制进行了研究，并在“悟空-IV”仿人机器人实验平台上进行了实验验证，
 成功实现了机器人6km/h的高速稳定行走，以及多级台阶的稳定跨越。
 
 本文各章节的内容和结论如下：
 
-1） 
+1） 设计了仿人机器人状态估计器。首先对仿人机器人每条腿触地的概率进行了估计，
+为步行状态机提供了切换信号；其次对仿人机器人质心在世界系下的位置、速度进行了估计
+为后续的运动控制和轨迹规划建立了基础。
+
+2） 设计了基于二次规划的仿人机器人运动控制器。将仿人机器人每条腿的运动分为支撑相和摆动相，
+摆动相采用位置控制，跟随根据质心速度计算出的落脚点位置；支撑相将上层规划器规划出的运动行为
+组合成一个二次规划问题，求解出关节的期望力矩作为电机的前馈输入，状态反馈得到的期望力矩作为
+电机的反馈输入。
+
+3） 设计了基于轨迹优化的仿人机器人运动规划器。将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
+滑动摩擦约束、转动摩擦约束作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
+利用非线性规划求解器求解，最终得到机器人质心的期望轨迹。
 % 本文对仿人机器人的运动控制进行了各个层次的研究
 \section{展望}
+
+本文对仿人机器人的模型建立和对应的状态估计、轨迹跟踪和轨迹规划方法进行了阐述，并通过平地行走实验、上台阶实验对文中提出的算法进行了验证。但目前这些算法的应用场景还偏简单和固定，
+在后续研究中，还有以下工作可以进一步推进：
+
+1） 将现有的触地状态估计和质心位置速度估计算法扩展到更复杂的室外场景中。本文中的触地估计和质心位置速度估计并未考虑到环境地形中有不可忽略的斜度的情况，因而很难应对和平地相差较远的室外环境。
+后续工作可以考虑引入外部传感器，如相机，激光雷达等可以提供外部环境信息的传感器，来实现更鲁棒和可靠的状态估计。
+
+2） 使用更完整的动力学模型来实现机器人的轨迹跟踪。本文中的运动控制器主要是基于质心的弹簧倒立摆模型，该模型简单可靠便于快速求解，但在执行更动态的动作时，由于忽略了很多动力学因素的影响，
+控制效果会受影响。使用更完整且准确的全身动力学模型可以进一步挖掘机器人关节的硬件性能，执行更复杂更动态的动作。
+
+3） 将运动规划器扩展到更多更通用的场景。本文中的运动规划器针对仿人机器人上台阶的场景，构建了轨迹优化问题并对其进行在线的数值求解，能比较好地完成上台阶的任务。实际上轨迹优化的适用场景不止于此，
+对于平地、斜坡、不平整路面等各种地形都可以设计不同的目标函数以及权重矩阵，将更多场景包含在统一的轨迹规划框架之中。
 % \subsection{落脚点规划的最近进展}
 % 落脚点规划是运动规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
 % 增加了运动规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
