@@ -16,8 +16,8 @@
 
 目前国内外关于腿足式尤其是仿人机器人的研究也受到越来越多的关注，仿人机器
 人是仿生机器人领域的代表之一，它集机械、电气、计算机、传感器等多种学科于一体，
-是直接模仿采用仿人前进动物的一类机器人\cite{梶田秀司2007仿人机器人}，
-另一方面，腿足式也是自然界大部分生物所采取的运动方式，所以机器人采用腿足
+是直接模仿采用仿人前进动物的一类机器人\cite{梶田秀司2007仿人机器人}。
+腿足式也是自然界大部分生物所采取的运动方式，所以机器人采用腿足
 式方式能够更好的融入人类生活中。采用和人类相似的外形使得腿足式机器人相对于轮
 式和履带式机器人在亲和力方面有着难以匹敌的优势，完美的适应人类的工作环境\cite{2010067776.nh}。
 在未来利用仿人机器人取代人类在高危险环境下的工作或者重复性较高的体力劳动的
@@ -313,7 +313,7 @@ ZMP类的方法基于位置控制，在平地上能起到较好的控制效果�
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.0\linewidth]{仿人经典控制框架.eps}
-    \caption{\label{fig:typical_control}基于全身模型的控制框架主要包括三个阶段：接触规划，质心动力学级规划和全身控制
+    \caption{\label{fig:typical_control}基于全身模型的控制框架主要包括：接触规划，质心动力学级规划和全身控制
                 （图源~\cite{carpentier2016center}）}
 \end{figure}
 % 多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的\cite{geisert2017regularized}。
@@ -353,32 +353,36 @@ ZMP类的方法基于位置控制，在平地上能起到较好的控制效果�
 % MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite{lafaye2014linear}，ETHZ的ANYmal\cite{bjelonic2020rolling}
 % 和Ascento\cite{klemm2020lqr}等轮足机器人上。
 \section{本文的主要研究内容}
-本文针对仿人机器人跑跳步态的实现，首先简要介绍仿人机器人的实验平台“悟空-IV”机器人，
-其次根据仿人机器人状态机设计，分别对机器人处于单腿支撑相时与双腿
-腾空相时设计控制器，同时面对机器人在前进过程中前进方向出现偏差的问题，提出相
-应的解决方法。
+本文针对仿人机器人的质心轨迹规划和跟踪问题开展基于优化的运动控制研究，设计仿人机器人状态估计器、基于二次规划的运动控制器
+、以及基于轨迹优化的质心轨迹规划器，并在仿人机器人“悟空-IV”平台开展实验验证。
 
-本文的主要研究内容：
+本文的主要研究内容如下：
 
-1) 设计了仿人机器人状态估计器。首先对仿人机器人每条腿触地的概率进行了估计，
-为步行状态机提供了切换信号；其次对仿人机器人质心在世界系下的位置、速度进行了估计
-为后续的运动控制和轨迹规划建立了基础。
+1) 设计了仿人机器人状态估计器。首先简要介绍了“悟空-IV”仿人机器人实验平台及其硬件参数，然后提出了机器人的浮动基运动模型，
+阐述了对仿人机器人触地状态和浮动基状态进行估计的必要性。
+随后首先建立了机器人的概率触地模型，对仿人机器人每条腿触地的概率进行了估计，
+为步行状态机提供了切换信号；其次定义了仿人机器人的各个坐标系，并对仿人机器人浮动基在世界系下的位置、速度进行了估计，
+为后续的运动控制和规划建立了基础。
 
-2) 设计了基于二次规划的仿人机器人运动控制器。将仿人机器人每条腿的运动分为支撑相和摆动相，
-摆动相采用位置控制，跟随根据质心速度计算出的落脚点位置；支撑相将上层规划器规划出的运动行为
-组合成一个二次规划问题，求解出关节的期望力矩作为电机的前馈输入，状态反馈得到的期望力矩作为
-电机的反馈输入。
+2) 设计了基于二次规划的仿人机器人步行控制器。首先定义了仿人机器人的运动状态机，将仿人机器人每条腿的运动分为支撑相和摆动相，
+摆动相采用位置控制跟随根据质心速度计算出的落脚点位置；支撑相将上层规划器规划出的运动行为
+组合成二次规划问题，利用qpOASES求解库求解，将求解出的关节的期望力矩作为关节的前馈输入，将状态反馈得到的期望力矩作为
+关节的反馈输入，最终得到支撑腿各关节的实际期望力矩值。
 
-3) 设计了基于轨迹优化的仿人机器人运动规划器。将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
-滑动摩擦约束、转动摩擦约束作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
-利用非线性规划求解器求解，最终得到机器人质心的期望轨迹。
+3) 设计了基于轨迹优化的仿人机器人上台阶轨迹规划器。针对仿人机器人上台阶的稳定步行需求，将变高度双摆模型的动力学方程作为质心轨迹规划的动力学约束，以及机器人腿长约束、
+关节最大力矩约束、滑动摩擦约束、转动摩擦约束作为优化问题的约束条件，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
+利用Ipopt非线性优化求解器求解，最终得到登上台阶过程中机器人质心的期望轨迹。
 
-4) 在“悟空-IV”仿人机器人实验平台上开展实验，验证上述控制算法。成功验证
-状态估计器的准确性，以及运动控制器，运动规划器的有效性。
+4) 在“悟空-IV”仿人机器人实验平台上开展实验：实现了仿人机器人可靠的触地估计和浮动基位置速度估计；机器人最大稳定行走速度超过6km/h，并能实现误差在几厘米以内的位置跟踪；可以登上高度为10cm
+的三级连续台阶，验证上述算法的有效性。
 
 \section{本文主要结构}
-根据本文的研究内容以及顺序，各章节的内容安排如下：
-
+根据本文的研究内容以及顺序，各章节的结构如\aref{fig:artticle_struct}所示，内容安排如下：
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.6\linewidth]{文章结构.pdf}
+    \caption{\label{fig:artticle_struct}本文主要章节结构关系}
+\end{figure}
 第一章 本章主要介绍国内外仿人机器人的情况，对国内外知名仿人机器人简单介绍，
 以及仿人机器人运动控制的研究现状。
 
@@ -387,9 +391,9 @@ ZMP类的方法基于位置控制，在平地上能起到较好的控制效果�
 
 第三章 本章主要提出了基于二次规划的仿人机器人运动控制器。根据触地状态设计了机器人的有限状态机，处于摆动相的腿采用位置控制，
 足端轨迹跟随根据质心速度计算出的落脚点位置；处于支撑相的腿将上层规划器规划出的运动行为组合成一个二次规划问题，二次规划的解
-映射到关节空间作为关节电机的前馈输入，和状态反馈得到的反馈输入一起作为关节力矩的输入。最后在“悟空-IV”仿人机器人上进行了轨迹跟踪实验。
+映射到关节空间作为关节电机的前馈输入，和状态反馈得到的反馈输入一起作为关节力矩的输入。最后在“悟空-IV”仿人机器人实验平台上进行了轨迹跟踪实验。
 
-第四章 本章主要设计了基于轨迹优化的仿人机器人运动规划器。本章针对仿人机器人上台阶的场景，将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
+第四章 本章主要设计了基于轨迹优化的仿人机器人轨迹规划器。本章针对仿人机器人上台阶的场景，将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
 滑动摩擦约束、转动摩擦约束作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
 利用非线性规划求解器求解，最终得到机器人上台阶时质心的期望轨迹。最后在“悟空-IV”仿人机器人上进行了实验验证。
 
@@ -458,7 +462,7 @@ ZMP类的方法基于位置控制，在平地上能起到较好的控制效果�
     \item 机器人和环境之间不存在刚性的连接，或者说机器人的基座是“浮动”的。
     \item 机器人和环境的接触是不连续的，随着腿的交替运动，机器人的动力学也随之产生阶段性的不连续变化。
 \end{itemize}
-基于以上两个特征，浮动基描述成为了现在对腿足运动通用的表示方法。如\aref{fig:floating_base}所示，我们假设仿人机器人和环境之间存在$n_b$个虚拟关节，它们的数值组成了浮动基的坐标$\boldsymbol{q}_b$，
+基于以上两个特征，浮动基描述成为了现在对腿足运动通用的表示方法。如\aref{fig:floating_base}所示，假设仿人机器人和环境之间存在$n_b$个虚拟关节，它们的数值组成了浮动基的坐标$\boldsymbol{q}_b$，
 $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标$\boldsymbol{q}_j$，组成了机器人的广义坐标$\boldsymbol{q}$，即：
 \begin{equation}
     \label{equ:general_coor}
@@ -508,7 +512,7 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 实际工程中不能完全信任控制器会按时将脚抬离或者放回地面，完美地按照规划出的相位执行。同样地，也不能假设地面是完全平整的，
 在地形复杂或者是存在未知障碍物的环境中，地面的高度可能是未知的。在没有外部力传感器的情况下，只能依靠关节编码器的数据，机器人本体力感知，
 以及腿的运动学模型来估计机器人的触地状态。但关节编码器会有离散误差，本体力感知存在电机力矩系数的近似误差，运动学模型也会有参数误差。
-这些单一的测量没有一个能告诉我们腿的真实触地状态，但将这些测量信息融合起来可以得到某条腿是否有可能和地面接触的一个
+这些单一的测量没有一个能确定腿的真实触地状态，但将这些测量信息融合起来可以得到某条腿是否有可能和地面接触的一个
 更准确的估计$\hat s$，$\hat s \in \left\{0=swing, 1=contact\right\}$。完美的触地检测算法应当满足$\hat s = s$，$s$表示触地状态的真值。
 本章主要使用了卡尔曼滤波器来实现多种传感器信息的数据融合，将仿人机器人的两条腿和地面接触的整体概率估计作为卡尔曼滤波器的状态量，即：
 \begin{equation}
@@ -521,7 +525,7 @@ $\boldsymbol{q}_b$再加上机器人身上的$n_j$个驱动关节组成的坐标
 
 本章中将概率接触模型作为先验来融合所有可用的数据。虽然测量中涉及到的动力学很复杂，但把接触的概率作为状态，
 就能用一个简单的线性卡尔曼滤波来实现。在估计时使用概率而不是离散的二进制接触状态的好处在于，概率的增大或者减小
-可以预测会发生接触状态的变化，同时我们可以通过方便地调整触地的概率阈值来提升算法在不同环境下的表现。
+可以预测会发生接触状态的变化，同时可以通过方便地调整触地的概率阈值来提升算法在不同环境下的表现。
 \subsection{预测——过程模型}
 \label{sec:contact_pred}
 对于给定当前某条腿的相位$\phi$，步态规划器会给出每条腿期望的接触状态$s_{\phi}$。在理想情况下，$s = s_{\phi}$，
@@ -600,7 +604,7 @@ $\operatorname{erf}$表示误差函数，其与高斯分布的概率分布函数
         0 & & \sigma_{p_{z, r}}^2
         \end{array}\right]_k
 \end{equation}
-该协方差矩阵表示我们对接触高度模型的置信度。
+该协方差矩阵表示对接触高度模型的置信度。
 
 2）接触力测量模型：足底的外力是唯一真实能表明发生了触地的信息。由于“悟空-IV”仿人机器人并没有直接在足底安装力传感器，本文中使用的是由关节力矩向量乘以腿部雅可比矩阵得到的
 近似足底接触力。在这个接触力的基础上建立起另一个简单的概率模型，用随机变量$f_c$表示，假设$f_c$也满足高斯分布：$F_c \sim \mathcal{N}\left(\mu_{f_c}, \sigma_{f_c}^2\right)$。
@@ -614,7 +618,7 @@ $\operatorname{erf}$表示误差函数，其与高斯分布的概率分布函数
     \includegraphics[width=.75\linewidth]{gauss_force.pdf}
     \caption{\label{fig:gauss_force}足底力-触地概率分布图}
 \end{figure}
-\aref{fig:gauss_force}展示了法向接触力和对应触地概率的关系，这个基于接触力的触地概率是我们的第二个测量:
+\aref{fig:gauss_force}展示了法向接触力和对应触地概率的关系，这个基于接触力的触地概率是本节的第二个测量:
 \begin{equation}
     \label{equ:est_force_noise}
     \tilde{\boldsymbol{z}}_{2, k}=\left\{\begin{array}{c}
@@ -721,8 +725,8 @@ $\operatorname{erf}$表示误差函数，其与高斯分布的概率分布函数
 而且环境地形很可能是不规则的，机器人的几何模型中也可能有不确定性(比如柔性零件引起的变形)，所以仅仅通过机器人关节角度的测量是不足以重建出浮动基的位姿，实现可靠的状态估计的。
 
 IMU可以帮忙解决这个问题，它可以提供安装位置处相对于惯性系的姿态角，角速度和线加速度。“悟空-IV”上安装的IMU型号为Xsens MTi-630（\aref{fig:imu}），其相关参数见\aref{tab:imu_data}。可以看到
-IMU硬件输出的姿态角精度是相当高的，$roll$和$pitch$角的误差在0.2°以内，$yaw$角的误差在1°以内，因此我们不需要再专门设计浮动基姿态估计算法，直接将IMU安装在机器人浮动基座上即可。但浮动基的位置和速度估计
-无法直接通过传感器测量获得，因此我们设计了基于卡尔曼滤波，融合加速度计测量和腿部运动学信息的位置速度估计算法，在后续章节中会详细阐述。
+IMU硬件输出的姿态角精度是相当高的，$roll$和$pitch$角的误差在0.2°以内，$yaw$角的误差在1°以内，因此不需要再专门设计浮动基姿态估计算法，直接将IMU安装在机器人浮动基座上即可。但浮动基的位置和速度估计
+无法直接通过传感器测量获得，因此本节中设计了基于卡尔曼滤波，融合加速度计测量和腿部运动学信息的位置速度估计算法，在后续章节中会详细阐述。
 \begin{figure}[h]
     \centering
     \includegraphics[width=.35\linewidth]{imu.eps}
@@ -814,8 +818,8 @@ IMU硬件输出的姿态角精度是相当高的，$roll$和$pitch$角的误差�
 $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$分别是过程噪声和测量噪声的协方差矩阵。为了正确地表示支撑相和摆动相之间的切换，本章中设计了一种根据腿的触地状态
 来调整腿部运动学信息的噪声大小。
 
-首先用$\rho_{trust}$来表示某一条腿的运动学信息的可信度，由于我们的预测模型假设腿和地面是相对静止的，因此摆动腿运动学信息的可信度为0，摆动腿的相位和可信度$\rho_{trust}$的关系如\aref{fig:kin_trust}。
-在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里我们用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的时间区间具体有多长。
+首先用$\rho_{trust}$来表示某一条腿的运动学信息的可信度，由于本节中的预测模型假设腿和地面是相对静止的，因此摆动腿运动学信息的可信度为0，摆动腿的相位和可信度$\rho_{trust}$的关系如\aref{fig:kin_trust}。
+在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的时间区间具体有多长。
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.\linewidth]{trust.pdf}
@@ -869,7 +873,7 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 \subsection{实验结果}
 本节借助动作捕捉系统来验证浮动基位置%和速度估计
 的准确性。实验环境如\aref{fig:capture_exp}所示，动捕系统包含六颗镜头，以及数据分析处理软件。机器人身上穿的衣服主要是为了避免金属零件反光影响动捕系统的正常工作，同时机器人身体后方安装了
-四个反光标记点，来对机器人浮动基座的位置和速度信息进行捕捉。动捕系统在室内环境下可以实现厘米级的定位精度，因此我们可以将其采集到的数据作为真值，来评估浮动基位置和速度估计的输出结果。
+四个反光标记点，来对机器人浮动基座的位置和速度信息进行捕捉。动捕系统在室内环境下可以实现厘米级的定位精度，因此可以将其采集到的数据作为真值，来评估浮动基位置和速度估计的输出结果。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{动捕.jpg}
@@ -996,7 +1000,7 @@ $y$轴方向为机器人运动的正方向和左方向;机器人躯干的向前�
 关节速度向量$\boldsymbol{v}\in {{\mathbb{R}}^{n+6}}$
 % （区分$\boldsymbol{v}$和$\dot \boldsymbol{q}$是为了用关节构型的冗余参数来避免奇异问题(比如使用欧拉角而不是$rpy$来表示浮动基姿态)，
 % 同时使用最少的参数来表示速度向量(比如使用角速度而不是四元数的导数)）。
-我们假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
+假设机器人和世界系之间的“浮动关节”是唯一的无驱动自由度。令
 \begin{equation}
     \label{equ:momentum}
     \boldsymbol{h}=\left(\begin{aligned}
@@ -1026,7 +1030,7 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
     \boldsymbol{A}\dot{\boldsymbol{v}}+\dot{A}v={{\boldsymbol{W}}_{g}}+\sum\limits_{i}{{{\boldsymbol{W}}_{gr,i}}}
     +\sum\limits_{i}{{{\boldsymbol{W}}_{ext,i}}}
 \end{equation}
-\aref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，我们在后续的控制架构中利用了这一点。
+\aref{equ:euler_wrench}表明关节加速度向量$\dot{\boldsymbol{v}}$和机器人受到的力旋量之间存在仿射关系，后续的控制架构中利用了这一点。
 \section{控制架构}
 \label{sec:controller}
 \begin{figure}[htbp]
@@ -1034,7 +1038,7 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
     \includegraphics[width=1.\linewidth]{qp控制框架.eps}
     \caption{\label{fig:framework_control_flow}控制架构中上层信息流概览}
 \end{figure}
-\aref{fig:framework_control_flow}展示了我们的控制架构的上层信息流。一个上层的运动行为，比如行走或者开车行为，
+\aref{fig:framework_control_flow}展示了控制架构的上层信息流。一个上层的运动行为，比如行走或者开车行为，
 用下列数据构建了一个二次规划问题：
 1）	运动任务(motion task)形式的期望运动；
 2）	可行接触的信息；
@@ -1042,8 +1046,8 @@ ${\boldsymbol{W}}_{gr,i}$表示由于机器人刚体和环境接触产生的环�
 QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器输出关节加速度和与环境接触的连杆所受的环境接触力。
 这些信息随后通过一种逆动力学算法来计算期望的关节力矩。计算出的力矩随后用来确定发送给机器人关节电机的力矩指令。
 \subsection{期望运动}
-在我们的架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\aref{equ:euler_wrench}等式左边的部分。
-我们将运动任务定义为和机器人期望的广义速度向量线性相关的方程，${\dot{\boldsymbol{v}}}_{d}\in {\mathbb{R}}^{(n+6)}$，
+在本章介绍的控制架构中，运动任务是用来确定期望的机器人运动的。运动(motion)是动量变化率方程\aref{equ:euler_wrench}等式左边的部分。
+本章将运动任务定义为和机器人期望的广义速度向量线性相关的方程，${\dot{\boldsymbol{v}}}_{d}\in {\mathbb{R}}^{(n+6)}$，
 包括了机器人浮动基关节相对于世界系的空间加速度。$n$是驱动关节的数量。第$i$个运动任务可以写成
 \begin{equation}
     \label{equ:motion_task}
@@ -1060,8 +1064,8 @@ QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器�
     \left\| {{\boldsymbol{f}}_{i}}-({{\boldsymbol{n}}_{i}}{{\boldsymbol{f}}_{i}}){{\boldsymbol{n}}_{i}} \right\|\le \mu {{\boldsymbol{n}}_{i}}{{\boldsymbol{f}}_{i}}
 \end{equation}
 其中$\mu$是摩擦系数。\aref{equ:friction_cone}的二阶锥约束不能结合到一个二次规划中，并且二阶锥规划(SOCP)还没有比较快的求解器，
-所以我们用了标准的保守对摩擦锥的多棱锥（polyhedral）近似。近似出的摩擦锥用原本的二阶锥的一组$m$个射线作为基向量来参数化（如\aref{fig:friction_cone}），
-即我们用下式来替代\aref{equ:friction_cone}：
+所以本章用了标准的保守对摩擦锥的多棱锥（polyhedral）近似。近似出的摩擦锥用原本的二阶锥的一组$m$个射线作为基向量来参数化（如\aref{fig:friction_cone}），
+即用下式来替代\aref{equ:friction_cone}：
 \begin{equation}
     \label{equ:friction_para}
     \begin{aligned}
@@ -1069,7 +1073,7 @@ QP利用\aref{equ:euler_wrench}协调运动任务和可行接触。QP求解器�
        & {{\rho }_{ij}}\ge 0 \\ 
       \end{aligned}      
 \end{equation}
-其中$\boldsymbol{\beta}_{ij} \in \mathbb{R}^3$是基向量，$\rho_{ij}$是坐标。在本文提出的结果中我们用了四个基向量，将$\mu$设为0.8。
+其中$\boldsymbol{\beta}_{ij} \in \mathbb{R}^3$是基向量，$\rho_{ij}$是坐标。本章中用了四个基向量，将$\mu$设为0.8。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{摩擦锥.eps}
@@ -1101,11 +1105,11 @@ ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\tim
    & {{\boldsymbol{\beta}}_{im}} \\ 
   \end{aligned} \right]
   $。
-  实际我们用了和接触的刚体表面固定的坐标系的面法向量${{\boldsymbol{n}}_{j}}$。
+  实际本章中用了和接触的刚体表面固定的坐标系的面法向量${{\boldsymbol{n}}_{j}}$。
 %   我们更愿意使用Pollard和Reitsma的射线参数化，
 %   而不是Stewart和Trinkle的另一种参数化，因为射线参数化每个接触点要求的决策变量都会少一个。
 \subsection{二次规划构建过程}
-最终我们得到的二次规划问题如\ref{equ:qp_control}所示：
+最终构建出的二次规划问题如\ref{equ:qp_control}所示：
 \begin{equation}
     \label{equ:qp_control}
     \begin{aligned}
@@ -1116,23 +1120,9 @@ ${{\hat{\boldsymbol{r}}}_{i}}{\boldsymbol{f}_{i}}\equiv {\boldsymbol{r}_{i}}\tim
       \end{aligned}
 \end{equation}
 其中，$\boldsymbol{b}={{\dot{\boldsymbol{h}}}_{d}}-\dot{\boldsymbol{A}}\boldsymbol{v}$，${{\dot{\boldsymbol{h}}}_{d}}\in {{\mathbb{R}}^{6}}$表示期望的质心动量变化率。
-${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho} }},{\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$是由更上层的控制器决定的目标函数权重矩阵。\aref{tab:qp_weight}给出了行走行为下的权重矩阵示例。
-\begin{table}[htbp]
-    \setstretch{1.3}
-	\centering
-	\caption{权重矩阵的数值}
-	\label{tab:qp_weight}
-	\begin{tabular}{m{2cm}<{\centering}m{2cm}<{\centering}}
-		\toprule  %添加表格头部粗线
-		\fangsong{参数名称}   &数值  \\
-		\midrule  %添加表格中横线
-		${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}}$    & $\mathbf{I}$\\
-		${\boldsymbol{{C}}_{\boldsymbol{\rho} }}$ &  $0.01 \mathbf{I}$ \\
-		${\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$ & $0.05 \mathbf{I}$ \\
-		\bottomrule %添加表格底部粗线
-	\end{tabular}
-\end{table}
-二次规划问题构建的具体算法流程由\aref{alg:quadratic_program}给出，最终我们使用了qpOASES求解库来进行问题的数值求解，平均求解时间在2ms左右。
+${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho} }},{\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$是由更上层的控制器决定的目标函数权重矩阵。
+
+二次规划问题构建的具体算法流程由\aref{alg:quadratic_program}给出，最终本章使用了qpOASES求解库来进行问题的数值求解，平均求解时间在2ms左右。
 \begin{algorithm}[htb] 
 \setstretch{1.3}
 \caption{二次规划问题构建过程} 
@@ -1166,10 +1156,28 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 \end{algorithmic}
 \end{algorithm}
 \section{实验结果}
-\subsection{轨迹跟踪实验}
+% \subsection{轨迹跟踪实验}
 \label{sec:controller_exp}
-我们在“悟空-IV”实物样机上部署了上述算法，并进行了相关行走实验验证了算法的有效性。\aref{fig:track_exp}是轨迹跟踪实验的实验截图，在该实验中，
-我们让机器人跟随一段规划好的五次多项式轨迹，跟踪曲线如\aref{fig:com_pos_track}所示。
+本节在“悟空-IV”实物样机上部署了上述算法，并进行了相关行走实验。
+\begin{table}[htbp]
+    \setstretch{1.3}
+	\centering
+	\caption{权重矩阵的数值}
+	\label{tab:qp_weight}
+	\begin{tabular}{m{2cm}<{\centering}m{2cm}<{\centering}}
+		\toprule  %添加表格头部粗线
+		\fangsong{参数名称}   &数值  \\
+		\midrule  %添加表格中横线
+		${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}}$    & $\mathbf{I}$\\
+		${\boldsymbol{{C}}_{\boldsymbol{\rho} }}$ &  $0.01 \mathbf{I}$ \\
+		${\boldsymbol{C}_{{\dot{\boldsymbol{v}}}}}$ & $0.05 \mathbf{I}$ \\
+		\bottomrule %添加表格底部粗线
+	\end{tabular}
+\end{table}
+\aref{fig:track_exp}是轨迹跟踪实验的实验过程截图，在该实验中，权重矩阵的赋值见\aref{tab:qp_weight}。
+机器人质心的期望位置是一段根据始末状态规划好的五次多项式轨迹，x方向和y方向分别前进1.0m和0.5m后再回到原点，z方向保持恒定高度不变。
+最终轨迹跟踪的执行结果如\aref{fig:com_pos_track}所示，xyz方向上轨迹跟踪的均方根误差分别为0.127m，0.075m和0.089m。从质心位置轨迹曲线可以看出，由于仿人机器人的运动存在不连续的特性，每次状态切换
+都会对轨迹跟踪的效果产生影响。
 \begin{figure}[htbp]
     \centering
     \includegraphics[height=.32\linewidth]{walk_1.jpg}
@@ -1188,8 +1196,11 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     \includegraphics[width=.8\linewidth]{rectangle_track.pdf}
     \caption{\label{fig:com_pos_track}质心位置跟踪曲线}
 \end{figure}
-\subsection{高速行走实验}
-除此之外，我们还通过快速行走实验验证了上述算法在高速场景下的鲁棒性。实验截图如\aref{fig:track_exp}所示。由质心速度估计得到的速度曲线如\aref{fig:com_vel_track}。
+% \subsection{高速行走实验}
+
+本章还通过快速行走实验验证了上述算法在高速场景下的鲁棒性。实验过程如\aref{fig:fast_walk}所示。\aref{fig:com_vel_track}展示了质心速度的跟随曲线，图中蓝色曲线表示质心速度估计结果，
+橙色虚线表示目标速度设定为6km/h（1.67m/s），黄色短线段表示在线段所在的时间区间内计算出的平均速度，其值约为6.1km/h(1.69m/s)，成功达到了期望的速度值。
+在高速运动的场景下，速度估计的结果相对期望速度的均方根误差为0.289m/s，和位置跟踪一样，不连续的状态切换对机器人的速度跟随也有一定的不利影响，即便如此，稳定的高速行走还是验证了本章所提出的算法的鲁棒性。
 \begin{figure}[htbp]
     \centering
     \includegraphics[height=.32\linewidth]{fast_walk1.jpg}
@@ -1201,11 +1212,11 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     \includegraphics[height=.32\linewidth]{fast_walk6.jpg}
     \includegraphics[height=.32\linewidth]{fast_walk7.jpg}
     \includegraphics[height=.32\linewidth]{fast_walk8.jpg}   
-    \caption{\label{fig:track_exp}“悟空-IV”快速行走实验截图}
+    \caption{\label{fig:fast_walk}“悟空-IV”快速行走实验截图}
 \end{figure}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{velo.eps}
+    \includegraphics[width=.75\linewidth]{velo.eps}
     \caption{\label{fig:com_vel_track}质心速度曲线}
 \end{figure}
 \newpage
@@ -1284,7 +1295,7 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
     m \ddot{\boldsymbol{x}}=-m \boldsymbol{g}+\sum_i{ }^{\mathcal{I}} \boldsymbol{f}_i
 \end{equation}
 其中$\boldsymbol{x} \in \mathbb{R}^{3}$是惯性系$\mathcal{I}$下的质心位置，$m$是机器人的总质量，$\boldsymbol{g}$是重力加速度， 
-是惯性系$\mathcal{I}$下的一个外力。我们可以把机器人足底所受的力和力矩定义在和$\mathcal{I}$平行的一个坐标系下，这个坐标系的原点和CoP点重合；
+是惯性系$\mathcal{I}$下的一个外力。可以把机器人足底所受的力和力矩定义在和$\mathcal{I}$平行的一个坐标系下，这个坐标系的原点和CoP点重合；
 同时假设在通过CoP点，和足底垂直的轴上没有力矩作用在机器人上。这样机器人足底所受的力矩为0，可以通过限制所有的力都在通过质心的一条
 直线上来保证角动量守恒，即：
 \begin{equation}
@@ -1295,14 +1306,14 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 $\lambda_* \in \mathbb{R}^{3}$是系数，可以理解成弹簧的刚度。\aref{equ:linear_f}表示让质心角动量守恒，是一种偏保守的限制。
 然而，在仿人机器人用这样的模型可以在某种程度上确保鲁棒性。
 
-由于我们把所有的接触都考虑成单边接触，$\lambda_*$被约束为正来保证法向力为正，${ }^{\mathcal{I}} \boldsymbol{p}_* \in \mathbb{R}^{3}$
+由于所有的接触都被考虑成单边接触，$\lambda_*$被约束为正来保证法向力为正，${ }^{\mathcal{I}} \boldsymbol{p}_* \in \mathbb{R}^{3}$
 是足底CoP在$\mathcal{I}$下的位置，
 \begin{equation}
     \label{equ:cop}
     { }^{\mathcal{I}} \boldsymbol{p}_*=\boldsymbol{x}_*+{ }^{\mathcal{I}} \boldsymbol{R}_* \boldsymbol{p}_*
 \end{equation}
 其中$\boldsymbol{x}_* \in \mathbb{R}^{3}$是足底位置，$\boldsymbol{p}_*$是足坐标系下的CoP，因此$z$坐标为0。
-${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$间的相对旋转，为了简化表达，下文我们省略掉上标，
+${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$间的相对旋转，为了简化表达，下文将省略掉上标，
 将${ }^{\mathcal{I}} \boldsymbol{R}_*$表示为$\boldsymbol{R}_*$。
 
 假设机器人所受外力仅由足底力组成，\aref{equ:newton_2}可以改写为：
@@ -1311,6 +1322,7 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
     m \ddot{\boldsymbol{x}}= -m \boldsymbol{g}+m \lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right)
     +m \lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)
 \end{equation}
+
 同除以机器人的总质量，最终得到：
 \begin{equation}
     \label{equ:newton_linear_2}
@@ -1320,11 +1332,11 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
 \aref{equ:newton_linear_2}表示双摆的模型，在包含双腿的同时也保持了较低的维度。
 \section{上台阶质心轨迹规划}
 \label{sec:traj_plan}
-本文中表述的跨台阶规划器利用了
+本章中表述的跨台阶规划器利用了
 % [16][26][27]中阐述的
-基于阶段的轨迹优化。我们假设预先知道接触的序列，
+基于阶段的轨迹优化。假设预先知道接触的序列，
 这样简化了对接触的激活和失活的处理。本节提出了解决相关的非线性轨迹优化问题的约束，任务和方法论。
-首先我们将\aref{equ:newton_linear_2}简化为：
+首先将\aref{equ:newton_linear_2}简化为：
 \begin{equation}
     \label{equ:acceleration}
     \ddot{\boldsymbol{x}} = \boldsymbol{a}_i
@@ -1336,7 +1348,7 @@ ${ }^{\mathcal{I}} \boldsymbol{R}_*$表示足坐标系和惯性系$\mathcal{I}$�
     \item 两只脚触地，$\boldsymbol{a}_i=-\boldsymbol{g}+\lambda_l\left(\boldsymbol{x}-\boldsymbol{x}_l-\boldsymbol{R}_l \boldsymbol{p}_l\right)
                     +\lambda_r\left(\boldsymbol{x}-\boldsymbol{x}_r-\boldsymbol{R}_r \boldsymbol{p}_r\right)$
 \end{itemize}
-通过二阶泰勒展开，我们可以得到\aref{equ:acceleration}的近似离散形式：
+通过二阶泰勒展开，可以得到\aref{equ:acceleration}的近似离散形式：
 \begin{equation}
     \label{equ:approx_acc}
     \begin{aligned}
@@ -1382,8 +1394,8 @@ $T_i$并非预先设定好的，而是作为待优化变量。但每个阶段的
         \end{array}\right]\left(\boldsymbol{R}_*^{\top} m \left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right)\right)^2 \leq 0
 \end{equation}
 
-对于扭转摩擦约束，我们在足坐标系的原点施加相同的法向力矩$\tau_{*, z}$，并对其施加边界约束，即$-\mu_t{ }^* f_{*, z} \leq \tau_{*, z} \leq \mu_t{ }^* f_{*, z}$，
-$\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{f}_* \in \mathbb{R}^{3}$的作用点在$\boldsymbol{p}_*$处，我们可以把约束重写为：
+对于扭转摩擦约束，本节在足坐标系的原点施加相同的法向力矩$\tau_{*, z}$，并对其施加边界约束，即$-\mu_t{ }^* f_{*, z} \leq \tau_{*, z} \leq \mu_t{ }^* f_{*, z}$，
+$\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{f}_* \in \mathbb{R}^{3}$的作用点在$\boldsymbol{p}_*$处，可以把约束重写为：
 \begin{equation}
     \label{equ:friction_final}
     -\left[\begin{array}{c}
@@ -1406,7 +1418,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
     -\boldsymbol{d}_*^{\top *} \boldsymbol{f}_* \leq \boldsymbol{c}_*^{\top *} \boldsymbol{f}_* \leq \boldsymbol{d}_*^{\top *} \boldsymbol{f}_*
 \end{equation}
 注意$\boldsymbol{c}_*^{\top *} \boldsymbol{f}_*$表示$\boldsymbol{p}_* \times { }^* \boldsymbol{f}_*$的$z$向分量。
-和上文对静摩擦力约束的处理一样，我们替换掉${ }^* \boldsymbol{f}_*$得到下面的不等式约束：
+和上文对静摩擦力约束的处理一样，替换掉${ }^* \boldsymbol{f}_*$得到下面的不等式约束：
 \begin{equation}
     \label{equ:friction_stack}
     \boldsymbol{F}_* \boldsymbol{R}_*^{\top}\left(\boldsymbol{x}-\boldsymbol{x}_*-\boldsymbol{R}_* \boldsymbol{p}_*\right) \leq 0
@@ -1420,7 +1432,7 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
         \end{array}\right]
 \end{equation}
 
-在规划机器人运动时，我们必须考虑它的运动学限制，可以用质心到足的距离近似腿长，来限制超出运动学范围的运动，这个约束可以写成：
+在规划机器人运动时，必须考虑它的运动学限制，可以用质心到足的距离近似腿长，来限制超出运动学范围的运动，这个约束可以写成：
 \begin{equation}
     \label{equ:kine_constraint}
     -l^{\min } \leq\left\|\boldsymbol{x}-\boldsymbol{x}_*\right\| \leq l^{\max }
@@ -1436,9 +1448,9 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
     \Gamma_{x_d}=\sum_{k=\mathbb{K}_f}\left(w_{x_d}\left\|\boldsymbol{x}(k)-\boldsymbol{x}_{\boldsymbol{d}}\right\|^2+w_{\dot{x}_d}\left\|\boldsymbol{v}(k)-\boldsymbol{v}_d\right\|^2\right)
 \end{equation}
 其中$w_{x_d}, w_{\dot{x}_d} \in \mathbb{R}^{+}$是可以调整的权重。$\mathbb{K}_f$包括了最后一个阶段的一部分，末状态在这部分里面。
-所以可以生成提前到达终点并定义可以维持终点状态的控制输入的轨迹。因此，我们保证了最终可以到达稳定的状态。
+所以可以生成提前到达终点并定义可以维持终点状态的控制输入的轨迹。因此保证了最终可以到达稳定的状态。
 
-由\aref{equ:newton_linear_2}定义的模型不包含任何执行规划运动的关节力矩信息，为了减小关节所需的力矩，我们加上了下面的任务：
+由\aref{equ:newton_linear_2}定义的模型不包含任何执行规划运动的关节力矩信息，为了减小关节所需的力矩，这里加上了下面的任务：
 \begin{equation}
     \label{equ:cost_2}
     \Gamma_\tau=w_\tau \sum_{k, *} \tau_*(k)^2+w_{\tau_{\max }} \sum_*\left(\max _k \tau_*(k)^2\right)
@@ -1455,14 +1467,14 @@ $\mu_t \in \mathbb{R}$是扭转摩擦系数。考虑到外力${ }^* \boldsymbol{
 $w_{\tau}, w_{\tau_{max}} \in \mathbb{R}^+$是确定两项的相对优先级的权重。
 
 对于控制输入$\lambda_*(k)$和$\boldsymbol{p}_*(k)$ ，执行规划器生成的轨迹的输入的变化最好是相对小的，
-这样可以减少实物机器人跟踪轨迹时的关节力矩的变化。所以我们考虑下面的任务：
+这样可以减少实物机器人跟踪轨迹时的关节力矩的变化。所以考虑下面的任务：
 \begin{equation}
     \label{equ:cost_3}
     \Gamma_{\Delta_u}=w_{\Delta_u} \sum_{k=2 \ldots N \cdot P}\left\|\boldsymbol{u}_*(k)-\boldsymbol{u}_*(k-1)\right\|^2
 \end{equation}
 其中$w_{\Delta u} \in \mathbb{R}^+$是任务权重，$\boldsymbol{u}_*=\left[\lambda_*^{\top} \boldsymbol{p}_*^{\top}\right]^{\top}$。
 
-最后，我们加上一系列的正则项：
+最后再加上一系列的正则项：
 \begin{equation}
     \label{equ:cost_4}
     \Gamma_{\text {reg }}=  w_t \sum_i\left\|T_i-T_{i, d}\right\|^2+w_\lambda \sum_k\left\|\lambda_*(k)\right\|^2+ 
@@ -1471,7 +1483,7 @@ $w_{\tau}, w_{\tau_{max}} \in \mathbb{R}^+$是确定两项的相对优先级的�
 正则项使得优化问腿的求解向最小化控制输入和最小化每个阶段的的时长与预设的期望时长$T_{i, d}$的差值的方向进行，$w_t, w_\lambda, w_p$是对应正则项的权重。
 \subsection{优化问题}
 最终的轨迹优化问题由动力学约束(\aref{equ:approx_acc})，\aref{constraints}中列举的约束，\aref{cost_function}中的目标函数。由于约束中既有等式约束又有不等式约束，
-我们用Direct Multiple Shooting将轨迹优化问题转化为非线性规划问题(NLP)。NLP问题的决策变量$\boldsymbol{\chi}$可以写成：
+本章中用Direct Multiple Shooting将轨迹优化问题转化为非线性规划问题(NLP)。NLP问题的决策变量$\boldsymbol{\chi}$可以写成：
 \begin{equation}
     \label{equ:decision_variable}
     \boldsymbol{\chi} = \begin{cases}\boldsymbol{x}(k) & k=0 \ldots N \cdot P \\ \boldsymbol{v}(k) & k=0 \ldots N \cdot P \\ \boldsymbol{a}(k) & k=1 \ldots N \cdot P \\ \lambda_*(k) & k=1 \ldots N \cdot P, *=l, r \\ \boldsymbol{p}_*(k) & k=1 \ldots N \cdot P, *=l, r \\ T_i & i=1 \ldots P,\end{cases}
@@ -1482,7 +1494,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 
 问题求解的完整过程在\aref{alg:traj_optimization}中，其中含有下标$i$的量取决于某个特定的阶段，并且在该阶段的时长内是固定的。算法的实现基于CasADi\cite{andersson2019casadi}，求解器使用了Ipopt。
 
-由于系统模型、摩擦约束、以及相关目标函数的非线性，我们构建的优化问题是非凸的。为了加速求解，我们用每个阶段期望的时长来初始化$T_i$，期望时长的选取基于以往的实验数据，
+由于系统模型、摩擦约束、以及相关目标函数的非线性，本章中构建的优化问题是非凸的。为了加速求解，实际上会用每个阶段期望的时长来初始化$T_i$，期望时长的选取基于以往的实验数据，
 质心位置轨迹用从$\boldsymbol{x}_0$到$\boldsymbol{x}_d$的线性插值来初始化，其他变量均被初始化为0。
 \begin{algorithm}[h] 
 \setstretch{1.3}
@@ -1528,7 +1540,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \end{algorithm}
 \section{实验结果}
 \label{stair_experiment}
-本节主要介绍在仿人机器人“悟空-IV”上开展的上台阶实验，实验场景包含三级台阶，如\aref{fig:track_exp}所示，每级台阶高度为10cm，宽度为25cm。机器人需要从台阶下面约20cm处启动，
+本节主要介绍在仿人机器人“悟空-IV”上开展的上台阶实验，实验场景包含三级台阶，如\aref{fig:stairs}所示，每级台阶高度为10cm，宽度为25cm。机器人需要从台阶下面约20cm处启动，
 连续地登上三级台阶。
 \begin{figure}[h]
     \centering
@@ -1541,11 +1553,11 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
     \includegraphics[height=.32\linewidth]{stairs_6.jpg}
     \includegraphics[height=.32\linewidth]{stairs_7.jpg}
     \includegraphics[height=.32\linewidth]{stairs_8.jpg}   
-    \caption{\label{fig:track_exp}“悟空-IV”上台阶实验截图}
+    \caption{\label{fig:stairs}“悟空-IV”上台阶实验截图}
 \end{figure}
 
 本章中通过轨迹优化得到的质心轨迹由第三章中提出的运动控制器来执行，该运动控制器将优化求解得到的期望质心加速度和期望足底力转化成“悟空-IV”机器人的关节力矩，从而实现沿期望轨迹的运动。
-本实验中将由各阶段始末状态平滑插值后微调得到的质心轨迹作为对照组，来进一步验证轨迹优化方法的优越性。由于在登上台阶的过程中膝关节电机所要承受的负荷是远超其他关节电机的，因此我们重点将膝关节力矩
+本实验中将由各阶段始末状态平滑插值后微调得到的质心轨迹作为对照组，来进一步验证轨迹优化方法的优越性。由于在登上台阶的过程中膝关节电机所要承受的负荷是远超其他关节电机的，因此本节重点将膝关节力矩
 作为效果对比的指标。
 \begin{figure}[h]
     \centering
@@ -1564,16 +1576,16 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \aref{fig:track_com}为跟随优化轨迹过程中三个方向的质心位置曲线，由于z方向的轨迹跟踪效果对于能否成功登上台阶来说是最重要的，\aref{fig:track_com}(c)中的竖直虚线表示优化问题分隔的不同阶段，图中蓝色曲线为优化求解得到的z方向轨迹，
 红色曲线为优化轨迹的执行结果，黑色曲线表示对照组的规划结果。可以看出优化轨迹在登上台阶之前质心在z方向有一段明显的下降过程，这是为了提前收缩腿长以避免在登上台阶的过程中出现不符合腿长约束的运动，
 \aref{fig:com_z_velo}中的z向速度曲线也可以明显看到这一过程。多次实验发现质心提前下降的动作同时的确有利于提高登上台阶的成功率，在各25次同样条件下的上台阶实验中，有质心下降动作时成功登上三级台阶的次数
-会比对照组多4次，成功率提升了$16\%$。
-\begin{figure}[h]
+会比对照组多4次，\begin{figure}[h]
     \centering
     \includegraphics[width=.6\linewidth]{stair_tracking.eps} 
     \caption{\label{fig:track_com}“悟空-IV”上台阶质心跟随曲线}
-\end{figure}
+\end{figure}成功率提升了$16\%$。
 
+\newpage
 \section{本章总结}
 本章首先将第三章中的弹簧倒立摆模型进行了拓展，从而得到了变高度双摆模型及其动力学方程。然后阐述了针对上台阶场景的轨迹优化问题的构建过程：首先变高度双摆动力学模型作为动力学约束，和摩擦力约束、腿长约束一起组成了轨迹优化问题
-的约束条件；然后设计了一系列目标函数和正则项，来使优化问题的解向我们期望的方向收敛。最终得到的优化问题由非线性规划求解器Ipopt求解，得到的期望质心轨迹由第三章介绍的运动控制器来执行，在“悟空-IV”机器人上成功实现了登上台阶的动作。
+的约束条件；然后设计了一系列目标函数和正则项，来使优化问题的解向期望的方向收敛。最终得到的优化问题由非线性规划求解器Ipopt求解，得到的期望质心轨迹由第三章介绍的运动控制器来执行，在“悟空-IV”机器人上成功实现了登上台阶的动作。
 \chapter{总结与展望}
 \section{总结}
 本文建立了仿人机器人的模型，并从状态估计、轨迹跟踪、轨迹规划三个方面对仿人机器人的运动控制进行了研究，并在“悟空-IV”仿人机器人实验平台上进行了实验验证，
@@ -1590,7 +1602,7 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 组合成一个二次规划问题，求解出关节的期望力矩作为关节的前馈输入，状态反馈得到的期望力矩作为
 关节的反馈输入。
 
-3） 设计了基于轨迹优化的仿人机器人运动规划器。将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
+3） 设计了基于轨迹优化的仿人机器人轨迹规划器。将变高度双摆模型作为规划的动力学模型，将力矩和腿长约束、
 滑动摩擦约束、转动摩擦约束作为优化问题的约束，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
 利用非线性规划求解器求解，最终得到机器人质心的期望轨迹。
 % 本文对仿人机器人的运动控制进行了各个层次的研究
@@ -1604,15 +1616,15 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 2） 使用更完整的动力学模型来实现机器人的轨迹跟踪。本文中的运动控制器主要是基于质心的弹簧倒立摆模型，该模型简单可靠便于快速求解，但在执行更动态的动作时，由于忽略了很多动力学因素的影响，
 控制效果会受影响。使用更完整且准确的全身动力学模型可以进一步挖掘机器人关节的硬件性能，执行更复杂更动态的动作。
 
-3） 将运动规划器扩展到更多更通用的场景。本文中的运动规划器针对仿人机器人上台阶的场景，构建了轨迹优化问题并对其进行在线的数值求解，能比较好地完成上台阶的任务。实际上轨迹优化的适用场景不止于此，
+3） 将轨迹规划器扩展到更多更通用的场景。本文中的轨迹规划器针对仿人机器人上台阶的场景，构建了轨迹优化问题并对其进行在线的数值求解，能比较好地完成上台阶的任务。实际上轨迹优化的适用场景不止于此，
 对于平地、斜坡、不平整路面等各种地形都可以设计不同的目标函数以及权重矩阵，将更多场景包含在统一的轨迹规划框架之中。
 % \subsection{落脚点规划的最近进展}
-% 落脚点规划是运动规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
-% 增加了运动规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
+% 落脚点规划是轨迹规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
+% 增加了轨迹规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
 % 混合整数公式(mixed-integer formulations)，同时还考虑了在不平整地形的运动学甚至动力学可行性约束\cite{aceituno2017simultaneous}。
 
 % 另外一种方法是用机器人足能到达的范围来提供接触序列存在的充分必要条件。这样机器人的运动可以不用提前设定好接触序列来实现，
-% 这大大降低了运动规划问题的复杂度，使机器人可以在几分之一秒内对变化的环境作出快速重规划。具体的接触序列可以在下一个阶段用各种各样的
+% 这大大降低了轨迹规划问题的复杂度，使机器人可以在几分之一秒内对变化的环境作出快速重规划。具体的接触序列可以在下一个阶段用各种各样的
 % 启发式函数来得到，比如在考虑不平整地形下运动学甚至动力学可行性约束的同时最大化准静态的鲁棒平衡\cite{tonneau2018efficient}。这种多阶段的方法可以很高效，
 % 但是对启发函数的依赖可能会导致失败。
 

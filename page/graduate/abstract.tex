@@ -2,51 +2,55 @@
 \chapternonum{摘要}
 
 仿人机器人是机器人领域的研究热点之一。仿人机器人存在结构复杂，自由度高，非线性强，本质不稳定等特点，其运动的性能及稳定性至今无法达到人们的期望，其中
-走上台阶更是机器人运动控制的重要挑战。本文针对仿人机器人开展基于优化的运动控制研究，设计仿人机器人状态估计器、基于二次规划的运动控制器
+走上台阶更是机器人运动控制的重要挑战。本文针对仿人机器人的质心轨迹规划和跟踪问题开展基于优化的运动控制研究，设计仿人机器人状态估计器、基于二次规划的运动控制器
 、以及基于轨迹优化的质心轨迹规划器，并在仿人机器人“悟空-IV”平台开展实验验证。本文的主要研究工作和成果如下：
 
 1) 设计了仿人机器人状态估计器。首先定义了仿人机器人的运动状态机，并对仿人机器人每条腿触地的概率进行了估计，
-为步行状态机提供了切换信号；其次定义了仿人机器人的各个坐标系，并对仿人机器人质心在世界系下的位置、速度进行了估计
+为步行状态机提供了切换信号；其次定义了仿人机器人的各个坐标系，并对仿人机器人浮动基在世界系下的位置、速度进行了估计，
 为后续的运动控制和规划建立了基础。
 
-2) 设计了基于二次规划的仿人机器人运动控制器。将仿人机器人每条腿的运动分为支撑相和摆动相，
+2) 设计了基于二次规划的仿人机器人步行控制器。将仿人机器人每条腿的运动分为支撑相和摆动相，
 摆动相采用位置控制跟随根据质心速度计算出的落脚点位置；支撑相将上层规划器规划出的运动行为
 组合成二次规划问题，利用qpOASES求解库求解，将求解出的关节的期望力矩作为关节的前馈输入，将状态反馈得到的期望力矩作为
 关节的反馈输入，最终得到支撑腿各关节的实际期望力矩值。
 
-3) 设计了基于轨迹优化的仿人机器人运动规划器。针对机器人上台阶场景，将变高度双摆模型的动力学方程作为质心轨迹规划的动力学约束，以及机器人腿长约束、
+3) 设计了基于轨迹优化的仿人机器人上台阶轨迹规划器。针对仿人机器人上台阶的稳定步行需求，将变高度双摆模型的动力学方程作为质心轨迹规划的动力学约束，以及机器人腿长约束、
 关节最大力矩约束、滑动摩擦约束、转动摩擦约束作为优化问题的约束条件，并设计一系列的目标函数以及正则项，最终构建出一个轨迹优化问题，
-利用Ipopt求解器求解，最终得到登上台阶过程中机器人质心的期望轨迹。
+利用Ipopt非线性优化求解器求解，最终得到登上台阶过程中机器人质心的期望轨迹。
 
-4) 在“悟空-IV”仿人机器人实验平台上开展实验，验证上述控制算法。成功验证
-状态估计器的准确性，以及运动控制器，运动规划器的有效性。
+4) 在“悟空-IV”仿人机器人实验平台上开展实验：实现了仿人机器人可靠的触地估计和浮动基位置速度估计；机器人最大稳定行走速度超过6km/h，并能实现误差在几厘米以内的位置跟踪；可以登上高度为10cm
+的三级连续台阶，验证上述算法的有效性。
 
 $\textbf{关键词}$：仿人机器人；状态估计；二次规划；轨迹优化；运动控制；
 
 \cleardoublepage
 \chapternonum{Abstract}
 
-Biped robot is one of the research hotspots in the field of robotics. Biped robots have the characteristics of complex mechanical structures, 
-complex dynamic equations, and high requirements for stability control. The stability of their motion has so far failed to meet people's expectations. 
-Walking up steps is an important challenge for robot motion control. This thesis conducts optimization-based motion control research for biped robots, 
-designs a biped robot state estimator, a motion controller based on quadratic programming, and a center-of-mass trajectory planner based on trajectory optimization. 
-carry out experimental verification. The main research contents of this thesis are:
+Humanoid robot is one of the research hotspots in the field of robotics. Humanoid robots have the characteristics of complex structure, high degree of freedom, 
+strong nonlinearity, and inherent instability. So far, their motion performance and stability have not met people's expectations. 
+Walking up stairs is an important challenge for robot motion control. In this paper, the optimization-based motion control research is carried out 
+for the center of mass trajectory planning and tracking problems of humanoid robots, and the state estimator of humanoid robots and the motion controller 
+based on quadratic programming are designed, and a center-of-mass trajectory planner based on trajectory optimization, and carried out experimental verification 
+on the humanoid robot "Wukong-IV" platform. The main research work and achievements of this paper are as follows:
 
-1) A biped robot state estimator is designed. First, the probability of each leg of the biped robot touching the ground is estimated, 
-which provides a switching signal for the walking state machine; secondly, the position and velocity of the center of mass of the biped robot in the world system are estimated, 
-which provides a basis for subsequent motion control and planning. The foundation is established.
+1) A state estimator for a humanoid robot is designed. First, the motion state machine of the humanoid robot is defined, and the probability of each leg of the humanoid 
+robot touching the ground is estimated, which provides switching signals for the walking state machine; secondly, each coordinate system of the humanoid robot is defined, 
+and the simulation The position and velocity of the human-robot floating base in the world system are estimated, which establishes the foundation for subsequent motion control 
+and planning.
 
-2) A biped robot motion controller based on quadratic programming is designed. The motion of each leg of the biped robot is divided into a support phase and a swing phase. 
-The swing phase uses position control to follow the foothold position calculated according to the velocity of the center of mass; the support phase combines the motion behavior 
-planned by the upper planner into a quadratic plan The problem is to solve the expected torque of the joint as the feedforward input of the motor, and the expected torque 
-obtained by the state feedback as the feedback input of the motor.
+2) A walking controller for humanoid robot based on quadratic programming is designed. The motion of each leg of the humanoid robot is divided into a support phase 
+and a swing phase. The swing phase uses position control to follow the foothold position calculated according to the velocity of the center of mass; 
+the support phase combines the motion behavior planned by the upper planner into a quadratic programming problem , use the qpOASES solution library to solve the problem, 
+use the calculated expected torque of the joint as the feed-forward input of the joint, and use the expected torque obtained by the state feedback as the feedback input 
+of the joint, and finally obtain the actual expected torque value of each joint of the supporting leg.
 
-3) A biped robot motion planner based on trajectory optimization is designed. The variable-height double pendulum model is used as the dynamic model for planning, 
-the torque and leg length constraints, sliding friction constraints, and rotational friction constraints are used as constraints for the optimization problem, 
-and a series of objective functions and regular terms are designed to finally construct a trajectory optimization The problem is solved using a nonlinear programming 
-solver, and finally the expected trajectory of the robot's center of mass is obtained.
+3) A trajectory planner based on trajectory optimization for a humanoid robot going up stairs is designed. Aiming at the stable walking requirements of the humanoid robot 
+on the stairs, the dynamic equation of the variable-height double pendulum model is used as the dynamic constraint of the center-of-mass trajectory planning, and the robot 
+leg length constraint, joint maximum moment constraint, sliding friction constraint, and rotational friction constraint are optimized The constraint conditions of the problem, 
+and a series of objective functions and regular terms are designed, and finally a trajectory optimization problem is constructed, which is solved by using the Ipopt nonlinear 
+optimization solver, and finally the expected trajectory of the robot's center of mass in the process of climbing the steps is obtained.
 
-4) Experiments were carried out on the WuKong-IV biped robot experimental platform to verify the above control algorithm. 
-Successfully verified the accuracy of the state estimator, and the effectiveness of the motion controller, motion planner.
-
+4) Experiments were carried out on the "Wukong-IV" humanoid robot experimental platform: the reliable ground contact estimation and floating base position and velocity 
+estimation of the humanoid robot were realized; the maximum stable walking speed of the robot exceeded 6km/h, and the error was within a few centimeters position tracking; 
+the robot can climb three consecutive steps with a height of 10cm to verify the effectiveness of the above algorithm.
 $\textbf{Keywords}$: Humanoid robot; State estimation; Quadratic programming; Trajectory optimization; Locomotion control
