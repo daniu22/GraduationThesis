@@ -867,24 +867,46 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 \end{algorithmic}
 \end{algorithm}
 \subsection{实验结果}
-本节借助动作捕捉系统来验证浮动基位置和速度估计的准确性。实验环境如\aref{fig:capture_exp}所示，动捕系统包含六颗镜头，以及数据分析处理软件。机器人身上穿的衣服主要是为了避免金属零件反光影响动捕系统的正常工作，同时机器人身体后方安装了
+本节借助动作捕捉系统来验证浮动基位置%和速度估计
+的准确性。实验环境如\aref{fig:capture_exp}所示，动捕系统包含六颗镜头，以及数据分析处理软件。机器人身上穿的衣服主要是为了避免金属零件反光影响动捕系统的正常工作，同时机器人身体后方安装了
 四个反光标记点，来对机器人浮动基座的位置和速度信息进行捕捉。动捕系统在室内环境下可以实现厘米级的定位精度，因此我们可以将其采集到的数据作为真值，来评估浮动基位置和速度估计的输出结果。
-\subsubsection{浮动基位置估计实验结果}
-实验过程中“悟空-IV”机器人沿\aref{fig:com_pos_est}中的蓝色矩形慢速行走，蓝色矩阵的尺寸为0.5m$\times$1.0m。\aref{fig:com_pos_est}中的橙色曲线为浮动基位置估计的结果，黄色曲线为同一次行走实验中根据动捕系统采集的数据得到的浮动基位置曲线。
-图中虚线内的部分是由于机器人走到了动捕镜头的盲区附近，此时镜头只能捕捉到有限的反光标记点，所以出现了较大的偏差。
-% 对比行走过程中浮动基位置估计结果和动作捕捉的数据(\aref{fig:com_pos_est})，可以看出二者基本相符。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=.8\linewidth]{动捕.jpg}
     \caption{\label{fig:capture_exp}动作捕捉实验图}
 \end{figure}
+% \subsubsection{浮动基位置估计实验结果}
+
+实验过程中“悟空-IV”机器人沿\aref{fig:com_pos_est}中的蓝色矩形慢速行走，蓝色矩阵的尺寸为0.5m$\times$1.0m。\aref{fig:com_pos_est}中的橙色曲线为浮动基位置估计的结果，黄色曲线为同一次行走实验中根据动捕系统采集的数据得到的浮动基位置曲线。
+图中虚线内的部分是由于机器人走到了动捕镜头的盲区附近，此时镜头只能捕捉到有限的反光标记点，所以出现了较大的偏差。在虚线以外的部分将位置估计的结果和动捕系统的数据相比较，均方根误差为0.065m。
+由于浮动基在运动过程中存在姿态偏移，并且位置估计和动捕系统得到的并非是浮动基上同一点相对世界系的位置，因此这个误差是在合理范围内的。
+% 对比行走过程中浮动基位置估计结果和动作捕捉的数据(\aref{fig:com_pos_est})，可以看出二者基本相符。
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=1.\linewidth]{rectangle.pdf}
     \caption{\label{fig:com_pos_est}质心位置估计结果}
 \end{figure}
-\subsubsection{浮动基速度估计实验结果}
-\subsubsection{机器人运动速度对浮动基状态估计准确性的影响}
+
+\aref{tab:velo_rse}列出了在不同平均速度下，位置估计的结果相对于动捕数据的均方根误差值。可以明显看出随着机器人运动速度增大，均方根误差值也明显增大。降低位置估计精度的因素主要有随速度增加机器人身体摆动幅度的增大，
+以及机器人足端打滑频率的增加。
+\begin{table}[htbp]
+    \setstretch{1.3}
+	\centering
+	\caption{权重矩阵的数值}
+	\label{tab:velo_rse}
+	\begin{tabular}{m{2cm}<{\centering}m{2cm}<{\centering}}
+		\toprule  %添加表格头部粗线
+		\fangsong{平均运动速度(m/s)}   & 均方根误差值(m)  \\
+		\midrule  %添加表格中横线
+		0.24 & 0.063\\
+		0.41 & 0.071  \\
+		0.65 & 0.089 \\
+        0.81 & 0.103 \\
+		\bottomrule %添加表格底部粗线
+	\end{tabular}
+\end{table}
+% \subsubsection{浮动基速度估计实验结果}
+% \subsubsection{机器人运动速度对浮动基状态估计准确性的影响}
 \section{本章总结}
 本章首先介绍了“悟空-IV”仿人机器人的基本硬件配置，并对仿人机器人的浮动基运动模型进行了阐述。采用浮动基模型描述运动要求对浮动基相对惯性系的位置、速度和姿态做出比较准确的估计。浮动基的姿态可以方便地用安装在其上的IMU测量得到，
 但浮动基的位置和速度估计需要仿人机器人每条腿的触地信息。本章基于线性卡尔曼滤波的框架，先设计了融合相位、足端高度和足底力信息的触地状态估计算法；在触地估计的基础上，设计了融合IMU积分信息和腿部运动学信息的浮动基位置和速度估计算法。
@@ -1460,8 +1482,8 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 
 问题求解的完整过程在\aref{alg:traj_optimization}中，其中含有下标$i$的量取决于某个特定的阶段，并且在该阶段的时长内是固定的。算法的实现基于CasADi\cite{andersson2019casadi}，求解器使用了Ipopt。
 
-由于系统模型、摩擦约束、以及相关目标函数的非线性，我们构建的优化问题是非凸的。为了加速求解，我们用每个阶段期望的时长来初始化$T_i$，
-质心轨迹用从$\boldsymbol{x}_0$到$\boldsymbol{x}_d$的线性插值来初始化，其他变量均被初始化为0。
+由于系统模型、摩擦约束、以及相关目标函数的非线性，我们构建的优化问题是非凸的。为了加速求解，我们用每个阶段期望的时长来初始化$T_i$，期望时长的选取基于以往的实验数据，
+质心位置轨迹用从$\boldsymbol{x}_0$到$\boldsymbol{x}_d$的线性插值来初始化，其他变量均被初始化为0。
 \begin{algorithm}[h] 
 \setstretch{1.3}
 \begin{algorithmic}[1] %这个1 表示从第一行开始显示行号，不写就不会显示行号
@@ -1506,13 +1528,8 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 \end{algorithm}
 \section{实验结果}
 \label{stair_experiment}
-为了验证上述轨迹优化算法的有效性，设计了仿人机器人上台阶实验。实验过程如\aref{fig:track_exp}所示。实验结果表明优化出的质心轨迹相对直接插值得到
-的轨迹而言，对膝关节力矩的减小有显著的效果，如\aref{fig:knee_torque}所示，蓝色曲线为执行轨迹优化得到的膝关节力矩曲线，其峰值力矩约为94.0$N\cdot m$，
-红色曲线为执行插值轨迹得到的膝关节力矩曲线，其峰值力矩约为118.2$N\cdot m$，降低了约$20.5\%$。\aref{fig:track_com}为跟随优化轨迹过程中的质心位置曲线。
-% $\mathcal{I}$
-% \boldsymbol{\rho}
-% \in \mathbb{R}^{3}
-% { }^* \boldsymbol{f}_*
+本节主要介绍在仿人机器人“悟空-IV”上开展的上台阶实验，实验场景包含三级台阶，如\aref{fig:track_exp}所示，每级台阶高度为10cm，宽度为25cm。机器人需要从台阶下面约20cm处启动，
+连续地登上三级台阶。
 \begin{figure}[h]
     \centering
     \includegraphics[height=.32\linewidth]{stairs_1.jpg}
@@ -1526,16 +1543,34 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
     \includegraphics[height=.32\linewidth]{stairs_8.jpg}   
     \caption{\label{fig:track_exp}“悟空-IV”上台阶实验截图}
 \end{figure}
+
+本章中通过轨迹优化得到的质心轨迹由第三章中提出的运动控制器来执行，该运动控制器将优化求解得到的期望质心加速度和期望足底力转化成“悟空-IV”机器人的关节力矩，从而实现沿期望轨迹的运动。
+本实验中将由各阶段始末状态平滑插值后微调得到的质心轨迹作为对照组，来进一步验证轨迹优化方法的优越性。由于在登上台阶的过程中膝关节电机所要承受的负荷是远超其他关节电机的，因此我们重点将膝关节力矩
+作为效果对比的指标。
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.8\linewidth]{knee.eps} 
+    \includegraphics[width=.6\linewidth]{knee.eps} 
     \caption{\label{fig:knee_torque}“悟空-IV”上台阶膝关节力矩曲线}
 \end{figure}
-\begin{figure}[htbp]
+
+如\aref{fig:knee_torque}所示，实验结果表明优化出的质心轨迹相对直接插值得到的轨迹而言，对膝关节力矩的减小有显著的效果。图中蓝色曲线为执行轨迹优化得到的膝关节力矩曲线，其峰值力矩约为94.0$N\cdot m$，
+红色曲线为执行插值轨迹得到的膝关节力矩曲线，其峰值力矩约为118.2$N\cdot m$，降低了约$20.5\%$。
+\begin{figure}[h]
     \centering
-    \includegraphics[width=.8\linewidth]{stair_tracking.eps} 
+    \includegraphics[width=.6\linewidth]{com_z_velo.eps} 
+    \caption{\label{fig:com_z_velo}“悟空-IV”上台阶质心z向速度曲线}
+\end{figure}
+
+\aref{fig:track_com}为跟随优化轨迹过程中三个方向的质心位置曲线，由于z方向的轨迹跟踪效果对于能否成功登上台阶来说是最重要的，\aref{fig:track_com}(c)中的竖直虚线表示优化问题分隔的不同阶段，图中蓝色曲线为优化求解得到的z方向轨迹，
+红色曲线为优化轨迹的执行结果，黑色曲线表示对照组的规划结果。可以看出优化轨迹在登上台阶之前质心在z方向有一段明显的下降过程，这是为了提前收缩腿长以避免在登上台阶的过程中出现不符合腿长约束的运动，
+\aref{fig:com_z_velo}中的z向速度曲线也可以明显看到这一过程。多次实验发现质心提前下降的动作同时的确有利于提高登上台阶的成功率，在各25次同样条件下的上台阶实验中，有质心下降动作时成功登上三级台阶的次数
+会比对照组多4次，成功率提升了$16\%$。
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.6\linewidth]{stair_tracking.eps} 
     \caption{\label{fig:track_com}“悟空-IV”上台阶质心跟随曲线}
 \end{figure}
+
 \section{本章总结}
 本章首先将第三章中的弹簧倒立摆模型进行了拓展，从而得到了变高度双摆模型及其动力学方程。然后阐述了针对上台阶场景的轨迹优化问题的构建过程：首先变高度双摆动力学模型作为动力学约束，和摩擦力约束、腿长约束一起组成了轨迹优化问题
 的约束条件；然后设计了一系列目标函数和正则项，来使优化问题的解向我们期望的方向收敛。最终得到的优化问题由非线性规划求解器Ipopt求解，得到的期望质心轨迹由第三章介绍的运动控制器来执行，在“悟空-IV”机器人上成功实现了登上台阶的动作。
