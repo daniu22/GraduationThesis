@@ -316,42 +316,6 @@ ZMP类的方法基于位置控制，在平地上能起到较好的控制效果�
     \caption{\label{fig:typical_control}基于全身模型的控制框架主要包括：接触规划，质心动力学级规划和全身控制
                 （图源~\cite{carpentier2016center}）}
 \end{figure}
-% 多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的\cite{geisert2017regularized}。
-% 这其中涉及到包含动力学模型\cite{felis2017rbdl}，仿真\cite{lee2018dart}，状态估计\cite{camurri2020pronto}，控制器设计\cite{tedrake2019drake}的灵活高效开源软件的发展。
-%利用collocation\cite{posa2016optimization}或multipe-shooting\cite{koch2014optimization}等轨迹优化的一些技术，我们可以考虑所有的运动学和动力学约束，
-% 以及最小化能量消耗等目标函数，用机器人的完整非线性动力学模型来协调肢体的运动(其中collocation和multipe-shooting在求解速度、准确性、
-% 稳定性和精度上互有优势\cite{diehl2006fast})。使用松弛的接触模型甚至能同时优化求解接触序列\cite{posa2014direct}。由于高效的开源数值求解器利用了轨迹优化问题的
-% 稀疏性和动力学模型的精确导数，在线计算全身运动可以在7ms内完成\cite{neunert2018whole}。
-
-
-% 腿足运控的难题之一是接触力通常是单边的：机器人只能推接触表面，而不能拉。因此接触力$f_i$只能朝向特定的方向，由摩擦锥来约束。
-% 另外，每个接触都是二元的：要么有接触和接触力，要么没有接触也没有接触力。当腿和某个面碰撞，也会产生冲击力。
-% 触地转换和冲击是影响连续动力学\aref{equ:newton}和\aref{equ:euler}的离散事件，从这个角度讲腿足机器人的动力学是混合的，
-% 这是难题之二。
-
-% 理论上，从机器人可以执行合适的接触力来避免摔倒的状态中，我们可以定义可行状态（viable states）。周期运动（周期踏步？）和平衡点
-% 显然是可行的，并且如果机器人能从给定状态在几步内达到这样一个循环或者是平衡点，那这样的状态也是可行的\cite{wieber2002stability}。
-% 这就是目前许多现有腿足运控方法的关键\cite{wieber2016modeling}——可捕获性分析\cite{pratt2006velocity}的要义。
-
-% 接触点$s_i$的序列通常要考虑机器人所在环境及其目标点、运动学和静平衡约束\cite{escande2013planning}，
-% 用随机采样点的方法在时空域上预先规划好，这个过程称作落脚点规划。预规划好的落脚点在后续执行的过程中可以根据实际的地形
-% 和外界扰动来调整cite{feng2016robust}。对应的质心运动和角动量可以通过在线MPC的框架来得到\cite{wieber2006trajectory}，
-% 该框架在考虑质心动力学\aref{equ:newton}和\aref{equ:euler}的同时需要保证机器人的状态始终是可捕获的\cite{wieber2016modeling}。
-
-% 当机器人在平地上运动，所有接触点$s_i$都是共面的，接触力$f_i$通常会退化到他们的零力矩点(ZMP)，而ZMP在接触点组成的凸包内\cite{wieber2002stability}
-% (通过单边接触约束的多面体投影，非平面的接触点也有类似的性质\cite{caron2016zmp})。在这种情况下，预先定义好质心在竖直方向上的运动可以得到高效的线性模型。
-% 最常见的是线性倒立摆模型(LIP)，它假设质心在平面内运动并且角动量为0\cite{kajita1991study}。考虑非零的角动量并不影响模型的线性，但很少有人这样做，
-% 可能是在平地上行走时这样做的好处并不多\cite{koolen2012capturability}。
-
-% 通常用逆运动学\cite{kajita2003resolved}，或者
-% 分层QP可以在控制目标函数中考虑不同的优先级\cite{escande2014hierarchical}，但存在奇异的问题\cite{wieber2017geometric}。逆运动学和反馈线性化对模型误差尤其是位置误差，
-% 以及对机器人平衡至关重要的地面接触的稳定性和刚度非常敏感。基于欠驱动(passivity)的方法更不依赖于准确的接触模型\cite{henze2016passivity, kurtz2020approximate}，
-% 是上述方法很有前景的一种替代。
-
-% 腿足运控的通用方法，原本是为仿人行走开发的，
-% 最近这种方法也被适配到了诸如ANYbotics的ANYmal\cite{bellicoso2018dynamic}，IIT的HyQ\cite{mastalli2017trajectory}，
-% MIT的Cheetah\cite{di2018dynamic}等四足机器人以及Aldebaran的pepper\cite{lafaye2014linear}，ETHZ的ANYmal\cite{bjelonic2020rolling}
-% 和Ascento\cite{klemm2020lqr}等轮足机器人上。
 \section{本文的主要研究内容}
 本文针对仿人机器人的质心轨迹规划和跟踪问题开展基于优化的运动控制研究，设计仿人机器人状态估计器、基于二次规划的运动控制器
 、以及基于轨迹优化的质心轨迹规划器，并在仿人机器人“悟空-IV”平台开展实验验证。
@@ -650,9 +614,6 @@ $\operatorname{erf}$表示误差函数，其与高斯分布的概率分布函数
 \end{equation}
 其中$N$是足的个数，对于本文中的仿人机器人而言$N=2$。通过将步态规划器的期望接触状态和测量概率模型的结果融合，可以得到每条腿的实际接触状态的一个更可靠的估计，该算法的整体迭代流程
 见\aref{alg:contact_est}。
-
-% 由于本章中把卡尔曼滤波器的$\boldsymbol{A}_k$设为$\mathbf{0}_N$，融合的过程也能通过贝叶斯定理下的静态最大似然方法来得到。
-% 但我们还是用了标准的卡尔曼滤波来迭代更新（但这个过程是预先嵌入在标准卡尔曼滤波更新中的），这在机器人学中是更容易获得的。
 \begin{algorithm}[htp]
 \setstretch{1.3}
 \caption{触地状态估计迭代过程} 
@@ -748,19 +709,6 @@ IMU硬件输出的姿态角精度是相当高的，$roll$和$pitch$角的误差�
 		\bottomrule %添加表格底部粗线
 	\end{tabular}
 \end{table}
-% 最近的方法集中在融合IMU信息，力传感器数据和运动学测量来实现高保真的状态估计。IMU和运动学数据的融合最开始是用来实现里程计[1][2]。
-% 之后，融合两者的高频率状态估计被用来估计速度并给闭环控制器使用：这可以在运动学层面进行[3][4][5]，也可以扩展到动力学模型[6][7]。
-% 其他传感器包括激光雷达的数据也可以被融合进来[8]。这些方法的共性是，解一个全耦合的推理问题来从传感器测量中估计位置和姿态。
-% 然而这种全耦合的推理计算十分耗时，同时很难调参，并且通常代码实现和debug是很复杂的。
-
-% 也有更简单的状态估计器和平衡控制器一起被提出，并且通常可以实现很震撼的实物效果[9][10][11][12][13]。这些估计器将姿态和位置估计解耦
-% 来简化问题，这就引出了一个问题：为了实现高性能的控制效果，我们在多大程度上需要全耦合的位姿解算？现在还很难回答这个问题，因为这些方法
-% 的严格验证有限，并且从来没有进行过合适的基准测试/对比试验(have never been properly benchmarked)。
-
-% \subsection{位置速度线性卡尔曼滤波器}
-% 扩展卡尔曼滤波在人形和四足机器人的浮动基状态估计上取得了很好的效果。尽管在很多实例中EKF类的方法都表现很好，但它们的误差动力学缺乏稳定性的保证，
-% 并且在实际中可能很难调整参数。本章使用的状态估计方法利用卡尔曼滤波实现了自适应权重的调整，从而得到浮动基的速度和位置估计。
-% 浮动基状态估计能在一个轻微的假设下分解成分级的姿态和位置滤波器，位置和速度估计就转化成了一个线性的问题，我们就能用线性卡尔曼滤波器来处理这个问题。
 \subsection{预测——过程模型}
 为了将仿人机器人腿部运动学信息利用进来，本章将机器人足在世界系下的位置也包括进机器人的位置和速度估计的状态量$\boldsymbol{x}$中去，即：
 \begin{equation}
@@ -820,13 +768,13 @@ $A$和$B$满足\aref{equ:est_posvel}，$\boldsymbol{Q}_n$和$\boldsymbol{R}_n$�
 
 首先用$\rho_{trust}$来表示某一条腿的运动学信息的可信度，由于本节中的预测模型假设腿和地面是相对静止的，因此摆动腿运动学信息的可信度为0，摆动腿的相位和可信度$\rho_{trust}$的关系如\aref{fig:kin_trust}。
 在支撑相刚开始和即将结束时，支撑腿可能未站稳，和地面有相对滑动的可能增加，其运动学信息的可信度降低，因此这种函数关系是符合直觉的。这里用信任窗口$trustWindow$值的大小来表示支撑相“刚开始”和“要结束”的时间区间具体有多长。
-\begin{figure}[h]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=1.\linewidth]{trust.pdf}
+    \includegraphics[width=.8\linewidth]{trust.pdf}
     \caption{\label{fig:kin_trust}支撑腿运动学信息可信度随相位变化图}
 \end{figure}
 运动学测量的方差根据可信度$\rho_{trust}$计算，随后用标准卡尔曼滤波的更新方程来得到浮动基位置和速度估计，具体的算法流程在\aref{alg:com_state_est}中给出。
-\begin{algorithm}[ht]
+\begin{algorithm}[htbp]
 \setstretch{1.3}
 \caption{浮动基状态估计迭代过程} 
 \label{alg:com_state_est} 
@@ -1230,63 +1178,6 @@ ${{\boldsymbol{C}}_{{\dot{\boldsymbol{h}}}}},{\boldsymbol{{C}}_{\boldsymbol{\rho
 
 本章节组织如下：\aref{vari_height_pendu}主要介绍了变高度双摆模型动力学方程的推导过程；\aref{sec:traj_plan}介绍了轨迹优化问题的构建过程，首先介绍了摩擦力约束和腿长约束的处理，然后介绍了优化问题目标函数的建立，
 最终将轨迹优化问题交给非线性规划求解软件处理，得到仿人机器人登上台阶的期望质心轨迹；\aref{stair_experiment}展示了实验结果并对其进行了分析讨论。
-% \section{基于二次规划的全身控制器}
-% 机器人运动由基于QP的全身控制器控制[22]，该控制器输出一组期望关节加速度，包括浮动基关节在惯性系$\mathcal{I}$下的空间加速度，
-% 这里我们用$\dot{\boldsymbol{\nu}}_d \in \mathbb{R}^{n+6}$表示，$n$是驱动关节的数量。另外，该全身控制器也会生成
-% 期望的接触力和力矩(wrenches)。
-
-% 该全身控制器处理包括笛卡尔空间和质心任务的不同运动控制任务。前者的实现是通过最小化下面的目标函数：
-% \begin{equation}
-%     \label{equ:qp_objective}
-%     \left\|\boldsymbol{J}_t \dot{\boldsymbol{\nu}}_d-\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)\right\|^2
-% \end{equation}
-% 其中$\boldsymbol{J}_t \in \mathbb{R}^{n_j \times (n+6)}$是任务雅可比，$n_j$是任务$j$的自由度数量，
-% $\boldsymbol{\alpha}_d \in \mathbb{R}^{n_j}$是任务的期望加速度，$\boldsymbol{\nu}$是由状态估计得到的浮动基和关节速度向量。
-% $\left(\boldsymbol{\alpha}_d-\dot{\boldsymbol{J}}_t \boldsymbol{\nu}\right)$是不依赖决策变量的向量，用符号$\boldsymbol{\alpha}_i$代替。
-
-% 质心任务由控制机器人的动量$\boldsymbol{h}$实现，$\boldsymbol{h} \in \mathbb{R}^{6}$。我们特意利用了下面的关系：
-% \begin{equation}
-%     \label{equ:qp_momentum}
-%     \dot{\boldsymbol{h}}=\boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\sum_i \boldsymbol{W}_{\mathrm{gr}, i}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i}
-% \end{equation}
-% 其中$\boldsymbol{J}_{CMM} \in \mathbb{R}^{6 \times (n+6)}$是质心动量矩阵[23]，
-% $\boldsymbol{W}_g=\left[\begin{array}{ll}0_{3 \times 1}^{\top} & m \boldsymbol{g}^{\top}\end{array}\right]^{\top}$是由于重力产生的力和力矩(wrench)，
-% $\sum_i {\boldsymbol{W}_{gr,i}}$表示作用在机器人身体上的接触力，$\sum_i {\boldsymbol{W}_{ext,i}}$表示除上述两种力外作用在机器人上的力和力矩的总和。
-
-% 不同的接触力作用在接触面(contact patch)的每个顶点上，这些力被特意用一个坐标向量$\boldsymbol{\rho}_i$定义，$\boldsymbol{\rho}_i \in \mathbb{R}^{m}$，
-% 它的基是摩擦锥表面上的$m$个向量(extreme rays)。通过限制$\boldsymbol{\rho}_i$的每一个元素都在$\left[\rho_{min}, \rho_{max}\right]$内，我们避免过分大的力和力矩。
-% 另外更重要的一点是，这样做隐式地满足了摩擦约束和CoP约束。一般来说由接触产生的法向力也一定是正的。
-% 我们可以把接触相关的力和力矩$\sum_i {\boldsymbol{W}_{gr,i}}$在惯性系$\mathcal{I}$中表示为$\boldsymbol{\rho}_i$的函数：
-% \begin{equation}
-%     \label{equ:qp_grf_coord}
-%     \boldsymbol{W}_{\mathrm{gr}, i}=\boldsymbol{Q}_i \boldsymbol{\rho}_i
-% \end{equation}
-% 其中$\boldsymbol{Q}_i \in \mathbb{R}^{6 \times m}$取决于接触顶点$i$的位置和基向量的选择，通过把所有的$\boldsymbol{Q}_i$和$\boldsymbol{\rho}_i$接到一起，
-% 我们可以得到$\sum_i {\boldsymbol{W}_{\mathrm{gr}, i}}=\boldsymbol{Q}_i \boldsymbol{\rho}_i$。
-
-% 最终笛卡尔和质心任务被组合成如下形式：
-% \begin{equation}
-%     \label{equ:qp_cartesian_com_task}
-%     \hat{\boldsymbol{J}}=\left[\begin{array}{c}
-%         \boldsymbol{J} \\
-%         \boldsymbol{J}_{\mathrm{CMM}}
-%         \end{array}\right], \quad \hat{\boldsymbol{\beta}}=\left[\begin{array}{c}
-%         \boldsymbol{\beta} \\
-%         \dot{\boldsymbol{h}}_d-\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}
-%         \end{array}\right]
-% \end{equation}
-% 其中$\boldsymbol{J}$和$\boldsymbol{\beta}$分别是所有的任务雅可比$\boldsymbol{J}_i$和$\boldsymbol{\beta}_i$的接合，
-% $\dot{\boldsymbol{h}}_d$是期望的动量变化率。
-% 在每个控制周期，要解的QP问题可以写成：
-% \begin{equation}
-%     \label{equ:qp_final}
-%     \begin{aligned}
-%         \underset{\dot{\nu}_d, \boldsymbol{\rho}}{\operatorname{minimize}} & \left\|\hat{\boldsymbol{J}} \dot{\boldsymbol{\nu}}_d-\hat{\boldsymbol{\beta}}\right\|_{C_t}^2+\|\boldsymbol{\rho}\|_{C_\rho}^2+\left\|\dot{\boldsymbol{\nu}}_d\right\|_{C_{\dot{\boldsymbol{\nu}}}}^2 \\
-%         \text { subject to: } & \boldsymbol{J}_{\mathrm{CMM}} \dot{\boldsymbol{\nu}}_d+\dot{\boldsymbol{J}}_{\mathrm{CMM}} \boldsymbol{\nu}=\boldsymbol{W}_g+\boldsymbol{Q} \boldsymbol{\rho}+\sum_i \boldsymbol{W}_{\mathrm{ext}, i} \\
-%         & \boldsymbol{\rho}^{\min } \leq \boldsymbol{\rho} \leq \boldsymbol{\rho}^{\max }
-%         \end{aligned}
-% \end{equation}
-% 期望的广义关节加速度和接触力被用于计算机器人期望的关节力矩输入。
 \section{变高度双摆模型}
 \label{vari_height_pendu}
 由牛顿第二定律可以得到线动量的变化率：
@@ -1618,73 +1509,3 @@ $\boldsymbol{\chi}$也包含每个阶段的时长。
 
 3） 将轨迹规划器扩展到更多更通用的场景。本文中的轨迹规划器针对仿人机器人上台阶的场景，构建了轨迹优化问题并对其进行在线的数值求解，能比较好地完成上台阶的任务。实际上轨迹优化的适用场景不止于此，
 对于平地、斜坡、不平整路面等各种地形都可以设计不同的目标函数以及权重矩阵，将更多场景包含在统一的轨迹规划框架之中。
-% \subsection{落脚点规划的最近进展}
-% 落脚点规划是轨迹规划的一个特例，在腿足运动中，接触状态的离散特性是组合爆炸的一个特殊来源，
-% 增加了轨迹规划问题整体的非凸性。为了解决这种讨厌的计算复杂性，已经有人提出利用现成先进的求解器在几秒内找到全局最优的接触序列的
-% 混合整数公式(mixed-integer formulations)，同时还考虑了在不平整地形的运动学甚至动力学可行性约束\cite{aceituno2017simultaneous}。
-
-% 另外一种方法是用机器人足能到达的范围来提供接触序列存在的充分必要条件。这样机器人的运动可以不用提前设定好接触序列来实现，
-% 这大大降低了轨迹规划问题的复杂度，使机器人可以在几分之一秒内对变化的环境作出快速重规划。具体的接触序列可以在下一个阶段用各种各样的
-% 启发式函数来得到，比如在考虑不平整地形下运动学甚至动力学可行性约束的同时最大化准静态的鲁棒平衡\cite{tonneau2018efficient}。这种多阶段的方法可以很高效，
-% 但是对启发函数的依赖可能会导致失败。
-
-% \subsection{简化模型的近期进展}
-% 运动发散量(divergent component of motion, DCM)：线性倒立摆(LIP)模型的一个好处是它足够简单，可以进行彻底的数学分析。值得注意的是，
-% LIP动力学的发散部分可以用一个单独的量表示——运动发散量(DCM)，而不必用质心的完整状态(位置和速度)。DCM的线性反馈控制是仿人平地运动的
-% 一种高效平衡控制策略\cite{kajita2010biped}，简单到可以在基于位置控制、力矩控制等各种各种机器人平台上验证。
-
-% DCM遵循接触力的一阶动力学，比质心的二阶动力学\aref{equ:newton}要简单，这也帮助简化了腿足控制的其他方面。最近主要有三个进展：第一，DCM可以在
-% 不改变系统动力学的前提下，去掉质心的平面约束来生成三维的行走轨迹\cite{englsberger2015three}；第二，通过对DCM的解析轨迹做一些变量替换，
-% 可以在轨迹优化中包含在线的step-timing adaption的同时保证我们要解的问题是一个小的凸问题\cite{khadiv2020walking}。第三，在证明MPC问题的稳定性和可行性时，
-% DCM可以被用作一个可行(viability)条件。
-
-% Centroidal dynamics: 在例如不平整地形、狭窄空间等有多点接触的场景中运动时，将接触力等效到ZMP是很局限的。基于完整质心动力学
-% \aref{equ:newton}和\aref{equ:euler}的方法是在更广泛的接触场景下计算可行的质心轨迹、角动量和对应接触力的一种解决方案。
-% 接触序列甚至可以同时优化求解\cite{winkler2018gait}。
-
-% 利用轨迹优化问题的稀疏性和凸性来求解的方法已经有了一定的发展\cite{ponton2016convex,tonneau2018efficient}。另外，机器人的惯量通常用单刚体近似得到\cite{mastalli2017trajectory,winkler2018gait}，
-% 并且为了让最终的非线性优化问题可以在期望的运动行为附近快速收敛，可以根据实际运动设计启发函数来正则化优化问题\cite{bledt2020extracting}。加上这些改进之后，
-% 基于完整质心动力学的方法可以在线运行，计算时间在10ms内\cite{bledt2019implementing}。
-
-% 质心动力学并不考虑运动学或者关节力矩约束。为了部分弥补这些缺陷，一些方法提出将接触力和力矩(wrench)锥扩展来包含力矩限制\cite{orsolino2020feasible}，
-% 还有一些基于学习的方法将更复杂的全身约束表示进质心模型里面\cite{carpentier2018multicontact}。
-
-% Mixed models: 另外一个在简化模型跟完整动力学模型之间的折中方案是，将质心动力学\aref{equ:newton}和\aref{equ:euler}和
-% 全身运动学模型结合，这样可以在保持适度的计算复杂度的同时得到符合动力学的全身运动\cite{dai2014whole}。用这种方法可以在70ms内在线计算和更新
-% 局部最优的反馈控制。也可以用交替下降的方法(alternating descent method)将质心动力学与全身动力学模型结合，来考虑质心动力学以外的部分\cite{budhiraja2019dynamics}。
-% 一种更早的方法将机器人的瞬间全身动力学与LIP模型在一个滚动时域内结合到一个统一的QP问题中，来获得机器人运动的长时动力学。
-
-% \subsection{全身模型的最新进展}
-% Trajectory optimization: 利用collocation\cite{posa2016optimization}或multipe-shooting\cite{koch2014optimization}等轨迹优化的一些技术，我们可以考虑所有的运动学和动力学约束，
-% 以及最小化能量消耗等目标函数，用机器人的完整非线性动力学模型来协调肢体的运动(其中collocation和multipe-shooting在求解速度、准确性、
-% 稳定性和精度上互有优势\cite{diehl2006fast})。使用松弛的接触模型甚至能同时优化求解接触序列\cite{posa2014direct}。由于高效的开源数值求解器利用了轨迹优化问题的
-% 稀疏性和动力学模型的精确导数，在线计算全身运动可以在7ms内完成\cite{neunert2018whole}。
-
-% Reinforcement learning:强化学习技术的成熟使得离线用机器人的完整动力学模型，从传感器原始数据和机器人姿态估计中直接计算出
-% \begin{itemize}
-% \item 能产生大量行为样本的高效仿真器\cite{hwangbo2018per}；
-% \item 能指引反馈控制策略的优化求解从简单场景到更复杂场景的“上课”策略；
-% \item 在电机模型里用实际的硬件测量数据训练得到的神经网络表示难以建模的不确定性。
-% \end{itemize}
-
-% \subsection{小结}
-% 腿足运控就是在足和环境之间建立一系列的接触，并且在不同接触之间执行对应的符合机器人运动学和动力学的动作。数值轨迹优化在这其中扮演了关键角色，
-% 处理交替的接触以及对应接触力的约束。不同复杂度的模型，从最简单的LIP模型，到完整质心动力学\aref{equ:newton}和\aref{equ:euler}，再到完整的多刚体动力学模型，
-% 可以单独或者结合起来使用，处理运动的不同方面(层次)。正是这些模型的改进，以及高级的数值方法的改进，无论是现成的还是特殊为腿足运控设计的，
-% 使得近年来从平地到更普遍的室内室外环境的转变成为可能。首个用强化学习成功实现真实复杂环境下的四足运动的例子也是用同样的方法做到的。
-
-% 离线和在线数值优化在这个过程中扮演的核心角色，使得整个腿足运控研究领域大力发展新的优化方法和高效的数值软件。值得一提的有，安全处理不同优先级、
-% 多目标函数的Lexicographic规划，利用非线性轨迹优化问题稀疏性的微分动态规划(DDP)，甚至还有将这两种方法相结合的\cite{geisert2017regularized}。
-% 这其中涉及到包含动力学模型\cite{felis2017rbdl}，仿真\cite{lee2018dart}，状态估计\cite{camurri2020pronto}，控制器设计\cite{tedrake2019drake}的灵活高效开源软件的发展。
-
-% 开源软件，以及包含3D打印零件，简化的电路跟执行器的开源硬件[86,87]，可以促进完善、鲁棒、经过大量测试的解决方案的复现、传播和平民化，
-% 同时有利于快速迭代和创新，并且使得这些现有实现方法可以扩展和改进(表1列出了一部分)。
-
-% 腿足运控控制的现有文献大多数都只用了状态反馈，但有意思的是由于质心是虚拟点，并且和环境的接触是很难检测和测量的，所以质心的位置和速度是
-% 不能直接测量得到的。因此状态估计是另一个关键的部分，但这部分被探索的少得惊人[84,2,88,89,90,91,92]。对状态估计和反馈控制的依赖使得
-% 现有的腿足机器人极度依赖昂贵、精细的硬件带来的准确信息。基于传感器的控制可能是另一种方案[93]，很大程度上还尚待探索。
-% 鲁棒控制也是一种可能的方案[94,95,96,97]，同样尚待研究。腿足机器人的鲁棒控制分析得出的最新结论是，正如在人形[96]和四足机器人[59]上
-% 已经验证过的那样，在低的惊人的频率下就可以得到完美稳定的反馈控制。
-
-% 基于上文提到的开源软件和硬件的控制方法可以促进更便宜，更鲁棒，功能更多的机器人的发展。这也是腿足运动在室内外各种环境得到验证，
-% 接近真实工业场景[98,99]后将会迈出的很合理的一步。可变形的元素也会推动这一目标[100]。
