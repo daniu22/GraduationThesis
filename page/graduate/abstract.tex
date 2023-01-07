@@ -1,15 +1,15 @@
 \cleardoublepage
 \chapternonum{摘要}
 
-仿人机器人是机器人领域的研究热点之一。仿人机器人存在结构复杂，自由度高，非线性强，本质不稳定等特点，其运动的性能及稳定性至今无法达到人们的期望，其中
-走上台阶更是机器人运动控制的重要挑战。本文针对仿人机器人的质心轨迹规划和跟踪问题开展基于优化的运动控制研究，设计仿人机器人状态估计器、基于二次规划的运动控制器
+仿人机器人及其相关研究在机器人领域内方兴未艾。仿人机器人存在结构复杂，自由度高，非线性强，本质不稳定等显著特性，
+想要实现其在各种环境下的稳定运动至今依然是一项重大挑战。本文针对仿人机器人轨迹跟踪和质心轨迹规划问题开展基于优化的运动控制研究，设计仿人机器人状态估计器、基于二次规划的运动控制器
 、以及基于轨迹优化的质心轨迹规划器，并在仿人机器人“悟空-IV”平台开展实验验证。本文的主要研究工作和成果如下：
 
-1) 设计了仿人机器人状态估计器。首先定义了仿人机器人的运动状态机，并对仿人机器人每条腿触地的概率进行了估计，
-为步行状态机提供了切换信号；其次定义了仿人机器人的各个坐标系，并对仿人机器人浮动基在世界系下的位置、速度进行了估计，
-为后续的运动控制和规划建立了基础。
+1) 设计了仿人机器人状态估计器。首先介绍了仿人机器人实验平台的相关硬件参数，利用机器人上已有的传感器硬件，
+先对仿人机器人每条腿触地的概率进行了估计，为步行状态机提供了切换信号；其次对仿人机器人浮动基在世界系下的位置、速度进行了估计，
+为后续的运动控制和轨迹规划建立了基础。
 
-2) 设计了基于二次规划的仿人机器人步行控制器。将仿人机器人每条腿的运动分为支撑相和摆动相，
+2) 设计了基于二次规划的仿人机器人步行控制器。定义了机器人步行运动的有限状态机，将仿人机器人行走时每条腿的运动分为支撑相和摆动相，
 摆动相采用位置控制跟随根据质心速度计算出的落脚点位置；支撑相将上层规划器规划出的运动行为
 组合成二次规划问题，利用qpOASES求解库求解，将求解出的关节的期望力矩作为关节的前馈输入，将状态反馈得到的期望力矩作为
 关节的反馈输入，最终得到支撑腿各关节的实际期望力矩值。
@@ -26,23 +26,22 @@ $\textbf{关键词}$：仿人机器人；状态估计；二次规划；轨迹优
 \cleardoublepage
 \chapternonum{Abstract}
 
-Humanoid robot is one of the research hotspots in the field of robotics. Humanoid robots have the characteristics of complex structure, high degree of freedom, 
-strong nonlinearity, and inherent instability. So far, their motion performance and stability have not met people's expectations. 
-Walking up stairs is an important challenge for robot motion control. In this thesis, the optimization-based motion control research is carried out 
-for the center of mass trajectory planning and tracking problems of humanoid robots, and the state estimator of humanoid robots and the motion controller 
-based on quadratic programming are designed, and a center-of-mass trajectory planner based on trajectory optimization, and carried out experimental verification 
-on the humanoid robot "Wukong-IV" platform. The main research work and achievements of this thesis are as follows:
+Humanoid robots and their related research are in the ascendant in the field of robotics. Humanoid robots have significant characteristics such as complex structure, 
+high degree of freedom, strong nonlinearity, and inherent instability. It is still a major challenge to achieve stable movement in various environments. In this thesis, 
+the optimization-based motion control research is carried out for the trajectory tracking and centroid trajectory planning problems of humanoid robots, 
+and the state estimator for humanoid robots, the motion controller based on quadratic programming, and the centroid trajectory planner based on 
+trajectory optimization are designed. The human robot "Wukong-IV" platform carried out experimental verification. The main research work and achievements of this thesis 
+are as follows:
 
-1) A state estimator for a humanoid robot is designed. First, the motion state machine of the humanoid robot is defined, and the probability of each leg of the humanoid 
-robot touching the ground is estimated, which provides switching signals for the walking state machine; secondly, each coordinate system of the humanoid robot is defined, 
-and the simulation The position and velocity of the human-robot floating base in the world system are estimated, which establishes the foundation for subsequent motion control 
-and planning.
+1) A state estimator for a humanoid robot is designed. Firstly, the relevant hardware parameters of the humanoid robot experiment platform are introduced. 
+Using the existing sensor hardware on the robot, the probability of each leg of the humanoid robot touching the ground is estimated, 
+which provides a switching signal for the walking state machine; The position and velocity of the human-robot floating base in the world system are estimated, 
+which establishes the foundation for the subsequent motion control and trajectory planning.
 
-2) A walking controller for humanoid robot based on quadratic programming is designed. The motion of each leg of the humanoid robot is divided into a support phase 
-and a swing phase. The swing phase uses position control to follow the foothold position calculated according to the velocity of the center of mass; 
-the support phase combines the motion behavior planned by the upper planner into a quadratic programming problem , use the qpOASES solution library to solve the problem, 
-use the calculated expected torque of the joint as the feed-forward input of the joint, and use the expected torque obtained by the state feedback as the feedback input 
-of the joint, and finally obtain the actual expected torque value of each joint of the supporting leg.
+2) A walking controller for humanoid robot based on quadratic programming is designed. Firstly, the finite state machine of the robot walking motion is defined, 
+and the motion of each leg of the humanoid robot is divided into a support phase and a swing phase. The motion behavior planned by the planner is combined into a 
+quadratic programming, and the qpOASES software library is used to solve the problem. The expected torque of the joint is used as the feed-forward input of the joint, 
+and the expected torque obtained by the state feedback is used as the feedback input of the joint. Finally, the desired torque values are sent to each joint of the supporting leg.
 
 3) A trajectory planner based on trajectory optimization for a humanoid robot going up stairs is designed. Aiming at the stable walking requirements of the humanoid robot 
 on the stairs, the dynamic equation of the variable-height double pendulum model is used as the dynamic constraint of the center-of-mass trajectory planning, and the robot 
@@ -50,7 +49,7 @@ leg length constraint, joint maximum moment constraint, sliding friction constra
 and a series of objective functions and regular terms are designed, and finally a trajectory optimization problem is constructed, which is solved by using the Ipopt nonlinear 
 optimization solver, and finally the expected trajectory of the robot's center of mass in the process of climbing the steps is obtained.
 
-4) Experiments were carried out on the "Wukong-IV" humanoid robot experimental platform: the reliable ground contact estimation and floating base position and velocity 
-estimation of the humanoid robot were realized; the maximum stable walking speed of the robot exceeded 6km/h, and the error was within a few centimeters position tracking; 
-the robot can climb three consecutive steps with a height of 10cm to verify the effectiveness of the above algorithm.
+4) Experiments were carried out on the "Wukong-IV" humanoid robot experimental platform. the reliable ground contact estimation and floating base position and velocity 
+estimation of the humanoid robot were realized; the maximum stable walking speed of the robot exceeded 6km/h, and the error of position tracking was within a few centimeters; 
+the robot can climb three consecutive steps with a height of 10cm each, which verifies the effectiveness of the above algorithm.
 $\textbf{Keywords}$: Humanoid robot; State estimation; Quadratic programming; Trajectory optimization; Locomotion control
